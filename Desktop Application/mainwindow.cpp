@@ -1,18 +1,11 @@
-
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QChartView>
-#include <QtCharts/QValueAxis>
-#include <QtWidgets/QGridLayout>
-#include <QTime>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QTimer>
 #include <QtDebug>
-#include "timer.h"
 #include <QGraphicsWidget>
 
+int count = 1;
 int digit = 1;
 int button = 100;
 QPen pen;
@@ -22,44 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
    ui->setupUi(this);
-
    ui->plot->addGraph();
-   ui->plot->xAxis->setRange(0, 20);
-   ui->plot->yAxis->setRange(0, 20);
+   ui->plot->xAxis->setRange(0, 100);
+   ui->plot->yAxis->setRange(0, 100);
    ui->plot->graph(0)->setPen(QPen(Qt::blue));
-   //ui->plot->graph()->setPen(pen);
    ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-  // ui->plot->graph(0)->setLineStyle(QCPGraph::);
    timerId = startTimer(1000);
-   /*QChartView *chartView;
-
-   QChart *chart = new QChart();
-   chart->legend()->hide();
-   QLineSeries *series = new QLineSeries(chart);
-   chart->addSeries(series);
-   chart->createDefaultAxes();
-   chart->setTitle("Simple line chart example");
-   chart->axisX()->setRange(0,10);
-   chart->axisY()->setRange(0,10);
-   //QString name("Series ");
-    series->append(0.5,0.5);
-    //chart->addSeries(series);
-    //![5]
-    chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-    ui->gridLayout_3->addWidget(chartView, 1, 2);
-    m_charts << chartView;
-    digit = 0;
-    if(digit < 1000)
-    {
-    delay(1000);
-    digit++;
-    ui->lcdNumber->display(digit);
-    //timerId = startTimer(1000);
-    updateLineChart(series);
-    }*/
-
-
 }
 
 MainWindow::~MainWindow()
@@ -71,41 +32,21 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     //QMessageBox::information(this,"Download Data", "File Type:");
-    digit = 0;
+    count = 1;
     ui->lcdNumber_2->display(button = button + 100);
 
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
+    digit = newData();
     qDebug() << "Update...";
-    ui->lcdNumber->display(++digit);
-    addPoint(digit,digit);
+    ui->lcdNumber->display(digit);
+    addPoint(count,digit);
+    count++;
     plot();
+    //digit++;
 }
-
-/*QChart *MainWindow::createLineChart() const
-{
-    QChart *chart = new QChart();
-    chart->setTitle("Line chart");
-
-    QString name("Series ");
-    QLineSeries *series = new QLineSeries(chart);
-            series->append(digit,digit);
-                        series->append(digit+1,digit+1);
-                                    series->append(digit+2,digit+2);
-                                                series->append(digit+3,digit+3);
-                                                            series->append(digit+4,digit+4);
-
-        chart->addSeries(series);
-
-    return chart;
-}*/
-
-/*void MainWindow::updateLineChart(QLineSeries *series)
-{
-    series->append(digit,digit);
-}*/
 
 void MainWindow::addPoint(double x, double y)
 {
@@ -131,3 +72,7 @@ void MainWindow::on_pushButton_2_clicked()
     clearData();
 }
 
+int MainWindow::newData()
+{
+    return rand() % 100;
+}

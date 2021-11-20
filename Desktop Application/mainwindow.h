@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtCharts/QChartGlobal>
-#include <QtCharts/QLineSeries>
 
 QT_BEGIN_NAMESPACE
 class QChartView;
@@ -21,6 +19,7 @@ public:
     void addPoint(double x, double y);
     void clearData();
     void plot();
+    int newData();
 
 private slots:
     void on_pushButton_clicked();
@@ -30,9 +29,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     int timerId;
-    //QChart *createLineChart() const;
-    //QList<QChartView *> m_charts;
-    //void updateLineChart(QLineSeries *series);
     void connectSignals();
     QVector<double> qv_x, qv_y;
 

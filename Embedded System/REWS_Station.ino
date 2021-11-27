@@ -1,5 +1,5 @@
 /*
- * REWS_Station.ino
+ * REWS.ino
  * Description: The weather station currently keeps track of weather and humidity. All other values
  * are generated using random values. After gathering weather data, the weather station sends it
  * serially to the Raspberry Pi.
@@ -13,8 +13,10 @@
 #define DHTPIN 2
 #define DHTTYPE    DHT11   
 DHT_Unified dht(DHTPIN, DHTTYPE);
-#define STRUCT_SIZE 24 //Size float * number of float datapoints
+#define STRUCT_SIZE 24 //Size of float * nr of struct members -> 4 * 6 
+#define STRUCT_ELEMS 6 // number of elements in structure
 byte Data[STRUCT_SIZE];//Data to send to Raspberry Pi
+float f_Data[STRUCT_ELEMS];
 struct Weather {
   float temp;//temperature
   float hum;//humidity
@@ -30,9 +32,50 @@ void setup() {
 }
 
 void loop() {
-  RecordData();//UC16
-  InsertData();//UC10
-  delay(1000);
+  RecordData();//UC..%need to change name according to P3 schematics
+
+  InsertData();//UC.. %^^
+  //ReceiveData();
+  clearData();
+  Serial.flush();
+  delay(500);
+}
+void clearData()
+{
+  for (int i = 0; i < STRUCT_SIZE; i++)
+    Data[i] = 0;//clear data to prep for receiving new data
+}
+void ReceiveData(){//Test function to make sure bits of W_Data are unpacked correctly
+  Serial.readBytesUntil('\n', Data, sizeof(Data)); 
+  float temp_loc = ((byte)Data[0] << 24) 
+                     + ((byte)Data[1] << 16) 
+                     + ((byte)Data[2] << 8) 
+                     + ((byte)Data[3]);
+      float hum_loc = ((byte)Data[4] << 24) 
+                     + ((byte)Data[5] << 16) 
+                     + ((byte)Data[6] << 8) 
+                     + ((byte)Data[7]);
+      float pres_loc = ((byte)Data[8] << 24) 
+                     + ((byte)Data[9] << 16) 
+                     + ((byte)Data[10] << 8) 
+                     + ((byte)Data[11]);
+      float dens_loc = ((byte)Data[12] << 24) 
+                     + ((byte)Data[13] << 16) 
+                     + ((byte)Data[14] << 8) 
+                     + ((byte)Data[15]);
+      float w_dir_loc = ((byte)Data[16] << 24) 
+                     + ((byte)Data[17] << 16) 
+                     + ((byte)Data[18] << 8) 
+                     + ((byte)Data[19]);
+      float w_spd_loc = ((byte)Data[20] << 24) 
+                     + ((byte)Data[21] << 16) 
+                     + ((byte)Data[22] << 8) 
+                     + ((byte)Data[23]);     
+  Serial.print("Printing Real Values: "); 
+  Serial.print("Temp in Celcuius = ");
+  Serial.print(temp_loc);
+  Serial.print(" Hu in % = ");
+  Serial.println(hum_loc);
 }
 void RecordData()
 {
@@ -46,34 +89,34 @@ void get_random_values()//to use in place of vacant sensors
   W_Data.dens = (float) random(20,25) * rand_float;
   W_Data.w_dir = (float) random(220,250) * rand_float;  
   W_Data.w_spd = (float) random(3, 5) * rand_float;
+  
 }
 void InsertData()
 {
   for (int i = 0; i < 4; i++)
   {
-    Data[i] = (byte)((long)W_Data.temp >> (24 - (8 * i)) & 0xFF);
+    //(byte to type's current index = temp byte shifted the total size from the indexed position
+    Data[i] = (byte)((long)W_Data.temp >> (24 - (8 * i)) & 0xFF);//& 0xFF is added to preserve bit places
     Data[i + 4] = (byte)((unsigned long)W_Data.hum >> (24 - (8 * i)) & 0xFF);
     Data[i + 8] = (byte)((unsigned long)W_Data.pres >> (24 - (8 * i)) & 0xFF);
     Data[i + 12] = (byte)((unsigned long)W_Data.dens >> (24 - (8 * i)) & 0xFF);
     Data[i + 16] = (byte)((unsigned long)W_Data.w_dir >> (24 - (8 * i)) & 0xFF);
     Data[i + 20] = (byte)((unsigned long)W_Data.w_spd >> (24 - (8 * i)) & 0xFF);
   }
-  for (int i = 0; i < 24; i++)
-    Serial.print(Data[i]);
- /* Serial.print("\n");
-  Serial.print("Temp: ");
+  //Serial.print("Printing binary Data: ");
+
+  //Serial.print("Temp: ");
   Serial.print(W_Data.temp);
-  Serial.print(", Humidity: ");
-  Serial.println(W_Data.hum);
-  Serial.print("Pressure: ");
+  Serial.print(',');
+  Serial.print(W_Data.hum);
+  Serial.print(',');
   Serial.print(W_Data.pres);
-  Serial.print(", Air Quality: ");
-  Serial.println(W_Data.dens);
-  Serial.print("Wind Dir.: ");
+  Serial.print(',');
+  Serial.print(W_Data.dens);
+  Serial.print(',');
   Serial.print(W_Data.w_dir);
-  Serial.print("Wind Speed :");
-  Serial.println(W_Data.w_spd);
-  */
+  Serial.print(',');
+  Serial.print(W_Data.w_spd);
 }
 void Get_Hum_Temp()
 {

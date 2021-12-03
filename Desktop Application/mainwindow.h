@@ -38,6 +38,8 @@ private slots:
 
     void on_horizontalSlider_3_sliderMoved(int position);
 
+    void on_pushButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
     int timerId;

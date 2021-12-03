@@ -5,6 +5,11 @@
 #include <QtDebug>
 #include <QGraphicsWidget>
 #include <QVector>
+#include <QtNetwork>
+#include <QUrl>
+#include <QJsonObject>
+
+
 
 int count = 1;
 int digit = 1;
@@ -16,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
    ui->setupUi(this);
+   qnam = new QNetworkAccessManager(this);
 
    ui->plot->addGraph();
    ui->plot_2->addGraph();
@@ -232,4 +238,13 @@ void MainWindow::convertPas()
         qvector_pressure.replace(i, (qvector_pressure.at(i)*100));
         i++;
     }
+}
+
+void MainWindow::getCurrentData(QString deviceId) {
+    QNetworkReply* reply = qnam->get(QNetworkRequest(QUrl("http://qt-project.org/")));
+    if(!reply) {
+        return;
+    }
+    connect(reply, &QIODevice::readyRead, this, &MainWindow::setCurrentData(reply));
+    connect(reply, &QNetworkReply::errorOccurred,
 }

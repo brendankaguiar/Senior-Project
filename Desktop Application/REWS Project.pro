@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += charts
+QT       += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -18,7 +19,9 @@ HEADERS += \
     qcustomplot.h
 
 FORMS += \
+    dialog.ui \
     mainwindow.ui
+    authenticationdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

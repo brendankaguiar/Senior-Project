@@ -1,3 +1,4 @@
+import flask
 from flask import Flask, request
 import os
 import sqlite3 as sl
@@ -30,7 +31,7 @@ class database:
                 winddirection TEXT,
                 humidity REAL,
                 pressure REAL,
-                aql REAL
+                aqi REAL
             );
             """)
 
@@ -56,7 +57,7 @@ class database:
         db_con = sl.connect(self.db_filename)
         with db_con:
             db_cursor = db_con.cursor()
-            request_str = """INSERT INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aql)
+            request_str = """INSERT INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aqi)
                 VALUES( {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} );
                 """.format("weather",
                            json_data["timestamp"],
@@ -67,7 +68,7 @@ class database:
                            '\''+json_data["winddirection"]+'\'',
                            json_data["humidity"],
                            json_data["pressure"],
-                           json_data["aql"])
+                           json_data["aqi"])
             db_con.execute(request_str)
             db_cursor.close()
 
@@ -107,15 +108,20 @@ class database:
             ORDER BY timestamp ASC;"""
             cursor.execute(request_str)
             result = cursor.fetchall()
-        result_str = ""
+        record_list = []
         for record in result:
-            record_str = ""
-            for value in record:
-                record_str = record_str + str(value) + ", "
-            record_str = record_str[:len(record_str)-2]
-            print(record_str)
-            result_str = result_str + record_str + "\n"
-        return result_str
+            record_dict = {'timestamp':record[0],
+                           'date':record[1],
+                           'deviceid':record[2],
+                           'temperature':record[3],
+                           'windspeed':record[4],
+                           'humidity':record[5],
+                           'pressure':record[6],
+                           'aqi':record[7],
+                           }
+            record_list.append(record_dict)
+        #return flask.jsonify(json)
+        return json.dumps(record_list)
 
     #return most recent record from a certain device
     def getlatest(self, deviceid):
@@ -127,11 +133,18 @@ class database:
             """
             cursor.execute(request_str)
             result = cursor.fetchall()
-            value_str = ""
-            for value in result[0]:
-                value_str = value_str + str(value) + ", "
-            value_str = value_str[:len(value_str)-2]
-            return value_str
+            record_dict = {}
+            for record in result:
+                record_dict = {'timestamp':record[0],
+                               'date':record[1],
+                               'deviceid':record[2],
+                               'temperature':record[3],
+                               'windspeed':record[4],
+                               'humidity':record[5],
+                               'pressure':record[6],
+                               'aqi':record[7],
+                               }
+            return json.dumps(record_dict)
 
 
 #####################################################
@@ -139,7 +152,7 @@ class database:
 #####################################################
 
 #database object for Flask routes
-db = database('rews',False)
+db = database('test',False)
 
 app = Flask(__name__)
 @app.route('/')

@@ -3,7 +3,7 @@ import server
 import sys
 
 server_host = "127.0.0.1"
-server_port = 80
+server_port = 5000
 
 if len(sys.argv) != 1:
     ip = sys.argv[1]

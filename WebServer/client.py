@@ -82,7 +82,7 @@ for x in range(0,2000):
                                          "winddirection": "SW",
                                          "humidity": random.randint(0,100),
                                          "pressure": random.randint(0,100),
-                                         "aql": random.randint(0,100)
+                                         "aqi": random.randint(0,100)
                                          })
     print(req.content.decode())
 

@@ -4,7 +4,8 @@
  * are generated using random values. After gathering weather data, the weather station sends it
  * serially to the Raspberry Pi.
  * 
- * Version 0.1 Set up Temp Structure and Serial Communication -Brendan Aguiar
+ * Version 0.1 Set up Temp Structure and Serial Communication -Brendan A.
+ * Version 0.2 Successfuly Tested sending data as String WD and as series of floats f_Data -Brendan A.
  */
 //Temperature/Humidity Globals
 #include <Adafruit_Sensor.h>
@@ -15,8 +16,9 @@
 DHT_Unified dht(DHTPIN, DHTTYPE);
 #define STRUCT_SIZE 24 //Size of float * nr of struct members -> 4 * 6 
 #define STRUCT_ELEMS 6 // number of elements in structure
-byte Data[STRUCT_SIZE];//Data to send to Raspberry Pi
+char Data[STRUCT_SIZE];//Data to send to Raspberry Pi
 float f_Data[STRUCT_ELEMS];
+String WD; 
 struct Weather {
   float temp;//temperature
   float hum;//humidity
@@ -36,14 +38,15 @@ void loop() {
 
   InsertData();//UC.. %^^
   //ReceiveData();
-  clearData();
-  Serial.flush();
-  delay(500);
+  //clearData();
+  delay(2000);
 }
 void clearData()
 {
+  
   for (int i = 0; i < STRUCT_SIZE; i++)
     Data[i] = 0;//clear data to prep for receiving new data
+   
 }
 void ReceiveData(){//Test function to make sure bits of W_Data are unpacked correctly
   Serial.readBytesUntil('\n', Data, sizeof(Data)); 
@@ -93,6 +96,21 @@ void get_random_values()//to use in place of vacant sensors
 }
 void InsertData()
 {
+  /*
+  WD = String(W_Data.temp);
+  WD += ',';
+  WD += String(W_Data.hum);
+  WD += ',';
+  WD += String(W_Data.pres);
+  WD += ',';
+  WD += String(W_Data.dens);
+  WD += ',';
+  WD += String(W_Data.w_dir);
+  WD += ',';
+  WD += String(W_Data.w_spd);
+  Serial.println(WD);
+  */
+  /*
   for (int i = 0; i < 4; i++)
   {
     //(byte to type's current index = temp byte shifted the total size from the indexed position
@@ -102,10 +120,20 @@ void InsertData()
     Data[i + 12] = (byte)((unsigned long)W_Data.dens >> (24 - (8 * i)) & 0xFF);
     Data[i + 16] = (byte)((unsigned long)W_Data.w_dir >> (24 - (8 * i)) & 0xFF);
     Data[i + 20] = (byte)((unsigned long)W_Data.w_spd >> (24 - (8 * i)) & 0xFF);
-  }
+  }*/
+  //Serial.println(Data);
+  
   //Serial.print("Printing binary Data: ");
-
-  //Serial.print("Temp: ");
+  f_Data[0] = W_Data.temp;
+  f_Data[1] = W_Data.hum;
+  f_Data[2] = W_Data.pres;
+  f_Data[3] = W_Data.dens;
+  f_Data[4] = W_Data.w_dir;
+  f_Data[5] = W_Data.w_spd;
+  Serial.println('$');//send start symbol
+  for(int i = 0; i < STRUCT_ELEMS; i++)
+    Serial.println(f_Data[i]);//send data
+  /*  
   Serial.print(W_Data.temp);
   Serial.print(',');
   Serial.print(W_Data.hum);
@@ -117,6 +145,7 @@ void InsertData()
   Serial.print(W_Data.w_dir);
   Serial.print(',');
   Serial.print(W_Data.w_spd);
+  */
 }
 void Get_Hum_Temp()
 {

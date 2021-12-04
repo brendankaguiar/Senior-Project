@@ -115,10 +115,12 @@ class database:
                            'deviceid':record[2],
                            'temperature':record[3],
                            'windspeed':record[4],
-                           'humidity':record[5],
-                           'pressure':record[6],
-                           'aqi':record[7],
+                           'winddirection':record[5],
+                           'humidity':record[6],
+                           'pressure':record[7],
+                           'aqi':record[8],
                            }
+            print(record_dict)
             record_list.append(record_dict)
         #return flask.jsonify(json)
         return json.dumps(record_list)
@@ -140,9 +142,10 @@ class database:
                                'deviceid':record[2],
                                'temperature':record[3],
                                'windspeed':record[4],
-                               'humidity':record[5],
-                               'pressure':record[6],
-                               'aqi':record[7],
+                               'winddirection':record[5],
+                               'humidity':record[6],
+                               'pressure':record[7],
+                               'aqi':record[8],
                                }
             return json.dumps(record_dict)
 

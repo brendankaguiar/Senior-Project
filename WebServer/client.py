@@ -13,7 +13,7 @@ d = str(datetime.today().date())
 d = d.replace('-','_')
 
 
-HOST = 'http://127.0.0.1:5000'  # The server's hostname or IP address
+HOST = 'http://75.38.110.170:5000/'  # The server's hostname or IP address
 ROUTE = '/devicedata/0/'+d
 
 PORT = 5000        # The port used by the server
@@ -47,16 +47,16 @@ def get_date(deviceid, date : str):
 #data = body.decode()
 #print(data)
 
-
-user_input = ''
-while user_input != '.exit':
-    user_input = input()
-    t1 = time.time()
-    data = get_date(0,"2021_11_"+user_input)
-    responsetime = time.time() - t1
-    print(data)
-    print("Records: "+ str(data.count("\n")))
-    print("Response in "+str(responsetime)+" seconds")
+#
+#user_input = ''
+#while user_input != '.exit':
+#    user_input = input()
+#    t1 = time.time()
+#    data = get_date(0,"2021_11_"+user_input)
+#    responsetime = time.time() - t1
+#    print(data)
+#    print("Records: "+ str(data.count("\n")))
+#    print("Response in "+str(responsetime)+" seconds")
 
 
 
@@ -67,12 +67,12 @@ while user_input != '.exit':
 
 #exit(1)
 
-for x in range(0,2000):
+for x in range(0,1):
     #time.sleep(1)
     day = random.randint(1,30)
     hour = random.randint(1,24)
     #minute
-    #randomdate = datetime.datetime(2021,11,randomdate) = randomdate.
+    randomdate = datetime.datetime(2021,11,randomdate)
 
     req = requests.post(HOST+ROUTE,json={"timestamp": int(time.time())+x,
                                          "date": randomdate,

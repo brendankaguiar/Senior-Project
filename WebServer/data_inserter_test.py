@@ -45,7 +45,7 @@ while current_timestamp != end_timestamp:
                                                "temperature": temp,
                                                "windspeed": random.randint(0,100),
                                                "winddirection": current_wind,
-                                               "humidity": round(random.uniform(0,1),2),
+                                               "humidity": round(random.uniform(0,1),2)*100,
                                                "pressure": random.randint(0,100),
                                                "aqi": aqi
                                                })

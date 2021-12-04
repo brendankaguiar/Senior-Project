@@ -17,15 +17,17 @@ t = int(time.time())
 d = str(datetime.today().date())
 d = d.replace('-','_')
 
-HOST = 'http://127.0.0.1:5000'  # The server's hostname or IP address
+HOST = 'http://75.38.110.170:5000/'  # The server's hostname or IP address
+HOST = 'http://127.0.0.1:5000/'
 ROUTE = '/devicedata/0/'+d
+
 
 
 def post_data(deviceid):
     url = HOST + "/devicedata/all/" + str(deviceid) + "/" + date
     try:
-        req = requests.post(url,json={"timestamp": int(time.time())+x,
-                                      "date": randomdate,
+        req = requests.post(url,json={"timestamp": int(datetime.now().timestamp()),
+                                      "date": '2021_12_3',
                                       "deviceid": 0,
                                       "temperature": random.randint(0,100),
                                       "windspeed": random.randint(0,100),
@@ -34,9 +36,14 @@ def post_data(deviceid):
                                       "pressure": random.randint(0,100),
                                       "aqi": random.randint(0,100)
                                       })
+        print(req.content)
     except:
         print("Connection Error")
 
+print("f")
+post_data(0)
+
+exit(0)
 
 def get_date(deviceid, date : str):
     url = HOST + "/devicedata/all/" + str(deviceid) + "/" + date
@@ -55,7 +62,7 @@ user_input = ''
 while user_input != '.exit':
     user_input = input()
     t1 = time.time()
-    data = get_date(0,"2021_11_"+user_input)
+    data = get_date(0,"2021_12_"+user_input)
     responsetime = time.time() - t1
     if data == None:
         print("Connection Error")

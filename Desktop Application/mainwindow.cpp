@@ -5,6 +5,10 @@
 #include <QtDebug>
 #include <QGraphicsWidget>
 #include <QVector>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <iostream>
 
 int count = 1;
 int digit = 1;
@@ -52,11 +56,11 @@ MainWindow::MainWindow(QWidget *parent)
 
    timerId = startTimer(1000);
    qvector_temp.append(23.5);
-   qDebug() <<  "Test Temp: " << qvector_temp.at(0);
+   //qDebug() <<  "Test Temp: " << qvector_temp.at(0);
    qvector_windspeed.append(73.2);
-   qDebug() <<  "Test Temp: " << qvector_windspeed.at(0);
+   //qDebug() <<  "Test Temp: " << qvector_windspeed.at(0);
    qvector_pressure.append(732.54);
-   qDebug() <<  "Test Temp: " << qvector_pressure.at(0);
+   //qDebug() <<  "Test Temp: " << qvector_pressure.at(0);
 }
 
 MainWindow::~MainWindow()
@@ -76,7 +80,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     digit = newData();
-    qDebug() << "Update...";
+    //qDebug() << "Update...";
     ui->lcdNumber->display(digit);
     addPoint(count,digit, qv_x,qv_y);
     addPoint(count,digit, qv_x2,qv_y2);
@@ -86,9 +90,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
     addPoint(count,digit, qv_x6,qv_y6);
     count++;
     plot();
-    qDebug() << "Test Temp: " << qvector_temp.at(0);
-    qDebug() << "Test Wind Speed: " << qvector_windspeed.at(0);
-    qDebug() << "Test Pressure: " << qvector_pressure.at(0);
+    //qDebug() << "Test Temp: " << qvector_temp.at(0);
+    //qDebug() << "Test Wind Speed: " << qvector_windspeed.at(0);
+    //qDebug() << "Test Pressure: " << qvector_pressure.at(0);
     //digit++;
 }
 
@@ -233,3 +237,29 @@ void MainWindow::convertPas()
         i++;
     }
 }
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QString url = ui->plainTextEdit->toPlainText();
+    url.remove(QChar('"'));
+    QUrl processedURL = url;
+    qDebug() << "Sending request to: " << url;
+    QNetworkAccessManager * manager;
+    QNetworkRequest request;
+    manager = new QNetworkAccessManager();
+    QObject::connect(manager, &QNetworkAccessManager::finished,
+        this, [=](QNetworkReply *reply) {
+            if (reply->error()) {
+                qDebug() << reply->errorString();
+                return;
+            }
+
+            QString answer = reply->readAll();
+
+            qDebug() << answer;
+        }
+    );
+    request.setUrl(processedURL);
+    manager->get(request);
+}
+

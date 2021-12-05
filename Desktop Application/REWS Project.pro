@@ -19,7 +19,6 @@ HEADERS += \
     qcustomplot.h
 
 FORMS += \
-    dialog.ui \
     mainwindow.ui
     authenticationdialog.ui
 

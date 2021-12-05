@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QNetworkAccessManager>
+#include <QUrl>
+#include <QJsonArray>
 
 QT_BEGIN_NAMESPACE
 class QChartView;
@@ -28,9 +31,6 @@ public:
     void convertPas();
 
 private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
 
     void on_horizontalSlider_sliderMoved(int position);
 
@@ -38,7 +38,7 @@ private slots:
 
     void on_horizontalSlider_3_sliderMoved(int position);
 
-    void on_pushButton_3_clicked();
+    void on_HTTPButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -47,8 +47,11 @@ private:
     QVector<double> qvector_temp, qvector_humid, qvector_windspeed, qvector_pressure, qvector_aq;
     QVector<double> qv_x, qv_y, qv_x2, qv_y2,qv_x3, qv_y3,qv_x4, qv_y4,qv_x5, qv_y5,qv_x6, qv_y6;
 
+    QNetworkRequest request;
+    QNetworkAccessManager* qnam;
+    QJsonArray jsonReply;
+
 protected:
-    void timerEvent(QTimerEvent *event);
 
 };
 #endif // MAINWINDOW_H

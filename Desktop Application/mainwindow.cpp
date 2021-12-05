@@ -5,10 +5,13 @@
 #include <QtDebug>
 #include <QGraphicsWidget>
 #include <QVector>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <QtNetwork>
+#include <QUrl>
 #include <iostream>
+#include <QJsonValue>
+#include <QJsonValueRef>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 int count = 1;
 int digit = 1;
@@ -17,83 +20,48 @@ QPen pen;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),
+      qnam(new QNetworkAccessManager)
 {
    ui->setupUi(this);
 
-   ui->plot->addGraph();
-   ui->plot_2->addGraph();
-   ui->plot_3->addGraph();
-   ui->plot_4->addGraph();
-   ui->plot_5->addGraph();
-   ui->plot_6->addGraph();
+   ui->HomepagePlot->addGraph();
+   ui->PlotTemperature->addGraph();
+   ui->PlotHumidity->addGraph();
+   ui->PlotWindSpeedDirection->addGraph();
+   ui->PlotPressure->addGraph();
+   ui->PlotAirQuality->addGraph();
 
-   ui->plot->xAxis->setRange(0, 100);
-   ui->plot->yAxis->setRange(0, 100);
-   ui->plot_2->xAxis->setRange(0, 100);
-   ui->plot_2->yAxis->setRange(0, 100);
-   ui->plot_3->xAxis->setRange(0, 100);
-   ui->plot_3->yAxis->setRange(0, 100);
-   ui->plot_4->xAxis->setRange(0, 100);
-   ui->plot_4->yAxis->setRange(0, 100);
-   ui->plot_5->xAxis->setRange(0, 100);
-   ui->plot_5->yAxis->setRange(0, 100);
-   ui->plot_6->xAxis->setRange(0, 100);
-   ui->plot_6->yAxis->setRange(0, 100);
+   ui->HomepagePlot->xAxis->setRange(0, 100);
+   ui->HomepagePlot->yAxis->setRange(0, 100);
+   ui->PlotTemperature->xAxis->setRange(0, 100);
+   ui->PlotTemperature->yAxis->setRange(0, 100);
+   ui->PlotHumidity->xAxis->setRange(0, 100);
+   ui->PlotHumidity->yAxis->setRange(0, 100);
+   ui->PlotWindSpeedDirection->xAxis->setRange(0, 100);
+   ui->PlotWindSpeedDirection->yAxis->setRange(0, 100);
+   ui->PlotPressure->xAxis->setRange(0, 100);
+   ui->PlotPressure->yAxis->setRange(0, 100);
+   ui->PlotAirQuality->xAxis->setRange(0, 100);
+   ui->PlotAirQuality->yAxis->setRange(0, 100);
 
-   ui->plot->graph(0)->setPen(QPen(Qt::blue));
-   ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-   ui->plot_2->graph(0)->setPen(QPen(Qt::blue));
-   ui->plot_2->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-   ui->plot_3->graph(0)->setPen(QPen(Qt::blue));
-   ui->plot_3->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-   ui->plot_4->graph(0)->setPen(QPen(Qt::blue));
-   ui->plot_4->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-   ui->plot_5->graph(0)->setPen(QPen(Qt::blue));
-   ui->plot_5->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-   ui->plot_6->graph(0)->setPen(QPen(Qt::blue));
-   ui->plot_6->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-
-   timerId = startTimer(1000);
-   qvector_temp.append(23.5);
-   //qDebug() <<  "Test Temp: " << qvector_temp.at(0);
-   qvector_windspeed.append(73.2);
-   //qDebug() <<  "Test Temp: " << qvector_windspeed.at(0);
-   qvector_pressure.append(732.54);
-   //qDebug() <<  "Test Temp: " << qvector_pressure.at(0);
+   ui->HomepagePlot->graph(0)->setPen(QPen(Qt::blue));
+   ui->HomepagePlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   ui->PlotTemperature->graph(0)->setPen(QPen(Qt::blue));
+   ui->PlotTemperature->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   ui->PlotHumidity->graph(0)->setPen(QPen(Qt::blue));
+   ui->PlotHumidity->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   ui->PlotWindSpeedDirection->graph(0)->setPen(QPen(Qt::blue));
+   ui->PlotWindSpeedDirection->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   ui->PlotPressure->graph(0)->setPen(QPen(Qt::blue));
+   ui->PlotPressure->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   ui->PlotAirQuality->graph(0)->setPen(QPen(Qt::blue));
+   ui->PlotAirQuality->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-
-void MainWindow::on_pushButton_clicked()
-{
-    //QMessageBox::information(this,"Download Data", "File Type:");
-    count = 1;
-    ui->lcdNumber_2->display(button = button + 100);
-
-}
-
-void MainWindow::timerEvent(QTimerEvent *event)
-{
-    digit = newData();
-    //qDebug() << "Update...";
-    ui->lcdNumber->display(digit);
-    addPoint(count,digit, qv_x,qv_y);
-    addPoint(count,digit, qv_x2,qv_y2);
-    addPoint(count,digit, qv_x3,qv_y3);
-    addPoint(count,digit, qv_x4,qv_y4);
-    addPoint(count,digit, qv_x5,qv_y5);
-    addPoint(count,digit, qv_x6,qv_y6);
-    count++;
-    plot();
-    //qDebug() << "Test Temp: " << qvector_temp.at(0);
-    //qDebug() << "Test Wind Speed: " << qvector_windspeed.at(0);
-    //qDebug() << "Test Pressure: " << qvector_pressure.at(0);
-    //digit++;
 }
 
 void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<double> &yV)
@@ -110,30 +78,26 @@ void MainWindow::clearData()
 
 void MainWindow::plot()
 {
-    ui->plot->graph(0)->setData(qv_x,qv_y);
-    ui->plot_2->graph(0)->setData(qv_x2,qv_y2);
-    ui->plot_3->graph(0)->setData(qv_x3,qv_y3);
-    ui->plot_4->graph(0)->setData(qv_x4,qv_y4);
-    ui->plot_5->graph(0)->setData(qv_x5,qv_y5);
-    ui->plot_6->graph(0)->setData(qv_x6,qv_y6);
-    ui->plot->replot();
-    ui->plot->update();
-    ui->plot_2->replot();
-    ui->plot_2->update();
-    ui->plot_3->replot();
-    ui->plot_3->update();
-    ui->plot_4->replot();
-    ui->plot_4->update();
-    ui->plot_5->replot();
-    ui->plot_5->update();
-    ui->plot_6->replot();
-    ui->plot_6->update();
+    ui->HomepagePlot->graph(0)->setData(qv_x,qv_y);
+    ui->PlotTemperature->graph(0)->setData(qv_x2,qv_y2);
+    ui->PlotHumidity->graph(0)->setData(qv_x3,qv_y3);
+    ui->PlotWindSpeedDirection->graph(0)->setData(qv_x4,qv_y4);
+    ui->PlotPressure->graph(0)->setData(qv_x5,qv_y5);
+    ui->PlotAirQuality->graph(0)->setData(qv_x6,qv_y6);
 
-}
+    ui->HomepagePlot->replot();
+    ui->HomepagePlot->update();
+    ui->PlotTemperature->replot();
+    ui->PlotTemperature->update();
+    ui->PlotHumidity->replot();
+    ui->PlotHumidity->update();
+    ui->PlotWindSpeedDirection->replot();
+    ui->PlotWindSpeedDirection->update();
+    ui->PlotPressure->replot();
+    ui->PlotPressure->update();
+    ui->PlotAirQuality->replot();
+    ui->PlotAirQuality->update();
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    clearData();
 }
 
 int MainWindow::newData()
@@ -238,28 +202,32 @@ void MainWindow::convertPas()
     }
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_HTTPButton_clicked()
 {
-    QString url = ui->plainTextEdit->toPlainText();
+    QString url = ui->HTTPTextInput->toPlainText();
     url.remove(QChar('"'));
     QUrl processedURL = url;
     qDebug() << "Sending request to: " << url;
-    QNetworkAccessManager * manager;
-    QNetworkRequest request;
-    manager = new QNetworkAccessManager();
-    QObject::connect(manager, &QNetworkAccessManager::finished,
+    request.setUrl(processedURL);
+    QObject::connect(qnam, &QNetworkAccessManager::finished,
         this, [=](QNetworkReply *reply) {
             if (reply->error()) {
                 qDebug() << reply->errorString();
                 return;
             }
 
-            QString answer = reply->readAll();
+            QByteArray buffer = reply->readAll();
+            qDebug() << buffer;
+            QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
+            QJsonArray jsonReply = jsonDoc.array();
+            QJsonObject data = jsonReply[0].toObject();
 
-            qDebug() << answer;
+            qDebug() << data;
+            qDebug() << data["temperature"];
+            reply->deleteLater();
         }
     );
-    request.setUrl(processedURL);
-    manager->get(request);
+    qnam->get(request);
+
 }
 

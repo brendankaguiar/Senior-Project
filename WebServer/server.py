@@ -60,7 +60,7 @@ class database:
             request_str = """INSERT INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aqi)
                 VALUES( {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} );
                 """.format("weather",
-                           json_data["timestamp"],
+                           int(json_data["timestamp"]),
                            '\''+json_data["date"]+'\'',
                            json_data["deviceid"],
                            json_data["temperature"],
@@ -137,7 +137,7 @@ class database:
             result = cursor.fetchall()
             record_dict = {}
             for record in result:
-                record_dict = {'timestamp':record[0],
+                record_dict = {'timestamp': record[0],
                                'date':record[1],
                                'deviceid':record[2],
                                'temperature':record[3],
@@ -155,14 +155,14 @@ class database:
 #####################################################
 
 #database object for Flask routes
-db = database('test',False)
+db = database('testdb',False)    #CHANGE BACK TO FALSE
 
 app = Flask(__name__)
 @app.route('/')
 def hello_world():
     print(f"\nReceived request from {request.remote_addr}")
     print(f"Hello World")
-    return 'hello test'
+    return 'Hello World'
 
 #retrieve, insert, and delete all records by date and device
 @app.route('/devicedata/all/<device_id>/<date>', methods = ['GET', 'POST', 'DELETE'])
@@ -172,14 +172,12 @@ def get(device_id,date):
         print(f"Getting all records for device {device_id} on date {date}")
         return db.getday(device_id,date)
     if request.method == 'POST':
-        print("posted")
         data = request.get_json()
         db.insert("weather",data)
         print(f"Posted {data}")
-        #db.debug_print()
         return "post_success"
     if request.method == 'DELETE':
-        print("deleted")
+        print(f"Deleting records for date {date}")
         db.delete("weather",date)
         return "delete_success"
 

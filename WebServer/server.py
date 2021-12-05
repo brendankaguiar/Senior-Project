@@ -120,7 +120,7 @@ class database:
                            'pressure':record[7],
                            'aqi':record[8],
                            }
-            print(record_dict)
+            #print(record_dict)
             record_list.append(record_dict)
         #return flask.jsonify(json)
         return json.dumps(record_list)
@@ -160,18 +160,22 @@ db = database('test',False)
 app = Flask(__name__)
 @app.route('/')
 def hello_world():
+    print(f"\nReceived request from {request.remote_addr}")
+    print(f"Hello World")
     return 'hello test'
 
 #retrieve, insert, and delete all records by date and device
 @app.route('/devicedata/all/<device_id>/<date>', methods = ['GET', 'POST', 'DELETE'])
 def get(device_id,date):
+    print(f"\nReceived request from {request.remote_addr}")
     if request.method == 'GET':
-        print("Getting all records for device " + device_id + " on date " + date)
+        print(f"Getting all records for device {device_id} on date {date}")
         return db.getday(device_id,date)
     if request.method == 'POST':
         print("posted")
         data = request.get_json()
         db.insert("weather",data)
+        print(f"Posted {data}")
         #db.debug_print()
         return "post_success"
     if request.method == 'DELETE':
@@ -188,6 +192,7 @@ def hour(device_id, date):
 #get latest record for certain device
 @app.route('/devicedata/latest/<device_id>', methods = ['GET'])
 def latest(device_id):
+    print(f"\nReceived request from {request.remote_addr}")
     if request.method == 'GET':
         print("Getting most recent record for device " + device_id)
         record = db.getlatest(device_id)
@@ -197,6 +202,7 @@ def latest(device_id):
 #delete all route
 @app.route('/devicedata/delete')
 def delete():
+    print(f"\nReceived request from {request.remote_addr}")
     db.delete("weather")
 
 if __name__ == '__main__':

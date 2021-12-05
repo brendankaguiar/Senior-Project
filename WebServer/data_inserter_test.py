@@ -6,8 +6,9 @@ from datetime import datetime
 import random
 import math
 
-HOST = 'http://127.0.0.1:5000'  # The server's hostname or IP address
-ROUTE = '/devicedata/0/'
+#HOST = 'http://127.0.0.1:5000'  # The server's hostname or IP address
+HOST = 'http://75.38.110.170:5000/'
+ROUTE = '/devicedata/all/0/'
 
 wind_direction = ['N','NW','NE','S','SW','SE']
 
@@ -36,7 +37,6 @@ while current_timestamp != end_timestamp:
     aqi = 25+random.randint(-1,1)
     aqi += random.randint(0,1)
 
-    print(t.hour)
     current_timestamp+=60
     try:
         req = requests.post(HOST+ROUTE+d,json={"timestamp": current_timestamp,
@@ -45,10 +45,11 @@ while current_timestamp != end_timestamp:
                                                "temperature": temp,
                                                "windspeed": random.randint(0,100),
                                                "winddirection": current_wind,
-                                               "humidity": round(random.uniform(0,1),2)*100,
+                                               "humidity": round(random.uniform(0.45,0.55),2)*100,
                                                "pressure": random.randint(0,100),
                                                "aqi": aqi
                                                })
+        print(req.content)
     except:
         print(f"Error Posting {current_timestamp}")
 

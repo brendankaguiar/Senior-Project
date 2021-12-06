@@ -155,7 +155,7 @@ class database:
 #####################################################
 
 #database object for Flask routes
-db = database('testdb',False)    #CHANGE BACK TO FALSE
+db = database('rews',True)    #CHANGE BACK TO FALSE
 
 app = Flask(__name__)
 @app.route('/')

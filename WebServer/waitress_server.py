@@ -1,3 +1,8 @@
+#*********PURPOSE***********
+#Deployment server
+#Run using waitress_server.py <IP>:<Port>
+#Running without arguments will run on localhost port 5000
+
 from waitress import serve
 import server
 import sys

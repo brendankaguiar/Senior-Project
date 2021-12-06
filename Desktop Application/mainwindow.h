@@ -32,11 +32,11 @@ public:
 
 private slots:
 
-    void on_horizontalSlider_sliderMoved(int position);
+    void on_ChangeTemperature_sliderMoved(int position);
 
-    void on_horizontalSlider_2_sliderMoved(int position);
+    void on_ChangeWind_sliderMoved(int position);
 
-    void on_horizontalSlider_3_sliderMoved(int position);
+    void on_ChangePressure_sliderMoved(int position);
 
     void on_HTTPButton_clicked();
 
@@ -44,7 +44,7 @@ private:
     Ui::MainWindow *ui;
 
     void connectSignals();
-    QVector<double> qvector_temp, qvector_humid, qvector_windspeed, qvector_pressure, qvector_aq;
+    //QVector<double> qvector_temp, qvector_humid, qvector_windspeed, qvector_pressure, qvector_aq;
     QVector<double> qv_x, qv_y, qv_x2, qv_y2,qv_x3, qv_y3,qv_x4, qv_y4,qv_x5, qv_y5,qv_x6, qv_y6;
 
     QNetworkRequest request;

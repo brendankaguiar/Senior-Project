@@ -57,7 +57,7 @@ class database:
         db_con = sl.connect(self.db_filename)
         with db_con:
             db_cursor = db_con.cursor()
-            request_str = """INSERT INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aqi)
+            request_str = """INSERT OR REPLACE INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aqi)
                 VALUES( {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} );
                 """.format("weather",
                            int(json_data["timestamp"]),

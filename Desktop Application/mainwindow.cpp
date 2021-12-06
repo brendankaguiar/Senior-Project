@@ -33,17 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotAirQuality->addGraph();
 
    ui->HomepagePlot->xAxis->setRange(0, 100);
-   ui->HomepagePlot->yAxis->setRange(0, 100);
+   ui->HomepagePlot->yAxis->setRange(-50, 100);
    ui->PlotTemperature->xAxis->setRange(0, 100);
-   ui->PlotTemperature->yAxis->setRange(0, 100);
+   ui->PlotTemperature->yAxis->setRange(-50, 100);
    ui->PlotHumidity->xAxis->setRange(0, 100);
    ui->PlotHumidity->yAxis->setRange(0, 100);
    ui->PlotWindSpeedDirection->xAxis->setRange(0, 100);
-   ui->PlotWindSpeedDirection->yAxis->setRange(0, 100);
+   ui->PlotWindSpeedDirection->yAxis->setRange(0, 15);
    ui->PlotPressure->xAxis->setRange(0, 100);
-   ui->PlotPressure->yAxis->setRange(0, 100);
+   ui->PlotPressure->yAxis->setRange(0, 1000);
    ui->PlotAirQuality->xAxis->setRange(0, 100);
-   ui->PlotAirQuality->yAxis->setRange(0, 100);
+   ui->PlotAirQuality->yAxis->setRange(0, 500);
 
    ui->HomepagePlot->graph(0)->setPen(QPen(Qt::blue));
    ui->HomepagePlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
@@ -217,13 +217,28 @@ void MainWindow::on_HTTPButton_clicked()
             }
 
             QByteArray buffer = reply->readAll();
-            qDebug() << buffer;
             QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
             QJsonArray jsonReply = jsonDoc.array();
-            QJsonObject data = jsonReply[0].toObject();
+            QJsonObject data = *new QJsonObject();
+            double count = 1;
 
-            qDebug() << data;
-            qDebug() << data["temperature"];
+
+
+            for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
+                data = record->toObject();
+//                qDebug() << data["winddirection"];
+//                qDebug() << data["temperature"];
+//                qDebug() << data["timestamp"];
+                addPoint(count, data["temperature"].toDouble(), qv_x, qv_y);
+                addPoint(count, data["temperature"].toDouble(), qv_x2, qv_y2);
+                addPoint(count, data["humidity"].toDouble(), qv_x3, qv_y3);
+                addPoint(count, data["windspeed"].toDouble(), qv_x4, qv_y4);
+                addPoint(count, data["pressure"].toDouble(), qv_x5, qv_y5);
+                addPoint(count, data["aqi"].toDouble(), qv_x6, qv_y6);
+                qDebug() << qv_y;
+                plot();
+                count++;
+            }
             reply->deleteLater();
         }
     );

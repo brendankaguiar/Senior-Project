@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotHumidity->xAxis->setRange(0, 100);
    ui->PlotHumidity->yAxis->setRange(0, 100);
    ui->PlotWindSpeedDirection->xAxis->setRange(0, 100);
-   ui->PlotWindSpeedDirection->yAxis->setRange(0, 15);
+   ui->PlotWindSpeedDirection->yAxis->setRange(0, 30);
    ui->PlotPressure->xAxis->setRange(0, 100);
    ui->PlotPressure->yAxis->setRange(0, 1000);
    ui->PlotAirQuality->xAxis->setRange(0, 100);
@@ -66,14 +66,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<double> &yV)
 {
+    xV.begin();
+    yV.begin();
     xV.append(x);
     yV.append(y);
 }
 
 void MainWindow::clearData()
 {
+    count = 1;
     qv_x.clear();
     qv_y.clear();
+    qv_x2.clear();
+    qv_y2.clear();
+    qv_x3.clear();
+    qv_y3.clear();
+    qv_x4.clear();
+    qv_y4.clear();
+    qv_x5.clear();
+    qv_y5.clear();
+    qv_x6.clear();
+    qv_y6.clear();
 }
 
 void MainWindow::plot()
@@ -98,6 +111,12 @@ void MainWindow::plot()
     ui->PlotAirQuality->replot();
     ui->PlotAirQuality->update();
 
+    ui->lcdNumber->display(qv_y.at(qv_y.length()-1));
+    ui->LCDTemperature->display(qv_y2.at(qv_y2.length()-1));
+    ui->LCDHumidity->display(qv_y3.at(qv_y3.length()-1));
+    ui->LCDWind->display(qv_y4.at(qv_y4.length()-1));
+    ui->LCDPressure->display(qv_y5.at(qv_y5.length()-1));
+    ui->LCDAirQuality->display(qv_y6.at(qv_y6.length()-1));
 }
 
 int MainWindow::newData()
@@ -105,7 +124,7 @@ int MainWindow::newData()
     return rand() % 100;
 }
 
-void MainWindow::on_horizontalSlider_sliderMoved(int position)
+void MainWindow::on_ChangeTemperature_sliderMoved(int position)
 {
     if(position == 1)
     {
@@ -120,25 +139,27 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 void MainWindow::convertF()
 {
     int i = 0;
-    while(i < qvector_temp.length())
+    while(i < qv_y2.length())
     {
-        qvector_temp.replace(i, (((qvector_temp.at(i)*9)/5) + 32));
+        qv_y2.replace(i, (((qv_y2.at(i)*9)/5) + 32));
         i++;
     }
+    plot();
 }
 
 void MainWindow::convertC()
 {
     int i = 0;
-    while(i < qvector_temp.length())
+    while(i < qv_y2.length())
     {
-        qvector_temp.replace(i, (((qvector_temp.at(i)-32)*5)/9));
+        qv_y2.replace(i, (((qv_y2.at(i)-32)*5)/9));
         i++;
     }
+    plot();
 }
 
 
-void MainWindow::on_horizontalSlider_2_sliderMoved(int position)
+void MainWindow::on_ChangeWind_sliderMoved(int position)
 {
     if(position == 1)
     {
@@ -153,24 +174,28 @@ void MainWindow::on_horizontalSlider_2_sliderMoved(int position)
 void MainWindow::convertMph()
 {
     int i = 0;
-    while(i < qvector_windspeed.length())
+    while(i < qv_y4.length())
     {
-        qvector_windspeed.replace(i, (qvector_windspeed.at(i)/1.609));
+        qv_y4.replace(i, (qv_y4.at(i)/1.609));
         i++;
     }
+    ui->PlotWindSpeedDirection->yAxis->setRangeUpper(30);
+    plot();
 }
 
 void MainWindow::convertKph()
 {
     int i = 0;
-    while(i < qvector_windspeed.length())
+    while(i < qv_y4.length())
     {
-        qvector_windspeed.replace(i, (qvector_windspeed.at(i)*1.609));
+        qv_y4.replace(i, (qv_y4.at(i)*1.609));
         i++;
     }
+    ui->PlotWindSpeedDirection->yAxis->setRangeUpper(50);
+    plot();
 }
 
-void MainWindow::on_horizontalSlider_3_sliderMoved(int position)
+void MainWindow::on_ChangePressure_sliderMoved(int position)
 {
     if(position == 1)
     {
@@ -185,21 +210,25 @@ void MainWindow::on_horizontalSlider_3_sliderMoved(int position)
 void MainWindow::convertMbars()
 {
     int i = 0;
-    while(i < qvector_pressure.length())
+    while(i < qv_y5.length())
     {
-        qvector_pressure.replace(i, (qvector_pressure.at(i)/100));
+        qv_y5.replace(i, (qv_y5.at(i)/100));
         i++;
     }
+    ui->PlotPressure->yAxis->setRangeUpper(1000);
+    plot();
 }
 
 void MainWindow::convertPas()
 {
     int i = 0;
-    while(i < qvector_pressure.length())
+    while(i < qv_y5.length())
     {
-        qvector_pressure.replace(i, (qvector_pressure.at(i)*100));
+        qv_y5.replace(i, (qv_y5.at(i)*100));
         i++;
     }
+    ui->PlotPressure->yAxis->setRangeUpper(100000);
+    plot();
 }
 
 void MainWindow::on_HTTPButton_clicked()
@@ -234,7 +263,7 @@ void MainWindow::on_HTTPButton_clicked()
                     minTimestamp = 0;
 
 
-
+            clearData();
             for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
                 data = record->toObject();
                 if(record == jsonReply.begin()){

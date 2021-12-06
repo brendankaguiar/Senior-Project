@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+#*********PURPOSE*********
+#Currently a test script for testing client behavior, does not do anything useful currently
+
 import sqlite3
 import socket
 import requests
@@ -57,11 +60,6 @@ def get_date(deviceid, date : str):
 #    print(data)
 #    print("Records: "+ str(data.count("\n")))
 #    print("Response in "+str(responsetime)+" seconds")
-
-
-
-
-
 
 
 

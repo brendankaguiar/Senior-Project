@@ -35,16 +35,18 @@ while current_timestamp <= end_timestamp:
     d = str(t.date())
     d = d.replace('-','_')
 
+    decimalhour = t.hour + (t.minute/60)
+
     if t.hour != current_hour:
         current_hour = t.hour
         current_wind = wind_direction[random.randint(0,5)]
 
 
     #get random temp:
-    temp = 12*math.cos((t.hour+12)/(12/math.pi))+32 + random.uniform(-0.5,0.5)
+    temp = 12*math.cos((decimalhour+12)/(12/math.pi))+32 + random.uniform(-0.5,0.5)
     temp = ((temp-32)*5)/9  #convert to celcius
 
-    wind_speed = 10 * math.cos((t.hour+6)/(6/math.pi))+10 + random.uniform(0,1)
+    wind_speed = 10 * math.cos((decimalhour+6)/(6/math.pi))+5 + random.uniform(-0.5,0.5)
     aqi = 25+random.randint(-1,1)
     aqi += random.randint(0,1)
 
@@ -71,14 +73,16 @@ def postnow():
     d = str(t.date())
     d = d.replace('-','_')
 
+    decimalhour = t.hour + (t.minute/60)
+
     #get random wind direction:
     current_wind = wind_direction[random.randint(0,5)]
 
     #get random temp:
-    temp = 12*math.cos((t.hour+12)/(12/math.pi))+32 + random.uniform(-0.5,0.5)
+    temp = 12*math.cos((decimalhour+12)/(12/math.pi))+32 + random.uniform(-0.5,0.5)
     temp = ((temp-32)*5)/9  #convert to celcius
 
-    wind_speed = 10 * math.cos((t.hour+6)/(6/math.pi))+10 + random.uniform(0,1)
+    wind_speed = 10 * math.cos((decimalhour+6)/(6/math.pi))+5 + random.uniform(-0.5,0.5)
     aqi = 25+random.randint(-1,1)
     aqi += random.randint(0,1)
 

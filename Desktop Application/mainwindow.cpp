@@ -1,3 +1,19 @@
+/************************************************
+ * REWS Weather Station Visualizer
+ * Written By: Nick Ang, Kenji Won, Dalton Tracy
+ *
+ * Framework dependencies:
+ * QMessageBoxm QTimer, QtDebug, QGraphicsWidget,
+ * QVector, QtNetwork, QUrl, QJsonValue, QJsonValueRef,
+ * QJsonDocument, QJsonObject
+ *
+ * Contributions:
+ * Nick -
+ * Kenji -
+ * Dalton - on_HTTPButton_Clicked() function - 5 hours
+ *
+ * **********************************************/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
@@ -231,6 +247,11 @@ void MainWindow::convertPas()
     plot();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won and Dalton Tracy
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QByteArray, QJsonDocument, QJsonArray, QJssonObject
+///////////////////////////////////////////////////////////////
 void MainWindow::on_HTTPButton_clicked()
 {
     QString url = "http://127.0.0.1:5000/devicedata/all/0/2021_12_05";
@@ -263,7 +284,7 @@ void MainWindow::on_HTTPButton_clicked()
                     minTimestamp = 0;
 
 
-            clearData();
+
             for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
                 data = record->toObject();
                 if(record == jsonReply.begin()){

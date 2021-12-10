@@ -24,24 +24,24 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     const uint offsetsAndSize[14];
-    char stringdata0[143];
+    char stringdata0[132];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_MainWindow_t, stringdata0) + ofs), len 
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 10), // "MainWindow"
-QT_MOC_LITERAL(11, 31), // "on_horizontalSlider_sliderMoved"
-QT_MOC_LITERAL(43, 0), // ""
-QT_MOC_LITERAL(44, 8), // "position"
-QT_MOC_LITERAL(53, 33), // "on_horizontalSlider_2_sliderM..."
-QT_MOC_LITERAL(87, 33), // "on_horizontalSlider_3_sliderM..."
-QT_MOC_LITERAL(121, 21) // "on_HTTPButton_clicked"
+QT_MOC_LITERAL(11, 32), // "on_ChangeTemperature_sliderMoved"
+QT_MOC_LITERAL(44, 0), // ""
+QT_MOC_LITERAL(45, 8), // "position"
+QT_MOC_LITERAL(54, 25), // "on_ChangeWind_sliderMoved"
+QT_MOC_LITERAL(80, 29), // "on_ChangePressure_sliderMoved"
+QT_MOC_LITERAL(110, 21) // "on_HTTPButton_clicked"
 
     },
-    "MainWindow\0on_horizontalSlider_sliderMoved\0"
-    "\0position\0on_horizontalSlider_2_sliderMoved\0"
-    "on_horizontalSlider_3_sliderMoved\0"
+    "MainWindow\0on_ChangeTemperature_sliderMoved\0"
+    "\0position\0on_ChangeWind_sliderMoved\0"
+    "on_ChangePressure_sliderMoved\0"
     "on_HTTPButton_clicked"
 };
 #undef QT_MOC_LITERAL
@@ -80,9 +80,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->on_horizontalSlider_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->on_horizontalSlider_2_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->on_horizontalSlider_3_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->on_ChangeTemperature_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->on_ChangeWind_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->on_ChangePressure_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 3: _t->on_HTTPButton_clicked(); break;
         default: ;
         }

@@ -1,3 +1,5 @@
+//This code is built on default when opening a new project on QT
+
 #include "mainwindow.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>

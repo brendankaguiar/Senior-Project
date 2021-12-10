@@ -1,14 +1,18 @@
 /************************************************
  * REWS Weather Station Visualizer
- * Written By: Nick Ang, Kenji Won, Dalton Tracy
+ * Written By: Nicholas Ang, Kenji Won, Dalton Tracy
  *
  * Framework dependencies:
- * QMessageBoxm QTimer, QtDebug, QGraphicsWidget,
+ * QtWidgets, QMessageBox, QTimer, QtDebug, QGraphicsWidget,
  * QVector, QtNetwork, QUrl, QJsonValue, QJsonValueRef,
  * QJsonDocument, QJsonObject
  *
+ * External Integrated Libraries:
+ * QCustomPlot - qcustomplot.h, qcustomplot.cpp
+ *
  * Contributions:
- * Nick -
+ * Nick - MainWindow, addPoint, clearData, plot, on_ChangeTemperature_sliderMoved, on_ChangePressure_sliderMoved,
+ * on_ChangeWind_sliderMoved,convertF,convertC,convertMph,convertKph,convertMbars,convertPas, UI design
  * Kenji -
  * Dalton - on_HTTPButton_Clicked() function - 5 hours
  *
@@ -16,6 +20,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QtWidgets>
 #include <QMessageBox>
 #include <QTimer>
 #include <QtDebug>
@@ -34,6 +39,10 @@ int digit = 1;
 int button = 100;
 QPen pen;
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QtWidgets, QCustomPlot
+///////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
@@ -75,11 +84,16 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotAirQuality->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
 }
 
+//Default Qt Window Destructor
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector
+///////////////////////////////////////////////////////////////
 void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<double> &yV)
 {
     xV.begin();
@@ -88,6 +102,10 @@ void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<doubl
     yV.append(y);
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector
+///////////////////////////////////////////////////////////////
 void MainWindow::clearData()
 {
     count = 1;
@@ -105,6 +123,10 @@ void MainWindow::clearData()
     qv_y6.clear();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QtWidgets, QCustomPlot, QVector
+///////////////////////////////////////////////////////////////
 void MainWindow::plot()
 {
     ui->HomepagePlot->graph(0)->setData(qv_x,qv_y);
@@ -140,6 +162,10 @@ int MainWindow::newData()
     return rand() % 100;
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
 void MainWindow::on_ChangeTemperature_sliderMoved(int position)
 {
     if(position == 1)
@@ -152,6 +178,10 @@ void MainWindow::on_ChangeTemperature_sliderMoved(int position)
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector, QCustomPlot
+///////////////////////////////////////////////////////////////
 void MainWindow::convertF()
 {
     int i = 0;
@@ -163,6 +193,10 @@ void MainWindow::convertF()
     plot();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector, QCustomPlot
+///////////////////////////////////////////////////////////////
 void MainWindow::convertC()
 {
     int i = 0;
@@ -174,7 +208,10 @@ void MainWindow::convertC()
     plot();
 }
 
-
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
 void MainWindow::on_ChangeWind_sliderMoved(int position)
 {
     if(position == 1)
@@ -187,6 +224,10 @@ void MainWindow::on_ChangeWind_sliderMoved(int position)
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector, QCustomPlot
+///////////////////////////////////////////////////////////////
 void MainWindow::convertMph()
 {
     int i = 0;
@@ -199,6 +240,10 @@ void MainWindow::convertMph()
     plot();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector, QCustomPlot
+///////////////////////////////////////////////////////////////
 void MainWindow::convertKph()
 {
     int i = 0;
@@ -211,6 +256,10 @@ void MainWindow::convertKph()
     plot();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
 void MainWindow::on_ChangePressure_sliderMoved(int position)
 {
     if(position == 1)
@@ -223,6 +272,10 @@ void MainWindow::on_ChangePressure_sliderMoved(int position)
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector, QCustomPlot
+///////////////////////////////////////////////////////////////
 void MainWindow::convertMbars()
 {
     int i = 0;
@@ -235,6 +288,10 @@ void MainWindow::convertMbars()
     plot();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QVector, QCustomPlot
+///////////////////////////////////////////////////////////////
 void MainWindow::convertPas()
 {
     int i = 0;

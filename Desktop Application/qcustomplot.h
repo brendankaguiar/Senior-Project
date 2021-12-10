@@ -1,3 +1,6 @@
+//ALL OF THIS CODE IS INTEGRATED
+//QCUSTOMPLOT IS OPEN SOURCE
+
 /***************************************************************************
 **                                                                        **
 **  QCustomPlot, an easy to use, modern plotting widget for Qt            **

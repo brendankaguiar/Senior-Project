@@ -13,7 +13,7 @@
  * Contributions:
  * Nick - MainWindow, addPoint, clearData, plot, on_ChangeTemperature_sliderMoved, on_ChangePressure_sliderMoved,
  * on_ChangeWind_sliderMoved,convertF,convertC,convertMph,convertKph,convertMbars,convertPas, UI design
- * Kenji -
+ * Kenji - on_HTTPButton_Clicked() and UI design
  * Dalton - on_HTTPButton_Clicked() function - 5 hours
  *
  * **********************************************/

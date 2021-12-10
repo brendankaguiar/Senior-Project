@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-
-#*********PURPOSE*********
-#Currently a test script for testing client behavior, does not do anything useful currently
+#*************DESCRIPTION*************
+#Written by Daniel Beeston
+#Currently a test script for client behavior, does not do anything useful
 
 import sqlite3
 import socket

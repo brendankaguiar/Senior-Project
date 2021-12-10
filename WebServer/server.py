@@ -1,13 +1,17 @@
-import flask
+#*************DESCRIPTION*************
+#Written by Daniel Beeston
+#Flask server routes and database functions
+#Run using "python server.py" to host development server on 127.0.0.1
+
+#External packages used: Flask, sqlite3, os, json, datetime
+
 from flask import Flask, request
-import os
 import sqlite3 as sl
 from datetime import datetime
-import time
-import random
 import os
 import json
 
+#Contains methods for querying database
 class database:
     def __init__(self,
                  name : str,
@@ -15,12 +19,12 @@ class database:
         self.reset = reset
         self.db_filename = name +'.db'
 
-        if reset:
+        if reset:   #delete existing database if database reset is true
             if os.path.exists(self.db_filename):
                 os.remove(self.db_filename)
 
         db_con = sl.connect(self.db_filename)
-        with db_con:
+        with db_con:    #create weather table
             db_con.execute("""
             CREATE TABLE IF NOT EXISTS weather (
                 timestamp INT PRIMARY KEY,
@@ -37,11 +41,12 @@ class database:
 
         db_con.close()
 
-    def debug_print(self):
+    #debug function to print all data from a day
+    def debug_print(self,month,day):
         db_con = sl.connect(self.db_filename)
         with db_con:
             cursor = db_con.cursor()
-            cursor.execute("""SELECT * FROM weather WHERE date = \"2021_11_5\";""")
+            cursor.execute(f"SELECT * FROM weather WHERE date = \"2021_{month}_{day}\";")
             result = cursor.fetchall()
             for row in result:
                 print(row)
@@ -72,6 +77,7 @@ class database:
             db_con.execute(request_str)
             db_cursor.close()
 
+    #Public delete records for either certain
     def delete(self,table,data):
         if table == "weather":
             if data is not None:
@@ -101,7 +107,7 @@ class database:
     def getday(self,deviceid,date : str):
         db_con = sl.connect(self.db_filename)
         result = 0
-        with db_con:
+        with db_con:    #open db_con and retrieve records
             cursor = db_con.cursor()
             request_str = f"""SELECT * FROM weather 
             WHERE date = \"{date}\" AND deviceid = {deviceid}
@@ -109,7 +115,7 @@ class database:
             cursor.execute(request_str)
             result = cursor.fetchall()
         record_list = []
-        for record in result:
+        for record in result:   #convert records into dictionary
             record_dict = {'timestamp':record[0],
                            'date':record[1],
                            'deviceid':record[2],
@@ -123,12 +129,12 @@ class database:
             #print(record_dict)
             record_list.append(record_dict)
         #return flask.jsonify(json)
-        return json.dumps(record_list)
+        return json.dumps(record_list)  #Return json object array with records
 
     #return most recent record from a certain device
     def getlatest(self, deviceid):
         db_con = sl.connect(self.db_filename)
-        with db_con:
+        with db_con:    #open db_con and retrieve latest record
             cursor = db_con.cursor()
             request_str = """SELECT * FROM weather
             WHERE timestamp = (SELECT MAX(timestamp) FROM weather);
@@ -136,7 +142,7 @@ class database:
             cursor.execute(request_str)
             result = cursor.fetchall()
             record_dict = {}
-            for record in result:
+            for record in result:   #convert record into dictionary
                 record_dict = {'timestamp': record[0],
                                'date':record[1],
                                'deviceid':record[2],
@@ -147,7 +153,7 @@ class database:
                                'pressure':record[7],
                                'aqi':record[8],
                                }
-            return json.dumps(record_dict)
+            return json.dumps(record_dict)  #Return json object with record
 
 
 #####################################################
@@ -155,9 +161,11 @@ class database:
 #####################################################
 
 #database object for Flask routes
-db = database('rews',True)    #CHANGE BACK TO FALSE
+db = database('rews',True)    #CHANGE TO FALSE IF NOT TEST
 
 app = Flask(__name__)
+
+#Test route
 @app.route('/')
 def hello_world():
     print(f"\nReceived request from {request.remote_addr}")

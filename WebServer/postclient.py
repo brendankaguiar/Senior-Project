@@ -1,7 +1,10 @@
-
-#***********PURPOSE***********
+#*************DESCRIPTION*************
+#Written by Daniel Beeston
 #When ran, it will post a single datapoint to localhost server with current date and time
+#Script is now somewhat redundent after creating data_inserter_test.py
 #To change host, see HOST variable
+
+#External packages used: requests, time, datetime, random, math
 
 import requests
 import time
@@ -23,6 +26,8 @@ def postnow():
     d = str(t.date())
     d = d.replace('-','_')
 
+    decimalhour = t.hour + (t.minute/60)
+
     #get random wind direction:
     current_wind = wind_direction[random.randint(0,5)]
 
@@ -30,7 +35,7 @@ def postnow():
     temp = 12*math.cos((t.hour+12)/(12/math.pi))+32 + random.uniform(-0.5,0.5)
     temp = ((temp-32)*5)/9  #convert to celcius
 
-    wind_speed = 10 * math.cos((t.hour+6)/(6/math.pi))+10 + random.uniform(0,1)
+    wind_speed = 5 * math.cos((decimalhour+6)/(6/math.pi))+ 5.5 + random.uniform(-0.5,0.5)
     aqi = 25+random.randint(-1,1)
     aqi += random.randint(0,1)
 

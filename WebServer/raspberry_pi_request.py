@@ -1,5 +1,8 @@
 #Reqests and Time functions written by Daniel B.
 #serial and time functions written by Brendan A.
+
+#External packages used: requests, serial, sleep, datetime
+
 import serial
 from time import sleep
 import requests
@@ -16,7 +19,6 @@ Data = port.readline().decode("utf-8").strip()#decode data received to String
 W_Data = Data.split(",")#parse into list removing commas in the process
 #print(W_Data) #check data was parsed correctly
 #append W_Data to json
-#Replace variables after each : to your variables. Keep deviceid to 0
 try:
     req = requests.post(HOST+ROUTE+date,json={"timestamp": current_timestamp,
                                               "date": date,

@@ -16,6 +16,11 @@
 #define DHTTYPE    DHT11   
 DHT_Unified dht(DHTPIN, DHTTYPE);
 
+//Weather Vane Assignments
+#define A_PIN 3 //Anemometer
+#define W_PIN A3 //Wind Vane
+int W_voltage, D_voltage, counter;//values for voltage reads
+
 //Weather Data Globals
 #define STRUCT_SIZE 24 //Size of float * nr of struct members -> 4 * 6 
 #define STRUCT_ELEMS 6 // number of elements in structure
@@ -35,6 +40,8 @@ void setup() {
   
   Serial.begin(9600);
   dht.begin();
+  pinMode(A_PIN, INPUT);
+  pinMode(W_PIN, INPUT);
 }
 
 void loop() {
@@ -46,6 +53,8 @@ void loop() {
 void getData()
 {
   Get_Hum_Temp();
+  Get_Wind_Dir();
+  Get_Wind_Spd();
   get_random_values();
 }
 
@@ -54,10 +63,6 @@ void get_random_values()//to use in place of vacant sensors
   float rand_float = (float)random(94,103) / (float) random(94,103);//add more randomness
   W_Data.pres = (float) random(999,1019) * rand_float; //generate random float
   W_Data.dens = (float) random(20,25) * rand_float;
-  int val = random(0,7);//random direction
-  String dir[8] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
-  W_Data.w_dir = dir[val];  
-  W_Data.w_spd = (float) random(3, 5) * rand_float;
 }
 
 void sendData()
@@ -93,4 +98,39 @@ void Get_Hum_Temp()
     Serial.println(F("Error reading humidity!"));
   else 
     W_Data.hum = event.relative_humidity;
+}
+
+void Get_Wind_Dir()
+{
+  W_voltage = analogRead(W_PIN);
+  if (W_voltage < 820 && W_voltage > 810)
+    W_Data.w_dir = "S";
+  else if (W_voltage < 970 && W_voltage > 960)
+    W_Data.w_dir = "SW";
+  else if (W_voltage < 1020 && W_voltage > 1010)
+    W_Data.w_dir = "W";
+  else if (W_voltage <= 1010 && W_voltage > 1005)
+    W_Data.w_dir = "NW";
+  else if (W_voltage < 1000 && W_voltage > 990)
+    W_Data.w_dir = "N";
+  else if (W_voltage < 920 && W_voltage > 910)
+    W_Data.w_dir = "NE";
+  else if (W_voltage < 517 && W_voltage > 508)
+    W_Data.w_dir = "E";
+  else if (W_voltage < 709 && W_voltage > 699)
+    W_Data.w_dir = "SE";
+}
+
+void Get_Wind_Spd()
+{
+  counter = 0;
+  attachInterrupt(digitalPinToInterrupt(A_PIN), Count, FALLING);//increment on active low button push
+  delay(1000);//Delay for 1 second interrupt keeps track of the counter
+  detachInterrupt(digitalPinToInterrupt(A_PIN));
+  W_Data.w_spd = (float)counter * (float)2.4 * (float).62137;//Speed in Miles Per Hour
+}
+
+void Count()
+{
+  counter++;
 }

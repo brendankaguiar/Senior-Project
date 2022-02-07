@@ -16,6 +16,50 @@
   <property name="toolTipDuration">
    <number>0</number>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+	background-color: rgb(185, 185, 185);  /*  Background window color   */ 
+}
+
+ /* Window color  for all tabs */ 
+QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{
+	background-color: rgb(225, 225, 225);
+}
+
+ /* Color the widgets so you can see them in the preview */ 
+QWidget{
+	color: black;
+	background-color: rgb(182, 182, 182);
+}
+
+QTabWidget{
+	font: 16pt &quot;Microsoft YaHei UI&quot;; /*  Tab font and size   */ 
+}
+
+QTabBar{
+	color: black;  /*  Tab font color   */ 
+}
+
+QTabBar::tab{
+	background: rgb(144, 144, 144); /*  Tab background color   */ 
+	border: 1px solid black;
+	padding: 5px;
+}
+
+QTabBar::tab:selected{
+	background:rgb(230, 230, 230) ; /*  Selected tab background color   */ 
+}
+
+QTabBar::tab:hover{
+	background:  rgb(168, 168, 168); /*  Selected tab background color   */ 
+}
+
+QTabWidget::tab-bar{
+	alignment: center /*  Allign the tabs to the center   */ 
+}
+
+</string>
+  </property>
   <widget class="QWidget" name="ThemeWidgetForm">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
@@ -24,7 +68,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -90,6 +134,31 @@
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="Humidity">
+       <attribute name="title">
+        <string>Humidity</string>
+       </attribute>
+       <widget class="QCustomPlot" name="PlotHumidity" native="true">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>250</y>
+          <width>441</width>
+          <height>281</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLCDNumber" name="LCDHumidity">
+        <property name="geometry">
+         <rect>
+          <x>920</x>
+          <y>50</y>
+          <width>231</width>
+          <height>171</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
       <widget class="QWidget" name="Temperature">
        <attribute name="title">
         <string>Temperature</string>
@@ -128,31 +197,6 @@
         </property>
         <property name="scaledContents">
          <bool>false</bool>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="Humidity">
-       <attribute name="title">
-        <string>Humidity</string>
-       </attribute>
-       <widget class="QCustomPlot" name="PlotHumidity" native="true">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>250</y>
-          <width>441</width>
-          <height>281</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLCDNumber" name="LCDHumidity">
-        <property name="geometry">
-         <rect>
-          <x>920</x>
-          <y>50</y>
-          <width>231</width>
-          <height>171</height>
-         </rect>
         </property>
        </widget>
       </widget>
@@ -218,6 +262,9 @@
           <width>441</width>
           <height>281</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
        </widget>
        <widget class="QLCDNumber" name="LCDAirQuality">

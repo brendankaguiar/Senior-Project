@@ -38,13 +38,13 @@ public:
     QPushButton *HTTPButton;
     QPlainTextEdit *HTTPTextInput;
     QLabel *EnterURLText;
+    QWidget *Humidity;
+    QCustomPlot *PlotHumidity;
+    QLCDNumber *LCDHumidity;
     QWidget *Temperature;
     QLCDNumber *LCDTemperature;
     QCustomPlot *PlotTemperature;
     QLabel *label_10;
-    QWidget *Humidity;
-    QCustomPlot *PlotHumidity;
-    QLCDNumber *LCDHumidity;
     QWidget *Wind;
     QCustomPlot *PlotWindSpeedDirection;
     QLCDNumber *LCDWind;
@@ -76,6 +76,50 @@ public:
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(1279, 620);
         MainWindow->setToolTipDuration(0);
+        MainWindow->setStyleSheet(QString::fromUtf8("QMainWindow{\n"
+"	background-color: rgb(185, 185, 185);  /*  Background window color   */ \n"
+"}\n"
+"\n"
+" /* Window color  for all tabs */ \n"
+"QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{\n"
+"	background-color: rgb(225, 225, 225);\n"
+"}\n"
+"\n"
+" /* Window color  for all tabs */ \n"
+"QWidget{\n"
+"	color: black;\n"
+"	\n"
+"	background-color: rgb(182, 182, 182);\n"
+"}\n"
+"\n"
+"QTabWidget{\n"
+"	font: 16pt \"Microsoft YaHei UI\"; /*  Tab font and size   */ \n"
+"}\n"
+"\n"
+"QTabBar{\n"
+"	color: black;  /*  Tab font color   */ \n"
+"}\n"
+"\n"
+"QTabBar::tab{\n"
+"	background: rgb(144, 144, 144); /*  Tab background color   */ \n"
+"	border: 1px solid black;\n"
+"	padding: 5px;\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected{\n"
+"	background:rgb(230, 230, 230) ; /*  Selected tab background color   */ \n"
+"}\n"
+"\n"
+"QTabBar::tab:hover{\n"
+"	background:  rgb(168, 168, 168); /*  Selected tab background color   */ \n"
+"}\n"
+"\n"
+"QTabWidget::tab-bar{\n"
+"	"
+                        "alignment: center /*  Allign the tabs to the center   */ \n"
+"}\n"
+"\n"
+""));
         ThemeWidgetForm = new QWidget(MainWindow);
         ThemeWidgetForm->setObjectName(QString::fromUtf8("ThemeWidgetForm"));
         gridLayout_2 = new QGridLayout(ThemeWidgetForm);
@@ -101,6 +145,15 @@ public:
         EnterURLText->setObjectName(QString::fromUtf8("EnterURLText"));
         EnterURLText->setGeometry(QRect(190, 20, 81, 16));
         tabWidget->addTab(Homepage, QString());
+        Humidity = new QWidget();
+        Humidity->setObjectName(QString::fromUtf8("Humidity"));
+        PlotHumidity = new QCustomPlot(Humidity);
+        PlotHumidity->setObjectName(QString::fromUtf8("PlotHumidity"));
+        PlotHumidity->setGeometry(QRect(30, 250, 441, 281));
+        LCDHumidity = new QLCDNumber(Humidity);
+        LCDHumidity->setObjectName(QString::fromUtf8("LCDHumidity"));
+        LCDHumidity->setGeometry(QRect(920, 50, 231, 171));
+        tabWidget->addTab(Humidity, QString());
         Temperature = new QWidget();
         Temperature->setObjectName(QString::fromUtf8("Temperature"));
         LCDTemperature = new QLCDNumber(Temperature);
@@ -114,15 +167,6 @@ public:
         label_10->setGeometry(QRect(40, 70, 511, 111));
         label_10->setScaledContents(false);
         tabWidget->addTab(Temperature, QString());
-        Humidity = new QWidget();
-        Humidity->setObjectName(QString::fromUtf8("Humidity"));
-        PlotHumidity = new QCustomPlot(Humidity);
-        PlotHumidity->setObjectName(QString::fromUtf8("PlotHumidity"));
-        PlotHumidity->setGeometry(QRect(30, 250, 441, 281));
-        LCDHumidity = new QLCDNumber(Humidity);
-        LCDHumidity->setObjectName(QString::fromUtf8("LCDHumidity"));
-        LCDHumidity->setGeometry(QRect(920, 50, 231, 171));
-        tabWidget->addTab(Humidity, QString());
         Wind = new QWidget();
         Wind->setObjectName(QString::fromUtf8("Wind"));
         PlotWindSpeedDirection = new QCustomPlot(Wind);
@@ -146,6 +190,7 @@ public:
         PlotAirQuality = new QCustomPlot(AirQuality);
         PlotAirQuality->setObjectName(QString::fromUtf8("PlotAirQuality"));
         PlotAirQuality->setGeometry(QRect(40, 230, 441, 281));
+        PlotAirQuality->setStyleSheet(QString::fromUtf8(""));
         LCDAirQuality = new QLCDNumber(AirQuality);
         LCDAirQuality->setObjectName(QString::fromUtf8("LCDAirQuality"));
         LCDAirQuality->setGeometry(QRect(880, 60, 231, 171));
@@ -212,7 +257,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(6);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -225,9 +270,9 @@ public:
         HTTPTextInput->setPlainText(QCoreApplication::translate("MainWindow", "https://www.qt.io/blog", nullptr));
         EnterURLText->setText(QCoreApplication::translate("MainWindow", "Enter URL", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Homepage), QCoreApplication::translate("MainWindow", "Homepage", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(Humidity), QCoreApplication::translate("MainWindow", "Humidity", nullptr));
         label_10->setText(QCoreApplication::translate("MainWindow", "Temperature", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Temperature), QCoreApplication::translate("MainWindow", "Temperature", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(Humidity), QCoreApplication::translate("MainWindow", "Humidity", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Wind), QCoreApplication::translate("MainWindow", "Wind Speed/Direction", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Pressure), QCoreApplication::translate("MainWindow", "Pressure", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(AirQuality), QCoreApplication::translate("MainWindow", "Air Quality", nullptr));

@@ -11,6 +11,8 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
@@ -18,9 +20,10 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "qcustomplot.h"
 
@@ -55,19 +58,24 @@ public:
     QCustomPlot *PlotAirQuality;
     QLCDNumber *LCDAirQuality;
     QWidget *Settings;
-    QSlider *ChangeTemperature;
     QLineEdit *lineEdit_4;
-    QSlider *ChangeWind;
-    QSlider *ChangePressure;
-    QLabel *label;
-    QLabel *label_2;
-    QLabel *label_3;
-    QLabel *label_4;
-    QLabel *label_5;
-    QLabel *label_6;
+    QFrame *formFrame;
+    QFormLayout *formLayout;
     QLabel *label_7;
-    QLabel *label_8;
-    QLabel *label_9;
+    QFrame *verticalFrame;
+    QVBoxLayout *verticalLayout;
+    QRadioButton *MillibarsButton;
+    QRadioButton *PascalButton;
+    QLabel *label_4;
+    QFrame *verticalFrame_2;
+    QVBoxLayout *verticalLayout_2;
+    QRadioButton *MPHButton;
+    QRadioButton *KPHButton;
+    QLabel *label;
+    QFrame *verticalFrame_3;
+    QVBoxLayout *verticalLayout_3;
+    QRadioButton *FarenheitButton;
+    QRadioButton *CelciusButton;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -85,13 +93,22 @@ public:
 "	background-color: rgb(225, 225, 225);\n"
 "}\n"
 "\n"
-" /* Window color  for all tabs */ \n"
+" /* Color the widgets so you can see them in the preview */ \n"
 "QWidget{\n"
 "	color: black;\n"
-"	\n"
 "	background-color: rgb(182, 182, 182);\n"
 "}\n"
 "\n"
+" /* Remove the background on the radio button widgets */ \n"
+"QRadioButton{\n"
+"	color: black;\n"
+"	background-color: none\n"
+"}\n"
+"\n"
+" /* Remove the background on the VBoxes */ \n"
+"QFrame{\n"
+" 	background-color: none\n"
+"}\n"
 "QTabWidget{\n"
 "	font: 16pt \"Microsoft YaHei UI\"; /*  Tab font and size   */ \n"
 "}\n"
@@ -106,7 +123,8 @@ public:
 "	padding: 5px;\n"
 "}\n"
 "\n"
-"QTabBar::tab:selected{\n"
+"Q"
+                        "TabBar::tab:selected{\n"
 "	background:rgb(230, 230, 230) ; /*  Selected tab background color   */ \n"
 "}\n"
 "\n"
@@ -115,8 +133,7 @@ public:
 "}\n"
 "\n"
 "QTabWidget::tab-bar{\n"
-"	"
-                        "alignment: center /*  Allign the tabs to the center   */ \n"
+"	alignment: center /*  Allign the tabs to the center   */ \n"
 "}\n"
 "\n"
 ""));
@@ -145,6 +162,11 @@ public:
         EnterURLText->setObjectName(QString::fromUtf8("EnterURLText"));
         EnterURLText->setGeometry(QRect(190, 20, 81, 16));
         tabWidget->addTab(Homepage, QString());
+        HTTPTextInput->raise();
+        lcdNumber->raise();
+        HomepagePlot->raise();
+        HTTPButton->raise();
+        EnterURLText->raise();
         Humidity = new QWidget();
         Humidity->setObjectName(QString::fromUtf8("Humidity"));
         PlotHumidity = new QCustomPlot(Humidity);
@@ -197,11 +219,6 @@ public:
         tabWidget->addTab(AirQuality, QString());
         Settings = new QWidget();
         Settings->setObjectName(QString::fromUtf8("Settings"));
-        ChangeTemperature = new QSlider(Settings);
-        ChangeTemperature->setObjectName(QString::fromUtf8("ChangeTemperature"));
-        ChangeTemperature->setGeometry(QRect(110, 60, 160, 22));
-        ChangeTemperature->setMaximum(1);
-        ChangeTemperature->setOrientation(Qt::Horizontal);
         lineEdit_4 = new QLineEdit(Settings);
         lineEdit_4->setObjectName(QString::fromUtf8("lineEdit_4"));
         lineEdit_4->setGeometry(QRect(510, 20, 131, 41));
@@ -209,46 +226,96 @@ public:
         font.setPointSize(20);
         lineEdit_4->setFont(font);
         lineEdit_4->setReadOnly(true);
-        ChangeWind = new QSlider(Settings);
-        ChangeWind->setObjectName(QString::fromUtf8("ChangeWind"));
-        ChangeWind->setGeometry(QRect(120, 160, 160, 22));
-        ChangeWind->setMaximum(1);
-        ChangeWind->setOrientation(Qt::Horizontal);
-        ChangePressure = new QSlider(Settings);
-        ChangePressure->setObjectName(QString::fromUtf8("ChangePressure"));
-        ChangePressure->setGeometry(QRect(120, 260, 160, 22));
-        ChangePressure->setMaximum(1);
-        ChangePressure->setOrientation(Qt::Horizontal);
-        label = new QLabel(Settings);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(160, 40, 71, 16));
-        label_2 = new QLabel(Settings);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(100, 80, 41, 16));
-        label_3 = new QLabel(Settings);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(240, 80, 61, 16));
-        label_4 = new QLabel(Settings);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(160, 140, 71, 16));
-        label_5 = new QLabel(Settings);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(80, 180, 121, 16));
-        label_6 = new QLabel(Settings);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(210, 180, 141, 16));
-        label_7 = new QLabel(Settings);
+        formFrame = new QFrame(Settings);
+        formFrame->setObjectName(QString::fromUtf8("formFrame"));
+        formFrame->setGeometry(QRect(120, 100, 331, 211));
+        formLayout = new QFormLayout(formFrame);
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        label_7 = new QLabel(formFrame);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(160, 240, 71, 16));
-        label_8 = new QLabel(Settings);
-        label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(100, 280, 49, 16));
-        label_9 = new QLabel(Settings);
-        label_9->setObjectName(QString::fromUtf8("label_9"));
-        label_9->setGeometry(QRect(260, 280, 51, 16));
+        QFont font1;
+        font1.setPointSize(16);
+        label_7->setFont(font1);
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, label_7);
+
+        verticalFrame = new QFrame(formFrame);
+        verticalFrame->setObjectName(QString::fromUtf8("verticalFrame"));
+        verticalLayout = new QVBoxLayout(verticalFrame);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        MillibarsButton = new QRadioButton(verticalFrame);
+        MillibarsButton->setObjectName(QString::fromUtf8("MillibarsButton"));
+        QFont font2;
+        font2.setPointSize(11);
+        MillibarsButton->setFont(font2);
+        MillibarsButton->setChecked(true);
+
+        verticalLayout->addWidget(MillibarsButton);
+
+        PascalButton = new QRadioButton(verticalFrame);
+        PascalButton->setObjectName(QString::fromUtf8("PascalButton"));
+        PascalButton->setFont(font2);
+
+        verticalLayout->addWidget(PascalButton);
+
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, verticalFrame);
+
+        label_4 = new QLabel(formFrame);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setFont(font1);
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, label_4);
+
+        verticalFrame_2 = new QFrame(formFrame);
+        verticalFrame_2->setObjectName(QString::fromUtf8("verticalFrame_2"));
+        verticalLayout_2 = new QVBoxLayout(verticalFrame_2);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        MPHButton = new QRadioButton(verticalFrame_2);
+        MPHButton->setObjectName(QString::fromUtf8("MPHButton"));
+        MPHButton->setFont(font2);
+        MPHButton->setChecked(true);
+
+        verticalLayout_2->addWidget(MPHButton);
+
+        KPHButton = new QRadioButton(verticalFrame_2);
+        KPHButton->setObjectName(QString::fromUtf8("KPHButton"));
+        KPHButton->setFont(font2);
+
+        verticalLayout_2->addWidget(KPHButton);
+
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, verticalFrame_2);
+
+        label = new QLabel(formFrame);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setFont(font1);
+
+        formLayout->setWidget(2, QFormLayout::LabelRole, label);
+
+        verticalFrame_3 = new QFrame(formFrame);
+        verticalFrame_3->setObjectName(QString::fromUtf8("verticalFrame_3"));
+        verticalLayout_3 = new QVBoxLayout(verticalFrame_3);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        FarenheitButton = new QRadioButton(verticalFrame_3);
+        FarenheitButton->setObjectName(QString::fromUtf8("FarenheitButton"));
+        FarenheitButton->setFont(font2);
+        FarenheitButton->setChecked(true);
+
+        verticalLayout_3->addWidget(FarenheitButton);
+
+        CelciusButton = new QRadioButton(verticalFrame_3);
+        CelciusButton->setObjectName(QString::fromUtf8("CelciusButton"));
+        CelciusButton->setFont(font2);
+
+        verticalLayout_3->addWidget(CelciusButton);
+
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, verticalFrame_3);
+
         tabWidget->addTab(Settings, QString());
 
-        gridLayout_2->addWidget(tabWidget, 0, 0, 1, 1);
+        gridLayout_2->addWidget(tabWidget, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(ThemeWidgetForm);
         statusbar = new QStatusBar(MainWindow);
@@ -257,7 +324,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -266,7 +333,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "REWS Desktop Visualizer", nullptr));
-        HTTPButton->setText(QCoreApplication::translate("MainWindow", "Send HTTP", nullptr));
+        HTTPButton->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
         HTTPTextInput->setPlainText(QCoreApplication::translate("MainWindow", "https://www.qt.io/blog", nullptr));
         EnterURLText->setText(QCoreApplication::translate("MainWindow", "Enter URL", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Homepage), QCoreApplication::translate("MainWindow", "Homepage", nullptr));
@@ -277,15 +344,15 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(Pressure), QCoreApplication::translate("MainWindow", "Pressure", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(AirQuality), QCoreApplication::translate("MainWindow", "Air Quality", nullptr));
         lineEdit_4->setText(QCoreApplication::translate("MainWindow", "SETTINGS", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Temperature", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "Celsius", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Fahrenheit", nullptr));
-        label_4->setText(QCoreApplication::translate("MainWindow", "Wind Speed", nullptr));
-        label_5->setText(QCoreApplication::translate("MainWindow", "Miles Per Hour (MPH)", nullptr));
-        label_6->setText(QCoreApplication::translate("MainWindow", "Kilometers Per Hour (KPH)", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "Air Pressure", nullptr));
-        label_8->setText(QCoreApplication::translate("MainWindow", "Millibars", nullptr));
-        label_9->setText(QCoreApplication::translate("MainWindow", "Pascals", nullptr));
+        MillibarsButton->setText(QCoreApplication::translate("MainWindow", "Millibars", nullptr));
+        PascalButton->setText(QCoreApplication::translate("MainWindow", "Pascals", nullptr));
+        label_4->setText(QCoreApplication::translate("MainWindow", "Wind Speed", nullptr));
+        MPHButton->setText(QCoreApplication::translate("MainWindow", "Miles Per Hour (MPH)", nullptr));
+        KPHButton->setText(QCoreApplication::translate("MainWindow", "Kilometers Per Hour (KPH)", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Temperature", nullptr));
+        FarenheitButton->setText(QCoreApplication::translate("MainWindow", "Farenheight ", nullptr));
+        CelciusButton->setText(QCoreApplication::translate("MainWindow", "Celsius", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Settings), QCoreApplication::translate("MainWindow", "Settings", nullptr));
     } // retranslateUi
 

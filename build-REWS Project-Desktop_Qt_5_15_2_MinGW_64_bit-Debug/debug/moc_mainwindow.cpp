@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[7];
-    char stringdata0[132];
+    char stringdata0[117];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,18 +33,17 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 32), // "on_ChangeTemperature_sliderMoved"
-QT_MOC_LITERAL(2, 44, 0), // ""
-QT_MOC_LITERAL(3, 45, 8), // "position"
-QT_MOC_LITERAL(4, 54, 25), // "on_ChangeWind_sliderMoved"
-QT_MOC_LITERAL(5, 80, 29), // "on_ChangePressure_sliderMoved"
-QT_MOC_LITERAL(6, 110, 21) // "on_HTTPButton_clicked"
+QT_MOC_LITERAL(1, 11, 21), // "on_HTTPButton_clicked"
+QT_MOC_LITERAL(2, 33, 0), // ""
+QT_MOC_LITERAL(3, 34, 26), // "on_MillibarsButton_toggled"
+QT_MOC_LITERAL(4, 61, 7), // "checked"
+QT_MOC_LITERAL(5, 69, 20), // "on_MPHButton_toggled"
+QT_MOC_LITERAL(6, 90, 26) // "on_FarenheitButton_toggled"
 
     },
-    "MainWindow\0on_ChangeTemperature_sliderMoved\0"
-    "\0position\0on_ChangeWind_sliderMoved\0"
-    "on_ChangePressure_sliderMoved\0"
-    "on_HTTPButton_clicked"
+    "MainWindow\0on_HTTPButton_clicked\0\0"
+    "on_MillibarsButton_toggled\0checked\0"
+    "on_MPHButton_toggled\0on_FarenheitButton_toggled"
 };
 #undef QT_MOC_LITERAL
 
@@ -62,16 +61,16 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   34,    2, 0x08 /* Private */,
-       4,    1,   37,    2, 0x08 /* Private */,
-       5,    1,   40,    2, 0x08 /* Private */,
-       6,    0,   43,    2, 0x08 /* Private */,
+       1,    0,   34,    2, 0x08 /* Private */,
+       3,    1,   35,    2, 0x08 /* Private */,
+       5,    1,   38,    2, 0x08 /* Private */,
+       6,    1,   41,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,    4,
+    QMetaType::Void, QMetaType::Bool,    4,
+    QMetaType::Void, QMetaType::Bool,    4,
 
        0        // eod
 };
@@ -82,10 +81,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_ChangeTemperature_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->on_ChangeWind_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->on_ChangePressure_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 3: _t->on_HTTPButton_clicked(); break;
+        case 0: _t->on_HTTPButton_clicked(); break;
+        case 1: _t->on_MillibarsButton_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 2: _t->on_MPHButton_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 3: _t->on_FarenheitButton_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
     }

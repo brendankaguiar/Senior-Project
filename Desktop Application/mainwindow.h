@@ -32,13 +32,19 @@ public:
 
 private slots:
 
-    void on_ChangeTemperature_sliderMoved(int position);
+    //void on_ChangeTemperature_sliderMoved(int position);
 
-    void on_ChangeWind_sliderMoved(int position);
+    //void on_ChangeWind_sliderMoved(int position);
 
-    void on_ChangePressure_sliderMoved(int position);
+    //void on_ChangePressure_sliderMoved(int position);
 
     void on_HTTPButton_clicked();
+
+    void on_MillibarsButton_toggled(bool checked);
+
+    void on_MPHButton_toggled(bool checked);
+
+    void on_FarenheitButton_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;

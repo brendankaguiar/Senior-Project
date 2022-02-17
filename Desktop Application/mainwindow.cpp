@@ -166,6 +166,7 @@ int MainWindow::newData()
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
+/*
 void MainWindow::on_ChangeTemperature_sliderMoved(int position)
 {
     if(position == 1)
@@ -177,7 +178,7 @@ void MainWindow::on_ChangeTemperature_sliderMoved(int position)
         convertC();
     }
 }
-
+*/
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QVector, QCustomPlot
@@ -212,6 +213,7 @@ void MainWindow::convertC()
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
+/*
 void MainWindow::on_ChangeWind_sliderMoved(int position)
 {
     if(position == 1)
@@ -223,7 +225,7 @@ void MainWindow::on_ChangeWind_sliderMoved(int position)
         convertMph();
     }
 }
-
+*/
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QVector, QCustomPlot
@@ -260,6 +262,7 @@ void MainWindow::convertKph()
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
+/*
 void MainWindow::on_ChangePressure_sliderMoved(int position)
 {
     if(position == 1)
@@ -271,7 +274,7 @@ void MainWindow::on_ChangePressure_sliderMoved(int position)
         convertMbars();
     }
 }
-
+*/
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QVector, QCustomPlot
@@ -311,7 +314,7 @@ void MainWindow::convertPas()
 ///////////////////////////////////////////////////////////////
 void MainWindow::on_HTTPButton_clicked()
 {
-    QString url = "http://127.0.0.1:5000/devicedata/all/0/2021_12_05";
+    QString url = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16";
     url.remove(QChar('"'));
     QUrl processedURL = url;
     qDebug() << "Sending request to: " << url;
@@ -401,5 +404,62 @@ void MainWindow::on_HTTPButton_clicked()
     );
     qnam->get(request);
 
+}
+
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
+
+void MainWindow::on_MillibarsButton_toggled(bool checked)
+{
+    if(checked)
+    {
+        convertMbars();
+        qDebug("converting to millibar");
+    }
+    else
+    {
+        convertPas();
+        qDebug("converting to pascal");
+    }
+}
+
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
+
+void MainWindow::on_MPHButton_toggled(bool Mchecked)
+{
+    if(Mchecked)
+    {
+        convertMph();
+        qDebug("converting to mph");
+    }
+    else
+    {
+        convertKph();
+        qDebug("converting to kph");
+    }
+}
+
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
+
+void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
+{
+    if(Fchecked)
+    {
+        convertF();
+        qDebug("converting to f");
+    }
+    else
+    {
+        convertC();
+        qDebug("converting to c");
+    }
 }
 

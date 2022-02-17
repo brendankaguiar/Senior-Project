@@ -121,6 +121,36 @@ void MainWindow::clearData()
     qv_y5.clear();
     qv_x6.clear();
     qv_y6.clear();
+    qv_x.squeeze();
+    qv_y.squeeze();
+    qv_x2.squeeze();
+    qv_y2.squeeze();
+    qv_x3.squeeze();
+    qv_y3.squeeze();
+    qv_x4.squeeze();
+    qv_y4.squeeze();
+    qv_x5.squeeze();
+    qv_y5.squeeze();
+    qv_x6.squeeze();
+    qv_y6.squeeze();
+    ui->HomepagePlot->graph(0)->data()->clear();
+    ui->PlotTemperature->graph(0)->data()->clear();
+    ui->PlotHumidity->graph(0)->data()->clear();
+    ui->PlotWindSpeedDirection->graph(0)->data()->clear();
+    ui->PlotPressure->graph(0)->data()->clear();
+    ui->PlotAirQuality->graph(0)->data()->clear();
+    ui->HomepagePlot->replot();
+    ui->HomepagePlot->update();
+    ui->PlotTemperature->replot();
+    ui->PlotTemperature->update();
+    ui->PlotHumidity->replot();
+    ui->PlotHumidity->update();
+    ui->PlotWindSpeedDirection->replot();
+    ui->PlotWindSpeedDirection->update();
+    ui->PlotPressure->replot();
+    ui->PlotPressure->update();
+    ui->PlotAirQuality->replot();
+    ui->PlotAirQuality->update();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -149,12 +179,24 @@ void MainWindow::plot()
     ui->PlotAirQuality->replot();
     ui->PlotAirQuality->update();
 
+    if(!(qv_y6.isEmpty()))
+    {
     ui->lcdNumber->display(qv_y.at(qv_y.length()-1));
     ui->LCDTemperature->display(qv_y2.at(qv_y2.length()-1));
     ui->LCDHumidity->display(qv_y3.at(qv_y3.length()-1));
     ui->LCDWind->display(qv_y4.at(qv_y4.length()-1));
     ui->LCDPressure->display(qv_y5.at(qv_y5.length()-1));
     ui->LCDAirQuality->display(qv_y6.at(qv_y6.length()-1));
+    }
+    else
+    {
+    ui->lcdNumber->display(0);
+    ui->LCDTemperature->display(0);
+    ui->LCDHumidity->display(0);
+    ui->LCDWind->display(0);
+    ui->LCDPressure->display(0);
+    ui->LCDAirQuality->display(0);
+    }
 }
 
 int MainWindow::newData()
@@ -166,7 +208,7 @@ int MainWindow::newData()
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
-void MainWindow::on_ChangeTemperature_sliderMoved(int position)
+void MainWindow::on_ChangeTemperature_valueChanged(int position)
 {
     if(position == 1)
     {
@@ -212,7 +254,7 @@ void MainWindow::convertC()
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
-void MainWindow::on_ChangeWind_sliderMoved(int position)
+void MainWindow::on_ChangeWind_valueChanged(int position)
 {
     if(position == 1)
     {
@@ -260,7 +302,7 @@ void MainWindow::convertKph()
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
-void MainWindow::on_ChangePressure_sliderMoved(int position)
+void MainWindow::on_ChangePressure_valueChanged(int position)
 {
     if(position == 1)
     {
@@ -311,7 +353,7 @@ void MainWindow::convertPas()
 ///////////////////////////////////////////////////////////////
 void MainWindow::on_HTTPButton_clicked()
 {
-    QString url = "http://127.0.0.1:5000/devicedata/all/0/2021_12_05";
+    QString url = "https://flask-rews.herokuapp.com/";
     url.remove(QChar('"'));
     QUrl processedURL = url;
     qDebug() << "Sending request to: " << url;
@@ -402,4 +444,3 @@ void MainWindow::on_HTTPButton_clicked()
     qnam->get(request);
 
 }
-

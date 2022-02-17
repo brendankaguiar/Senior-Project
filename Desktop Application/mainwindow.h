@@ -32,11 +32,11 @@ public:
 
 private slots:
 
-    void on_ChangeTemperature_sliderMoved(int position);
+    void on_ChangeTemperature_valueChanged(int position);
 
-    void on_ChangeWind_sliderMoved(int position);
+    void on_ChangeWind_valueChanged(int position);
 
-    void on_ChangePressure_sliderMoved(int position);
+    void on_ChangePressure_valueChanged(int position);
 
     void on_HTTPButton_clicked();
 

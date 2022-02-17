@@ -7,25 +7,52 @@
 
 from flask import Flask, request
 import sqlite3 as sl
+import psycopg2
 from datetime import datetime
+import urllib.parse as urlparse
 import os
 import json
 
+import urllib.parse as urlparse
+
+#DATABASE URL:
+DATABASE_URL = "postgres://ntmlgtzglebvxt:7f29de081a06069389993e83b304eabc7a607ec4645a1fca7df79d5f167cf1e5@ec2-54-224-64-114.compute-1.amazonaws.com:5432/d2814k1j2ol13i"
+
 #Contains methods for querying database
 class database:
+
+
     def __init__(self,
-                 name : str,
-                 reset : bool = False):
-        self.reset = reset
-        self.db_filename = name +'.db'
+                 url_ : str,
+                 reset_ : bool = False):
+        self.reset = reset_
+        #self.db_filename = name +'.db'
 
-        if reset:   #delete existing database if database reset is true
-            if os.path.exists(self.db_filename):
-                os.remove(self.db_filename)
+        self.url = urlparse.urlparse(url_)
+        self.dbname = self.url.path[1:]
+        self.user = self.url.username
+        self.password = self.url.password
+        self.host = self.url.hostname
+        self.port = self.url.port
 
-        db_con = sl.connect(self.db_filename)
+
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+
+        #if reset:   #delete existing database if database reset is true
+        #    if os.path.exists(self.db_filename):
+        #        os.remove(self.db_filename)
+
+        #db_con = sl.connect(self.db_filename)
+
         with db_con:    #create weather table
-            db_con.execute("""
+            db_cursor = db_con.cursor()
+            db_cursor.execute("""
             CREATE TABLE IF NOT EXISTS weather (
                 timestamp INT PRIMARY KEY,
                 date TEXT,
@@ -43,7 +70,13 @@ class database:
 
     #debug function to print all data from a day
     def debug_print(self,month,day):
-        db_con = sl.connect(self.db_filename)
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
         with db_con:
             cursor = db_con.cursor()
             cursor.execute(f"SELECT * FROM weather WHERE date = \"2021_{month}_{day}\";")
@@ -59,10 +92,16 @@ class database:
 
     #private insert for weather data
     def _weatherinsert(self,json_data):
-        db_con = sl.connect(self.db_filename)
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
         with db_con:
             db_cursor = db_con.cursor()
-            request_str = """INSERT OR REPLACE INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aqi)
+            request_str = """INSERT INTO {0} (timestamp, date, deviceid, temperature, windspeed, winddirection, humidity, pressure, aqi)
                 VALUES( {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9} );
                 """.format("weather",
                            int(json_data["timestamp"]),
@@ -74,7 +113,7 @@ class database:
                            json_data["humidity"],
                            json_data["pressure"],
                            json_data["aqi"])
-            db_con.execute(request_str)
+            db_cursor.execute(request_str)
             db_cursor.close()
 
     #Public delete records for either certain
@@ -86,7 +125,13 @@ class database:
                 self._weatherdeleteall()
 
     def _weatherdelete(self,date):
-        db_con = sl.connect(self.db_filename)
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
         with db_con:
             db_cursor = db_con.cursor()
             request_str = f"""
@@ -96,7 +141,13 @@ class database:
             db_cursor.close()
 
     def _weatherdeleteall(self):
-        db_con = sl.connect(self.db_filename)
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
         with db_con:
             db_cursor = db_con.cursor()
             request_str = "DELETE FROM weather;"
@@ -105,14 +156,20 @@ class database:
 
     #return all records of a certain date and device
     def getday(self,deviceid,date : str):
-        db_con = sl.connect(self.db_filename)
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
         result = 0
         with db_con:    #open db_con and retrieve records
             cursor = db_con.cursor()
             request_str = f"""SELECT * FROM weather 
-            WHERE date = \"{date}\" AND deviceid = {deviceid}
+            WHERE date = (%s) AND deviceid = {deviceid}
             ORDER BY timestamp ASC;"""
-            cursor.execute(request_str)
+            cursor.execute(request_str,[date])
             result = cursor.fetchall()
         record_list = []
         for record in result:   #convert records into dictionary
@@ -133,7 +190,13 @@ class database:
 
     #return most recent record from a certain device
     def getlatest(self, deviceid):
-        db_con = sl.connect(self.db_filename)
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
         with db_con:    #open db_con and retrieve latest record
             cursor = db_con.cursor()
             request_str = """SELECT * FROM weather
@@ -161,7 +224,7 @@ class database:
 #####################################################
 
 #database object for Flask routes
-db = database('rews',True)    #CHANGE TO FALSE IF NOT TEST
+db = database('postgres://ntmlgtzglebvxt:7f29de081a06069389993e83b304eabc7a607ec4645a1fca7df79d5f167cf1e5@ec2-54-224-64-114.compute-1.amazonaws.com:5432/d2814k1j2ol13i',True)    #CHANGE TO FALSE IF NOT TEST
 
 app = Flask(__name__)
 
@@ -169,8 +232,8 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     print(f"\nReceived request from {request.remote_addr}")
-    print(f"Hello World")
-    return 'Hello World'
+    print(f"Server is active")
+    return 'Server is active'
 
 #retrieve, insert, and delete all records by date and device
 @app.route('/devicedata/all/<device_id>/<date>', methods = ['GET', 'POST', 'DELETE'])
@@ -209,7 +272,8 @@ def latest(device_id):
 @app.route('/devicedata/delete')
 def delete():
     print(f"\nReceived request from {request.remote_addr}")
-    db.delete("weather")
+    db.delete("weather",None)
+    return "delete_success"
 
 if __name__ == '__main__':
     app.run()

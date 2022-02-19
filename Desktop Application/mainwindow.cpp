@@ -50,15 +50,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
    ui->setupUi(this);
 
-   ui->HomepagePlot->addGraph();
+   //->HomepagePlot->addGraph();
    ui->PlotTemperature->addGraph();
    ui->PlotHumidity->addGraph();
    ui->PlotWindSpeedDirection->addGraph();
    ui->PlotPressure->addGraph();
    ui->PlotAirQuality->addGraph();
 
-   ui->HomepagePlot->xAxis->setRange(0, 100);
-   ui->HomepagePlot->yAxis->setRange(-5, 6); //in celsius
+   //ui->HomepagePlot->xAxis->setRange(0, 100);
+   //ui->HomepagePlot->yAxis->setRange(-5, 6); //in celsius
    ui->PlotTemperature->xAxis->setRange(0, 100);
    ui->PlotTemperature->yAxis->setRange(-50, 100);
    ui->PlotHumidity->xAxis->setRange(0, 100);
@@ -70,8 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotAirQuality->xAxis->setRange(0, 100);
    ui->PlotAirQuality->yAxis->setRange(0, 500);
 
-   ui->HomepagePlot->graph(0)->setPen(QPen(Qt::blue));
-   ui->HomepagePlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   //ui->HomepagePlot->graph(0)->setPen(QPen(Qt::blue));
+   //ui->HomepagePlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotTemperature->graph(0)->setPen(QPen(Qt::blue));
    ui->PlotTemperature->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotHumidity->graph(0)->setPen(QPen(Qt::blue));
@@ -129,15 +129,15 @@ void MainWindow::clearData()
 ///////////////////////////////////////////////////////////////
 void MainWindow::plot()
 {
-    ui->HomepagePlot->graph(0)->setData(qv_x,qv_y);
+    //ui->HomepagePlot->graph(0)->setData(qv_x,qv_y);
     ui->PlotTemperature->graph(0)->setData(qv_x2,qv_y2);
     ui->PlotHumidity->graph(0)->setData(qv_x3,qv_y3);
     ui->PlotWindSpeedDirection->graph(0)->setData(qv_x4,qv_y4);
     ui->PlotPressure->graph(0)->setData(qv_x5,qv_y5);
     ui->PlotAirQuality->graph(0)->setData(qv_x6,qv_y6);
 
-    ui->HomepagePlot->replot();
-    ui->HomepagePlot->update();
+    //ui->HomepagePlot->replot();
+    //ui->HomepagePlot->update();
     ui->PlotTemperature->replot();
     ui->PlotTemperature->update();
     ui->PlotHumidity->replot();
@@ -149,7 +149,7 @@ void MainWindow::plot()
     ui->PlotAirQuality->replot();
     ui->PlotAirQuality->update();
 
-    ui->lcdNumber->display(qv_y.at(qv_y.length()-1));
+    //ui->lcdNumber->display(qv_y.at(qv_y.length()-1));
     ui->LCDTemperature->display(qv_y2.at(qv_y2.length()-1));
     ui->LCDHumidity->display(qv_y3.at(qv_y3.length()-1));
     ui->LCDWind->display(qv_y4.at(qv_y4.length()-1));
@@ -341,7 +341,12 @@ void MainWindow::on_HTTPButton_clicked()
                     maxAqi = 0,
                     minAqi = 0,
                     maxTimestamp = 0,
-                    minTimestamp = 0;
+                    minTimestamp = 0,
+                    lastAQI = 0,
+                    lastHum = 0,
+                    lastWindSpeed = 0,
+                    lastPressure = 0,
+                    lastTemp = 0;
 
 
 
@@ -382,17 +387,22 @@ void MainWindow::on_HTTPButton_clicked()
                     maxTimestamp = data["timestamp"].toDouble();
                 }
                 count++;
+                lastAQI = data["aqi"].toDouble();
+                lastHum = data["humidity"].toDouble();
+                lastWindSpeed = data["windspeed"].toDouble();
+                lastPressure = data["pressure"].toDouble();
+                lastTemp = data["temperature"].toDouble();
             }
             reply->deleteLater();
 
-            ui->HomepagePlot->yAxis->setRange(minTemp-5, maxTemp+5); //in celsius
+            //ui->HomepagePlot->yAxis->setRange(minTemp-5, maxTemp+5); //in celsius
             ui->PlotTemperature->yAxis->setRange(minTemp-5, maxTemp+5);
             ui->PlotHumidity->yAxis->setRange(minHum-5, maxHum+5);
             ui->PlotWindSpeedDirection->yAxis->setRange(minWindSpeed-5, maxWindSpeed+5);
             ui->PlotPressure->yAxis->setRange(maxPressure-10, maxPressure+5);
             ui->PlotAirQuality->yAxis->setRange(minAqi-5, maxAqi+5);
 
-            ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
+            //ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
             ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotWindSpeedDirection->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -400,6 +410,8 @@ void MainWindow::on_HTTPButton_clicked()
             ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
 
             plot();
+
+            //ui->AQIMeter->setValue(lastAQI);
         }
     );
     qnam->get(request);
@@ -463,3 +475,7 @@ void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
     }
 }
 
+void MainWindow::updateAQI(int value)
+{
+    //ui->AQIMeter->setValue(value);
+}

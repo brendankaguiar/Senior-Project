@@ -29,6 +29,7 @@ public:
     void convertKph();
     void convertMbars();
     void convertPas();
+    void updateAQI(int value);
 
 private slots:
 

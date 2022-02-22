@@ -29,8 +29,7 @@ public:
     void convertKph();
     void convertMbars();
     void convertPas();
-    void updateAQI(int value);
-
+    void updateHomepage();
 private slots:
 
     //void on_ChangeTemperature_sliderMoved(int position);
@@ -46,6 +45,8 @@ private slots:
     void on_MPHButton_toggled(bool checked);
 
     void on_FarenheitButton_toggled(bool checked);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

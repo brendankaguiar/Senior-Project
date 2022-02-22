@@ -95,7 +95,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -315,6 +315,19 @@ Excellent</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>500</y>
+          <width>221</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Update Homepage (temp debugging)</string>
         </property>
        </widget>
       </widget>
@@ -1030,7 +1043,7 @@ Past 24 hour low: #</string>
        <attribute name="title">
         <string>Settings</string>
        </attribute>
-       <widget class="QLineEdit" name="lineEdit_4">
+       <widget class="QLineEdit" name="SettingsTitle">
         <property name="geometry">
          <rect>
           <x>510</x>
@@ -1051,18 +1064,18 @@ Past 24 hour low: #</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QFrame" name="formFrame">
+       <widget class="QFrame" name="SettingsOptions">
         <property name="geometry">
          <rect>
           <x>120</x>
           <y>100</y>
-          <width>331</width>
+          <width>371</width>
           <height>211</height>
          </rect>
         </property>
         <layout class="QFormLayout" name="formLayout">
          <item row="0" column="0">
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="AirTitle">
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1107,7 +1120,7 @@ Past 24 hour low: #</string>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="WindTitle">
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1119,7 +1132,7 @@ Past 24 hour low: #</string>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QFrame" name="verticalFrame_2">
+          <widget class="QFrame" name="WindOptions">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QRadioButton" name="MPHButton">
@@ -1152,7 +1165,7 @@ Past 24 hour low: #</string>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="TemperatureTitle">
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1164,7 +1177,7 @@ Past 24 hour low: #</string>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QFrame" name="verticalFrame_3">
+          <widget class="QFrame" name="TemperatureOptions">
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
              <widget class="QRadioButton" name="CelciusButton">
@@ -1201,7 +1214,7 @@ Past 24 hour low: #</string>
          </item>
         </layout>
        </widget>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="DeleteAll">
         <property name="geometry">
          <rect>
           <x>1120</x>
@@ -1214,7 +1227,7 @@ Past 24 hour low: #</string>
          <string>DELETE ALL DATA</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="DownloadAll">
         <property name="geometry">
          <rect>
           <x>890</x>

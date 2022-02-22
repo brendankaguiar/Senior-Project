@@ -428,12 +428,12 @@ void MainWindow::on_MillibarsButton_toggled(bool checked)
     if(checked)
     {
         convertMbars();
-        qDebug("converting to millibar");
+        //qDebug("converting to millibar");
     }
     else
     {
         convertPas();
-        qDebug("converting to pascal");
+        //qDebug("converting to pascal");
     }
 }
 
@@ -447,12 +447,12 @@ void MainWindow::on_MPHButton_toggled(bool Mchecked)
     if(Mchecked)
     {
         convertMph();
-        qDebug("converting to mph");
+         //qDebug("converting to mph");
     }
     else
     {
         convertKph();
-        qDebug("converting to kph");
+        //qDebug("converting to kph");
     }
 }
 
@@ -466,16 +466,44 @@ void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
     if(Fchecked)
     {
         convertF();
-        qDebug("converting to f");
+        //qDebug("converting to f");
     }
     else
     {
         convertC();
-        qDebug("converting to c");
+        //qDebug("converting to c");
     }
 }
 
-void MainWindow::updateAQI(int value)
+void MainWindow::updateHomepage()
 {
-    //ui->AQIMeter->setValue(value);
+    //set the temp @ homescreen
+    QString temp = QString::number(qv_y2.at(qv_y2.length()-1));
+    if(ui->FarenheitButton->isChecked())
+    {
+        ui->HomeTemp->setText( temp.left(temp.indexOf(".") + 3) + " °F");
+    }
+    else
+    {
+        ui->HomeTemp->setText( temp.left(temp.indexOf(".") + 3) + " °C");
+    }
+    QDateTime datetime = QDateTime::currentDateTime();
+    //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
+    //12 hour time
+    if(datetime.time().toString().leftRef(2).toInt() > 12)
+    {
+        ui->HomeTime->setText(QString::number(datetime.time().toString().leftRef(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
+    }
+    else
+    {
+        ui->HomeTime->setText(datetime.time().toString().left(5) + "AM");
+    }
+    ui->HomeDate->setText(QLocale().toString(datetime.date(),QLocale::LongFormat));
 }
+//to do humid, wind, pressure, aq
+
+void MainWindow::on_pushButton_clicked()
+{
+    updateHomepage();
+}
+

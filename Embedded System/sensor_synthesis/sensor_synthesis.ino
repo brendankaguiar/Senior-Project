@@ -1,9 +1,3 @@
-
-
-
-
-
-
 //Weather Data Globals
 #define STRUCT_SIZE 24 //Size of float * nr of struct members -> 4 * 6 
 #define STRUCT_ELEMS 6 // number of elements in structure

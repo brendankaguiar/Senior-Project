@@ -30,6 +30,7 @@ QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#P
 	background-color: rgb(225,225,225);
 }
 
+
  /* Color the widgets so you can see them in the preview */ 
 QWidget{
 	color: black;
@@ -95,7 +96,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -106,12 +107,12 @@ QTabWidget::tab-bar{
          <rect>
           <x>30</x>
           <y>500</y>
-          <width>80</width>
+          <width>201</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Start</string>
+         <string>Start (now automatic on startup)</string>
         </property>
        </widget>
        <widget class="QLabel" name="HomeTemp">
@@ -329,6 +330,65 @@ Excellent</string>
         <property name="text">
          <string>Update Homepage (temp debugging)</string>
         </property>
+       </widget>
+       <widget class="QFrame" name="LoadingScreen">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>60</y>
+          <width>301</width>
+          <height>191</height>
+         </rect>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+background:rgb(135,211,124)
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QProgressBar" name="LoadingBar">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>130</y>
+           <width>118</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>-2</x>
+           <y>30</y>
+           <width>301</width>
+           <height>71</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>22</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Loading Data
+Please Wait...</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="Humidity">

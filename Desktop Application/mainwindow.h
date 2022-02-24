@@ -30,6 +30,7 @@ public:
     void convertMbars();
     void convertPas();
     void updateHomepage();
+    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16");
 private slots:
 
     //void on_ChangeTemperature_sliderMoved(int position);
@@ -47,6 +48,8 @@ private slots:
     void on_FarenheitButton_toggled(bool checked);
 
     void on_pushButton_clicked();
+
+    void on_tabWidget_currentChanged(int index);
 
 private:
     Ui::MainWindow *ui;

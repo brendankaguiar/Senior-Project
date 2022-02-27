@@ -29,7 +29,8 @@ public:
     void convertKph();
     void convertMbars();
     void convertPas();
-    void updateAQI(int value);
+    void updateHomepage();
+    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16");
 
 private slots:
 
@@ -47,10 +48,20 @@ private slots:
 
     void on_FarenheitButton_toggled(bool checked);
 
+    void on_pushButton_clicked();
+
+    void on_tabWidget_currentChanged(int index);
+
+    void downloadFile();
+
+    void on_DownloadAll_clicked();
+
+    void downloadFinished();
+
 private:
     Ui::MainWindow *ui;
 
-    void connectSignals();
+    //void connectSignals();
     //QVector<double> qvector_temp, qvector_humid, qvector_windspeed, qvector_pressure, qvector_aq;
     QVector<double> qv_x, qv_y, qv_x2, qv_y2,qv_x3, qv_y3,qv_x4, qv_y4,qv_x5, qv_y5,qv_x6, qv_y6;
 

@@ -34,7 +34,23 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-int count = 1;
+double maxTemp = 0,
+        minTemp = 0,
+        maxHum = 0,
+        minHum = 0,
+        maxWindSpeed = 0,
+        minWindSpeed = 0,
+        maxPressure = 0,
+        maxAqi = 0,
+        minAqi = 0,
+        maxTimestamp = 0,
+        minTimestamp = 0,
+        lastAQI = 0,
+        lastHum = 0,
+        lastWindSpeed = 0,
+        lastPressure = 0,
+        lastTemp = 0;
+
 int digit = 1;
 int button = 100;
 QPen pen;
@@ -44,11 +60,11 @@ QPen pen;
 ///////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),
-      qnam(new QNetworkAccessManager)
+    , ui(new Ui::MainWindow)
+    //,qnam(new QNetworkAccessManager)
 {
+   qnam = new QNetworkAccessManager(this);
    ui->setupUi(this);
-
    //->HomepagePlot->addGraph();
    ui->PlotTemperature->addGraph();
    ui->PlotHumidity->addGraph();
@@ -82,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotAirQuality->graph(0)->setPen(QPen(Qt::blue));
    ui->PlotAirQuality->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    getHttp();
+   qnam->setAutoDeleteReplies(true);
    //updateHomepage(); //for some reason this will crash the app before it starts
 }
 
@@ -109,7 +126,6 @@ void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<doubl
 ///////////////////////////////////////////////////////////////
 void MainWindow::clearData()
 {
-    count = 1;
     qv_x.clear();
     qv_y.clear();
     qv_x2.clear();
@@ -315,11 +331,17 @@ void MainWindow::convertPas()
 ///////////////////////////////////////////////////////////////
 void MainWindow::on_HTTPButton_clicked()
 {
+    clearData();
+    qnam->clearAccessCache();
+    qnam->clearConnectionCache();
     QString url = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16";
     url.remove(QChar('"'));
     QUrl processedURL = url;
     qDebug() << "Sending request to: " << url;
     request.setUrl(processedURL);
+
+
+
     QObject::connect(qnam, &QNetworkAccessManager::finished,
         this, [=](QNetworkReply *reply) {
             if (reply->error()) {
@@ -331,23 +353,6 @@ void MainWindow::on_HTTPButton_clicked()
             QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
             QJsonArray jsonReply = jsonDoc.array();
             QJsonObject data = *new QJsonObject();
-            double count = 1;
-            double maxTemp = 0,
-                    minTemp = 0,
-                    maxHum = 0,
-                    minHum = 0,
-                    maxWindSpeed = 0,
-                    minWindSpeed = 0,
-                    maxPressure = 0,
-                    maxAqi = 0,
-                    minAqi = 0,
-                    maxTimestamp = 0,
-                    minTimestamp = 0,
-                    lastAQI = 0,
-                    lastHum = 0,
-                    lastWindSpeed = 0,
-                    lastPressure = 0,
-                    lastTemp = 0;
 
 
 
@@ -357,16 +362,16 @@ void MainWindow::on_HTTPButton_clicked()
                     minTimestamp = data["timestamp"].toDouble();
                 }
  //                qDebug() << data["winddirection"];
- //                qDebug() << data["temperature"];
-                qDebug() << data["timestamp"];
-                addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x, qv_y);
+                qDebug() << data["temperature"];
+                //qDebug() << data["timestamp"];
+                //addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x, qv_y);
                 addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x2, qv_y2);
                 addPoint(data["timestamp"].toDouble(), data["humidity"].toDouble(), qv_x3, qv_y3);
                 addPoint(data["timestamp"].toDouble(), data["windspeed"].toDouble(), qv_x4, qv_y4);
                 addPoint(data["timestamp"].toDouble(), data["pressure"].toDouble(), qv_x5, qv_y5);
                 addPoint(data["timestamp"].toDouble(), data["aqi"].toDouble(), qv_x6, qv_y6);
 
-                if(data["temperature"].toDouble() > maxTemp) {
+                if(data["temperature"].toDouble() > maxTemp ) {
                     maxTemp = data["temperature"].toDouble();
                 }else if(data["temperature"].toDouble() < minTemp) {
                     minTemp = data["temperature"].toDouble();
@@ -387,7 +392,6 @@ void MainWindow::on_HTTPButton_clicked()
                 }else if(data["timestamp"].toDouble() > maxTimestamp) {
                     maxTimestamp = data["timestamp"].toDouble();
                 }
-                count++;
                 lastAQI = data["aqi"].toDouble();
                 lastHum = data["humidity"].toDouble();
                 lastWindSpeed = data["windspeed"].toDouble();
@@ -397,11 +401,7 @@ void MainWindow::on_HTTPButton_clicked()
             reply->deleteLater();
 
             //ui->HomepagePlot->yAxis->setRange(minTemp-5, maxTemp+5); //in celsius
-            ui->PlotTemperature->yAxis->setRange(minTemp-5, maxTemp+5);
-            ui->PlotHumidity->yAxis->setRange(minHum-5, maxHum+5);
-            ui->PlotWindSpeedDirection->yAxis->setRange(minWindSpeed-5, maxWindSpeed+5);
-            ui->PlotPressure->yAxis->setRange(maxPressure-10, maxPressure+5);
-            ui->PlotAirQuality->yAxis->setRange(minAqi-5, maxAqi+5);
+
 
             //ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
             ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -410,6 +410,33 @@ void MainWindow::on_HTTPButton_clicked()
             ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
 
+            //ui->PlotTemperature->yAxis->rescale();
+            //ui->PlotTemperature->yAxis->rescale();
+            //ui->PlotHumidity->yAxis->rescale();
+            //ui->PlotWindSpeedDirection->yAxis->rescale();
+            //ui->PlotPressure->yAxis->rescale();
+            //ui->PlotAirQuality->yAxis->rescale();
+            qDebug() << minTemp;
+            qDebug() << minHum;
+            qDebug() <<minWindSpeed;
+            qDebug() <<maxPressure;
+            qDebug() <<minTimestamp;
+            qDebug() <<minAqi;
+
+            qDebug("\n");
+
+
+            qDebug() << maxTemp;
+            qDebug() << maxHum;
+            qDebug() <<maxWindSpeed;
+            qDebug() <<maxPressure;
+            qDebug() <<maxAqi;
+            qDebug() <<maxTimestamp;
+            ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
+            ui->PlotHumidity->yAxis->setRange((minHum-5.0), (maxHum+5.0));
+            ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5.0), (maxWindSpeed+5.0));
+            ui->PlotPressure->yAxis->setRange((maxPressure-5.0), (maxPressure+5.0));
+            ui->PlotAirQuality->yAxis->setRange((minAqi-5.0), (maxAqi+5.0));
             plot();
 
             //ui->AQIMeter->setValue(lastAQI);
@@ -504,9 +531,9 @@ void MainWindow::updateHomepage()
     QDateTime datetime = QDateTime::currentDateTime();
     //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
     //12 hour time
-    if(datetime.time().toString().leftRef(2).toInt() > 12)
+    if(datetime.time().toString().left(2).toInt() > 12)
     {
-        ui->HomeTime->setText(QString::number(datetime.time().toString().leftRef(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
+        ui->HomeTime->setText(QString::number(datetime.time().toString().left(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
     }
     else
     {
@@ -576,6 +603,9 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::getHttp(QString http)
 {
+    clearData();
+    qnam->clearAccessCache();
+    qnam->clearConnectionCache();
     ui->LoadingScreen->setVisible(TRUE);
     QString url = http;
     url.remove(QChar('"'));
@@ -593,23 +623,7 @@ void MainWindow::getHttp(QString http)
             QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
             QJsonArray jsonReply = jsonDoc.array();
             QJsonObject data = *new QJsonObject();
-            double count = 1;
-            double maxTemp = 0,
-                    minTemp = 0,
-                    maxHum = 0,
-                    minHum = 0,
-                    maxWindSpeed = 0,
-                    minWindSpeed = 0,
-                    maxPressure = 0,
-                    maxAqi = 0,
-                    minAqi = 0,
-                    maxTimestamp = 0,
-                    minTimestamp = 0,
-                    lastAQI = 0,
-                    lastHum = 0,
-                    lastWindSpeed = 0,
-                    lastPressure = 0,
-                    lastTemp = 0;
+
 
 
             ui->LoadingBar->setValue(50);
@@ -619,9 +633,9 @@ void MainWindow::getHttp(QString http)
                     minTimestamp = data["timestamp"].toDouble();
                 }
  //                qDebug() << data["winddirection"];
- //                qDebug() << data["temperature"];
-                qDebug() << data["timestamp"];
-                addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x, qv_y);
+                 qDebug() << data["temperature"];
+                //qDebug() << data["timestamp"];
+                //addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x, qv_y);
                 addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x2, qv_y2);
                 addPoint(data["timestamp"].toDouble(), data["humidity"].toDouble(), qv_x3, qv_y3);
                 addPoint(data["timestamp"].toDouble(), data["windspeed"].toDouble(), qv_x4, qv_y4);
@@ -649,7 +663,6 @@ void MainWindow::getHttp(QString http)
                 }else if(data["timestamp"].toDouble() > maxTimestamp) {
                     maxTimestamp = data["timestamp"].toDouble();
                 }
-                count++;
                 lastAQI = data["aqi"].toDouble();
                 lastHum = data["humidity"].toDouble();
                 lastWindSpeed = data["windspeed"].toDouble();
@@ -660,11 +673,11 @@ void MainWindow::getHttp(QString http)
             reply->deleteLater();
 
             //ui->HomepagePlot->yAxis->setRange(minTemp-5, maxTemp+5); //in celsius
-            ui->PlotTemperature->yAxis->setRange(minTemp-5, maxTemp+5);
-            ui->PlotHumidity->yAxis->setRange(minHum-5, maxHum+5);
-            ui->PlotWindSpeedDirection->yAxis->setRange(minWindSpeed-5, maxWindSpeed+5);
-            ui->PlotPressure->yAxis->setRange(maxPressure-10, maxPressure+5);
-            ui->PlotAirQuality->yAxis->setRange(minAqi-5, maxAqi+5);
+            ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
+            ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
+            ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
+            ui->PlotPressure->yAxis->setRange((maxPressure-5), (maxPressure+5));
+            ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
 
             //ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
             ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -673,6 +686,21 @@ void MainWindow::getHttp(QString http)
             ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
 
+            qDebug() << minTemp;
+            qDebug() << minHum;
+            qDebug() <<minWindSpeed;
+            qDebug() <<maxPressure;
+            qDebug() <<minAqi;
+            qDebug() <<minTimestamp;
+
+            qDebug("\n");
+
+            qDebug() << maxTemp;
+            qDebug() << maxHum;
+            qDebug() <<maxWindSpeed;
+            qDebug() <<maxPressure;
+            qDebug() <<maxAqi;
+            qDebug() <<maxTimestamp;
             plot();
 
             //ui->AQIMeter->setValue(lastAQI);
@@ -682,3 +710,4 @@ void MainWindow::getHttp(QString http)
     qnam->get(request);
     ui->LoadingScreen->setVisible(FALSE);
     }
+

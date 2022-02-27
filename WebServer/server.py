@@ -163,7 +163,7 @@ class database:
             host=self.host,
             port=self.port
         )
-        result = 0
+        result = None
         with db_con:    #open db_con and retrieve records
             cursor = db_con.cursor()
             request_str = f"""SELECT * FROM weather 
@@ -187,6 +187,33 @@ class database:
             record_list.append(record_dict)
         #return flask.jsonify(json)
         return json.dumps(record_list)  #Return json object array with records
+
+    def getsensor(self,deviceid,date,sensor):
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+        result = None
+        with db_con:    #open db_con and retrieve records
+            cursor = db_con.cursor()
+            request_str = f"""SELECT timestamp, date, deviceid, {sensor} FROM weather 
+            WHERE date = (%s) AND deviceid = {deviceid}
+            ORDER BY timestamp ASC;"""
+            cursor.execute(request_str,[date])
+            result = cursor.fetchall()
+        record_list = []
+        for record in result:   #convert records into dictionary
+            record_dict = {'timestamp':record[0],
+                           'date':record[1],
+                           'deviceid':record[2],
+                           sensor:record[3],
+                           }
+            record_list.append(record_dict)
+        return json.dumps(record_list)  #Return json object array with records
+
 
     #return most recent record from a certain device
     def getlatest(self, deviceid):
@@ -251,6 +278,17 @@ def get(device_id,date):
         print(f"Deleting records for date {date}")
         db.delete("weather",date)
         return "delete_success"
+
+
+@app.route('/devicedata/sensor/<sensor>/<device_id>/<date>', methods = ['GET'])
+def getsensor(sensor,device_id,date):
+    print(f"\nReceived request from {request.remote_addr}")
+    if request.method == 'GET':
+        print(f"Getting {sensor} records for device {device_id} on date {date}")
+    if sensor == "temperature" or sensor == "windspeed" or sensor == "winddirection" or sensor == "humidity" or sensor == "pressure" or sensor == "aqi":
+        return db.getsensor(device_id,date,sensor)
+    return "invalid_sensor"
+
 
 #get record for each hour of a certain date and device
 @app.route('/devicedata/hour/<device_id>/<date>', methods = ['GET'])

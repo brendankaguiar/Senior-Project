@@ -169,11 +169,22 @@ void MainWindow::plot()
     ui->PlotAirQuality->update();
 
     //ui->lcdNumber->display(qv_y.at(qv_y.length()-1));
-    ui->LCDTemperature->display(qv_y2.at(qv_y2.length()-1));
-    ui->LCDHumidity->display(qv_y3.at(qv_y3.length()-1));
-    ui->LCDWind->display(qv_y4.at(qv_y4.length()-1));
-    ui->LCDPressure->display(qv_y5.at(qv_y5.length()-1));
-    ui->LCDAirQuality->display(qv_y6.at(qv_y6.length()-1));
+    if(qv_y2.isEmpty() != 0 && qv_y3.isEmpty() != 0 && qv_y4.isEmpty() != 0 && qv_y5.isEmpty() != 0 && qv_y6.isEmpty() != 0)
+    {
+        ui->LCDTemperature->display(qv_y2.at(qv_y2.length()-1));
+        ui->LCDHumidity->display(qv_y3.at(qv_y3.length()-1));
+        ui->LCDWind->display(qv_y4.at(qv_y4.length()-1));
+        ui->LCDPressure->display(qv_y5.at(qv_y5.length()-1));
+        ui->LCDAirQuality->display(qv_y6.at(qv_y6.length()-1));
+    }
+    else
+    {
+        ui->LCDTemperature->display(qv_y2.at(0));
+        ui->LCDHumidity->display(qv_y3.at(0));
+        ui->LCDWind->display(qv_y4.at(0));
+        ui->LCDPressure->display(qv_y5.at(0));
+        ui->LCDAirQuality->display(qv_y6.at(0));
+    }
 }
 
 int MainWindow::newData()

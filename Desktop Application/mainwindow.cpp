@@ -33,6 +33,8 @@
 #include <QJsonValueRef>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QCoreApplication>
+#include <QStandardPaths>
 
 double maxTemp = 0,
         minTemp = 0,
@@ -63,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     //,qnam(new QNetworkAccessManager)
 {
-   qnam = new QNetworkAccessManager(this);
+   //qnam = new QNetworkAccessManager(this);
    ui->setupUi(this);
    //->HomepagePlot->addGraph();
    ui->PlotTemperature->addGraph();
@@ -331,6 +333,7 @@ void MainWindow::convertPas()
 ///////////////////////////////////////////////////////////////
 void MainWindow::on_HTTPButton_clicked()
 {
+    qnam = new QNetworkAccessManager();
     clearData();
     qnam->clearAccessCache();
     qnam->clearConnectionCache();
@@ -603,6 +606,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::getHttp(QString http)
 {
+    qnam = new QNetworkAccessManager();
     clearData();
     qnam->clearAccessCache();
     qnam->clearConnectionCache();
@@ -624,7 +628,7 @@ void MainWindow::getHttp(QString http)
             QJsonArray jsonReply = jsonDoc.array();
             QJsonObject data = *new QJsonObject();
 
-
+            //qDebug() << buffer;
 
             ui->LoadingBar->setValue(50);
             for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
@@ -633,7 +637,7 @@ void MainWindow::getHttp(QString http)
                     minTimestamp = data["timestamp"].toDouble();
                 }
  //                qDebug() << data["winddirection"];
-                 qDebug() << data["temperature"];
+                // qDebug() << data["temperature"];
                 //qDebug() << data["timestamp"];
                 //addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x, qv_y);
                 addPoint(data["timestamp"].toDouble(), data["temperature"].toDouble(), qv_x2, qv_y2);
@@ -668,6 +672,7 @@ void MainWindow::getHttp(QString http)
                 lastWindSpeed = data["windspeed"].toDouble();
                 lastPressure = data["pressure"].toDouble();
                 lastTemp = data["temperature"].toDouble();
+
             }
             ui->LoadingBar->setValue(90);
             reply->deleteLater();
@@ -702,12 +707,60 @@ void MainWindow::getHttp(QString http)
             qDebug() <<maxAqi;
             qDebug() <<maxTimestamp;
             plot();
-
+            updateHomepage();
             //ui->AQIMeter->setValue(lastAQI);
         }
     );
     ui->LoadingBar->setValue(100);
     qnam->get(request);
     ui->LoadingScreen->setVisible(FALSE);
+
     }
 
+void MainWindow::downloadFile()
+{
+    qnam = new QNetworkAccessManager();
+    QString downloadUrl = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16";
+    qnam->clearAccessCache();
+    qnam->clearConnectionCache();
+    QString url = downloadUrl;
+    url.remove(QChar('"'));
+    QUrl processedURL = url;
+    qDebug() << "Sending request to: " << url;
+    request.setUrl(processedURL);
+
+    QNetworkReply *reply = qnam->get(request);
+    connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
+
+}
+
+void MainWindow::on_DownloadAll_clicked()
+{
+
+    downloadFile();
+}
+
+void MainWindow::downloadFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
+        if (reply)
+        {
+            if (reply->error() == QNetworkReply::NoError)
+            {
+                QString downloadPath = (QString)QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+                QString userFilename = QFileDialog::getSaveFileName(this, tr("Save File as"), downloadPath, (" txt file (*.txt)"));
+                QFile file(userFilename);
+                if(file.open(QIODevice::WriteOnly))
+                {
+                        file.write(reply->readAll());
+                        qDebug() << "Download Successful";
+                }
+            }
+            reply->deleteLater();
+        }
+        else
+        {
+            qDebug() << "Error downloading file";
+        }
+}

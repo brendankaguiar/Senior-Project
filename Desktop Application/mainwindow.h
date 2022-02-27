@@ -52,7 +52,11 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
-    //void onReplyfinished();
+    void downloadFile();
+
+    void on_DownloadAll_clicked();
+
+    void downloadFinished();
 
 private:
     Ui::MainWindow *ui;

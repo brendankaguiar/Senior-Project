@@ -8,6 +8,10 @@ GET Paths:
 /devicedata/sensor/<sensor>/<device_id>/<date>
 	--returns json list of objects with data of only one sensor
 
+/devicedata/stats/<sensor>/<device_id>/<date>
+    --returns json object of format {min,max,average}
+    --does not work with wind direction,
+
 /devicedata/latest/<device_id>
 	--gets latest record in database
 

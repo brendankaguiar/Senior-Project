@@ -6,11 +6,9 @@
 #External packages used: Flask, sqlite3, os, json, datetime
 
 from flask import Flask, request
-import sqlite3 as sl
 import psycopg2
 from datetime import datetime
 import urllib.parse as urlparse
-import os
 import json
 
 import urllib.parse as urlparse
@@ -245,6 +243,30 @@ class database:
                                }
             return json.dumps(record_dict)  #Return json object with record
 
+    def getstats(self,deviceid,date,sensor):
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+        result = None
+        with db_con:    #open db_con and retrieve records
+            cursor = db_con.cursor()
+            request_str = f"""SELECT MIN({sensor}), MAX({sensor}), AVG({sensor}) FROM weather 
+            WHERE date = (%s) AND deviceid = {deviceid};"""
+            cursor.execute(request_str,[date])
+            result = cursor.fetchall()
+            result = result[0]
+
+        record_dict = { 'min':result[0],
+                        'max':result[1],
+                        'average':result[2]
+                      }
+
+        return json.dumps(record_dict)  #Return json object array with records
+
 
 #####################################################
 # Flask Routes
@@ -305,6 +327,12 @@ def latest(device_id):
         record = db.getlatest(device_id)
         print(record)
         return record
+
+@app.route('/devicedata/stats/<sensor>/<device_id>/<date>', methods = ['GET'])
+def stats(sensor, device_id, date):
+    if request.method == 'GET':
+        print(f"Getting min/max/average {sensor} for device " + device_id + " on date " + date)
+        return db.getstats(device_id,date,sensor)
 
 #delete all route
 @app.route('/devicedata/delete')

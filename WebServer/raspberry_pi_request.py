@@ -13,12 +13,13 @@ ROUTE = '/devicedata/all/0/'
 date = str(datetime.today().date())
 date = date.replace('-','_')
 now = datetime.now()
-current_timestamp = now.strftime("%H:%M:%S")
+current_timestamp = now.timestamp()
 port = serial.Serial("/dev/ttyS0",9600)#wait until data available
 Data = port.readline().decode("utf-8").strip()#decode data received to String
 W_Data = Data.split(",")#parse into list removing commas in the process
-#print(W_Data) #check data was parsed correctly
+print(W_Data) #check data was parsed correctly
 #append W_Data to json
+
 try:
     req = requests.post(HOST+ROUTE+date,json={"timestamp": current_timestamp,
                                               "date": date,

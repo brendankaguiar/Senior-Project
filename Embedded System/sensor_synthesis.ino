@@ -1,9 +1,3 @@
-
-
-
-
-
-
 //Weather Data Globals
 #define STRUCT_SIZE 24 //Size of float * nr of struct members -> 4 * 6 
 #define STRUCT_ELEMS 6 // number of elements in structure
@@ -17,6 +11,7 @@ struct Weather {
   float dens;//particulate density for Air Quality
   String w_dir;//wind direction
   float w_spd;//wind speed
+  String gps_loc;//gps location as the GPGLL NMEA sentence
 } W_Data;//Weather data object
 
 #include <Seeed_HM330X.h>
@@ -84,6 +79,7 @@ HM330XErrorCode parse_result_value(uint8_t* data) {
 /*30s*/
 void setup() {
     Serial.begin(9600);
+    Serial1.begin(9600);//Baud rate for GPS
     pSensor.begin();
     dht.begin();
     pinMode(A_PIN, INPUT);
@@ -94,7 +90,6 @@ void setup() {
         Serial.println("HM330X init failed!!");
         while (1);
     }
-
 }
 
 
@@ -103,9 +98,8 @@ void loop() {
     if (sensor.read_sensor_value(buf, 29)) {
         Serial.println("HM330X read result failed!!");
     }
-    parse_result_value(buf);
-    parse_result(buf);
-    
+    parse_result_value(buf);//parse error results
+    parse_result(buf);//parse error results
     Serial.println("");
     delay(5000);
 }
@@ -117,9 +111,33 @@ void getData()
   Get_Wind_Spd();
   get_random_values();
   getPressure();
+  //get_location();
   sendData();
 }
-
+void get_location()
+{
+  String GPGLL = "$GPGLL";
+  char Byte;
+  if (Serial1.available())//if data in serial buffer
+  {
+    Byte = Serial1.read();//read incoming data
+    int success = 1;
+    while (success)
+    {
+      if (Byte == '$')
+      {
+        String NMEA = Serial1.readStringUntil('\n');
+        if (NMEA.startsWith(GPGLL))
+        {
+          W_Data.gps_loc = String(NMEA);
+          success = 0;
+        }
+      }
+      else
+        Byte = Serial1.read();
+    }
+  }
+}
 void getPressure()
 {
   // put your main code here, to run repeatedly:

@@ -36,22 +36,6 @@
 #include <QCoreApplication>
 #include <QStandardPaths>
 
-double maxTemp = 0,
-        minTemp = 0,
-        maxHum = 0,
-        minHum = 0,
-        maxWindSpeed = 0,
-        minWindSpeed = 0,
-        maxPressure = 0,
-        maxAqi = 0,
-        minAqi = 0,
-        maxTimestamp = 0,
-        minTimestamp = 0,
-        lastAQI = 0,
-        lastHum = 0,
-        lastWindSpeed = 0,
-        lastPressure = 0,
-        lastTemp = 0;
 
 int digit = 1;
 int button = 100;
@@ -148,29 +132,29 @@ void MainWindow::clearData()
 ///////////////////////////////////////////////////////////////
 void MainWindow::plot()
 {
-    //ui->HomepagePlot->graph(0)->setData(qv_x,qv_y);
-    ui->PlotTemperature->graph(0)->setData(qv_x2,qv_y2);
-    ui->PlotHumidity->graph(0)->setData(qv_x3,qv_y3);
-    ui->PlotWindSpeedDirection->graph(0)->setData(qv_x4,qv_y4);
-    ui->PlotPressure->graph(0)->setData(qv_x5,qv_y5);
-    ui->PlotAirQuality->graph(0)->setData(qv_x6,qv_y6);
-
-    //ui->HomepagePlot->replot();
-    //ui->HomepagePlot->update();
-    ui->PlotTemperature->replot();
-    ui->PlotTemperature->update();
-    ui->PlotHumidity->replot();
-    ui->PlotHumidity->update();
-    ui->PlotWindSpeedDirection->replot();
-    ui->PlotWindSpeedDirection->update();
-    ui->PlotPressure->replot();
-    ui->PlotPressure->update();
-    ui->PlotAirQuality->replot();
-    ui->PlotAirQuality->update();
-
     //ui->lcdNumber->display(qv_y.at(qv_y.length()-1));
-    if(qv_y2.isEmpty() != 0 && qv_y3.isEmpty() != 0 && qv_y4.isEmpty() != 0 && qv_y5.isEmpty() != 0 && qv_y6.isEmpty() != 0)
+    if(!qv_y2.isEmpty() && !qv_y3.isEmpty() && !qv_y4.isEmpty() && !qv_y5.isEmpty() && !qv_y6.isEmpty())
     {
+        //ui->HomepagePlot->graph(0)->setData(qv_x,qv_y);
+        ui->PlotTemperature->graph(0)->setData(qv_x2,qv_y2);
+        ui->PlotHumidity->graph(0)->setData(qv_x3,qv_y3);
+        ui->PlotWindSpeedDirection->graph(0)->setData(qv_x4,qv_y4);
+        ui->PlotPressure->graph(0)->setData(qv_x5,qv_y5);
+        ui->PlotAirQuality->graph(0)->setData(qv_x6,qv_y6);
+
+        //ui->HomepagePlot->replot();
+        //ui->HomepagePlot->update();
+        ui->PlotTemperature->replot();
+        ui->PlotTemperature->update();
+        ui->PlotHumidity->replot();
+        ui->PlotHumidity->update();
+        ui->PlotWindSpeedDirection->replot();
+        ui->PlotWindSpeedDirection->update();
+        ui->PlotPressure->replot();
+        ui->PlotPressure->update();
+        ui->PlotAirQuality->replot();
+        ui->PlotAirQuality->update();
+
         ui->LCDTemperature->display(qv_y2.at(qv_y2.length()-1));
         ui->LCDHumidity->display(qv_y3.at(qv_y3.length()-1));
         ui->LCDWind->display(qv_y4.at(qv_y4.length()-1));
@@ -179,11 +163,11 @@ void MainWindow::plot()
     }
     else
     {
-        ui->LCDTemperature->display(qv_y2.at(0));
-        ui->LCDHumidity->display(qv_y3.at(0));
-        ui->LCDWind->display(qv_y4.at(0));
-        ui->LCDPressure->display(qv_y5.at(0));
-        ui->LCDAirQuality->display(qv_y6.at(0));
+        ui->LCDTemperature->display("0");
+        ui->LCDHumidity->display("0");
+        ui->LCDWind->display("0");
+        ui->LCDPressure->display("0");
+        ui->LCDAirQuality->display("0");
     }
 }
 
@@ -368,7 +352,22 @@ void MainWindow::on_HTTPButton_clicked()
             QJsonArray jsonReply = jsonDoc.array();
             QJsonObject data = *new QJsonObject();
 
-
+            double maxTemp = 0,
+                    minTemp = 0,
+                    maxHum = 0,
+                    minHum = 0,
+                    maxWindSpeed = 0,
+                    minWindSpeed = 0,
+                    maxPressure = 0,
+                    maxAqi = 0,
+                    minAqi = 0,
+                    maxTimestamp = 0,
+                    minTimestamp = 0,
+                    lastAQI = 0,
+                    lastHum = 0,
+                    lastWindSpeed = 0,
+                    lastPressure = 0,
+                    lastTemp = 0;
 
             for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
                 data = record->toObject();
@@ -521,8 +520,18 @@ void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
 void MainWindow::updateHomepage()
 {
     //set the temp @ homescreen
-    QString temp = QString::number(qv_y2.at(qv_y2.length()-1));
-    double tempVal = (qv_y2.at(qv_y2.length()-1));
+    QString temp;
+    double tempVal;
+    if(qv_y2.isEmpty())
+    {
+        temp = "0";
+        tempVal = 0;
+    }
+    else
+    {
+        temp = QString::number(qv_y2.at(qv_y2.length()-1));
+        tempVal = (qv_y2.at(qv_y2.length()-1));
+    }
     if(ui->FarenheitButton->isChecked())
     {
         ui->HomeTemp->setText( temp.left(temp.indexOf(".") + 3) + " °F");
@@ -556,29 +565,72 @@ void MainWindow::updateHomepage()
     ui->HomeDate->setText(QLocale().toString(datetime.date(),QLocale::LongFormat));
 
     //update humidity
-    ui -> HomeHumidityVal->setText(QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
-    //update windspeed
-    if(ui->MPHButton->isChecked())
+    if(qv_y3.isEmpty())
     {
-        ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+        ui->HomeHumidityVal->setText("0%");
     }
     else
     {
-        ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+        ui -> HomeHumidityVal->setText(QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
     }
 
-    //update pressure
-    if(ui->MillibarsButton->isChecked())
+    //update windspeed
+    if(qv_y4.isEmpty())
     {
-        ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+    if(ui->MPHButton->isChecked())
+    {
+        ui -> HomeWindVal -> setText("0 MPH");
     }
     else
     {
-        ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+        ui -> HomeWindVal -> setText("0 KM/H");
+    }
+    }
+    else
+    {
+        if(ui->MPHButton->isChecked())
+        {
+            ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+        }
+        else
+        {
+            ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+        }
+    }
+    //update pressure
+    if(qv_y5.isEmpty())
+    {
+        if(ui->MillibarsButton->isChecked())
+        {
+            ui -> HomePressureVal -> setText("0 mbars");
+        }
+        else
+        {
+            ui -> HomePressureVal -> setText("0 P");
+        }
+    }
+    else
+    {
+        if(ui->MillibarsButton->isChecked())
+        {
+            ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+        }
+        else
+        {
+            ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+        }
     }
 
     //update air quality
-    int curAQ = qv_y6.at(qv_y6.length()-1);
+    int curAQ;
+    if(qv_y6.isEmpty())
+    {
+        curAQ = 0;
+    }
+    else
+    {
+        curAQ = qv_y6.at(qv_y6.length()-1);
+    }
     if(curAQ > 301) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nHazardous"); }
     else if (curAQ > 201) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nVery Unhealthy"); }
     else if (curAQ > 201) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nUnhealthy"); }
@@ -599,7 +651,15 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 {
     if(ui->tabWidget->currentIndex() == 0)
     {
-        double tempVal = (qv_y2.at(qv_y2.length()-1));
+        double tempVal;
+        if(qv_y2.isEmpty())
+        {
+            tempVal = 0;
+        }
+        else
+        {
+            tempVal = (qv_y2.at(qv_y2.length()-1));
+        }
         if(!ui->FarenheitButton->isChecked()) { tempVal = (tempVal *9/5) + 32;} //if temp is in celcius convert it to farenheight for temp color
         if(tempVal > 100) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,86,1);}"); }
         else if( tempVal > 85) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(253,200,36);}"); }
@@ -638,6 +698,23 @@ void MainWindow::getHttp(QString http)
             QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
             QJsonArray jsonReply = jsonDoc.array();
             QJsonObject data = *new QJsonObject();
+
+            double maxTemp = 0,
+                    minTemp = 0,
+                    maxHum = 0,
+                    minHum = 0,
+                    maxWindSpeed = 0,
+                    minWindSpeed = 0,
+                    maxPressure = 0,
+                    maxAqi = 0,
+                    minAqi = 0,
+                    maxTimestamp = 0,
+                    minTimestamp = 0,
+                    lastAQI = 0,
+                    lastHum = 0,
+                    lastWindSpeed = 0,
+                    lastPressure = 0,
+                    lastTemp = 0;
 
             //qDebug() << buffer;
 
@@ -731,7 +808,8 @@ void MainWindow::getHttp(QString http)
 void MainWindow::downloadFile()
 {
     qnam = new QNetworkAccessManager();
-    QString downloadUrl = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16";
+    //QString downloadUrl = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16";
+    QString downloadUrl = requestUrl("sensor/temperature/", "2022_02_17");
     qnam->clearAccessCache();
     qnam->clearConnectionCache();
     QString url = downloadUrl;
@@ -775,3 +853,56 @@ void MainWindow::downloadFinished()
             qDebug() << "Error downloading file";
         }
 }
+
+QString MainWindow::requestUrl(QString type, QString date)
+{
+    QString defaultString = "https://flask-rews.herokuapp.com/devicedata/";
+    QString deviceNum = "0/";
+    QString url;
+    QString temp;
+    url = defaultString.append(type);
+    temp = url.append(deviceNum);
+    url = temp.append(date);
+    return url;
+}
+
+void MainWindow::deleteAllData()
+{
+    qnam = new QNetworkAccessManager();
+    QString downloadUrl = "https://flask-rews.herokuapp.com/devicedata/delete";
+    qnam->clearAccessCache();
+    qnam->clearConnectionCache();
+    QString url = downloadUrl;
+    url.remove(QChar('"'));
+    QUrl processedURL = url;
+    qDebug() << "Sending request to: " << url;
+    request.setUrl(processedURL);
+    QNetworkReply *reply = qnam->get(request);
+    QObject::connect(reply, SIGNAL(finished()), this, SLOT(deleteFinished()));
+}
+
+void MainWindow::deleteFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
+        if (reply)
+        {
+            if (reply->error() == QNetworkReply::NoError)
+            {
+                        clearData();
+                        qDebug() << "Delete Successful";
+            }
+            reply->deleteLater();
+        }
+        else
+        {
+            qDebug() << "Error deleting all data";
+        }
+
+}
+
+void MainWindow::on_DeleteAll_clicked()
+{
+    deleteAllData();
+}
+

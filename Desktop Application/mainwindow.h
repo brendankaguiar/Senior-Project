@@ -58,6 +58,14 @@ private slots:
 
     void downloadFinished();
 
+    QString requestUrl(QString type, QString date);
+
+    void deleteAllData();
+
+    void on_DeleteAll_clicked();
+
+    void deleteFinished();
+
 private:
     Ui::MainWindow *ui;
 

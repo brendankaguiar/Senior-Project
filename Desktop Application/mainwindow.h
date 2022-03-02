@@ -30,7 +30,7 @@ public:
     void convertMbars();
     void convertPas();
     void updateHomepage();
-    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16");
+    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/latest/0");
 
 private slots:
 
@@ -65,6 +65,16 @@ private slots:
     void on_DeleteAll_clicked();
 
     void deleteFinished();
+
+    QString getCurrentDate();
+
+    void getMinMaxAvg(QString sensor);
+
+    void on_FirstDate_2_userDateChanged(const QDate &date);
+
+    void on_SecondDate_2_userDateChanged(const QDate &date);
+
+    void getHttpMultidate();
 
 private:
     Ui::MainWindow *ui;

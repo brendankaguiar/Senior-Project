@@ -35,10 +35,32 @@
 #include <QJsonObject>
 #include <QCoreApplication>
 #include <QStandardPaths>
+#include <QDateTime>
+#include <QDate>
 
+double maxTemp = 0,
+        minTemp = 0,
+        maxHum = 0,
+        minHum = 0,
+        maxWindSpeed = 0,
+        minWindSpeed = 0,
+        maxPressure = 0,
+        minPressure = 0,
+        maxAqi = 0,
+        minAqi = 0,
+        maxTimestamp = 0,
+        minTimestamp = 0,
+        avgAqi = 0,
+        avgHum = 0,
+        avgWindSpeed = 0,
+        avgPressure = 0,
+        avgTemp = 0;
 
 int digit = 1;
 int button = 100;
+QDate startDate;
+QDate endDate;
+
 QPen pen;
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
@@ -651,6 +673,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 {
     if(ui->tabWidget->currentIndex() == 0)
     {
+        updateHomepage();
         double tempVal;
         if(qv_y2.isEmpty())
         {
@@ -677,12 +700,14 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::getHttp(QString http)
 {
+    QString date = getCurrentDate();
+    QString url = requestUrl("all/", date);
     qnam = new QNetworkAccessManager();
     clearData();
     qnam->clearAccessCache();
     qnam->clearConnectionCache();
     ui->LoadingScreen->setVisible(TRUE);
-    QString url = http;
+    //QString url = http;
     url.remove(QChar('"'));
     QUrl processedURL = url;
     qDebug() << "Sending request to: " << url;
@@ -799,10 +824,10 @@ void MainWindow::getHttp(QString http)
             //ui->AQIMeter->setValue(lastAQI);
         }
     );
+    updateHomepage();
     ui->LoadingBar->setValue(100);
     qnam->get(request);
     ui->LoadingScreen->setVisible(FALSE);
-
     }
 
 void MainWindow::downloadFile()
@@ -904,5 +929,120 @@ void MainWindow::deleteFinished()
 void MainWindow::on_DeleteAll_clicked()
 {
     deleteAllData();
+}
+
+QString MainWindow::getCurrentDate()
+{
+    int day,month,year;
+    QString dateS;
+    QDate date = QDate::currentDate();
+    day = date.day();
+    month = date.month();
+    year = date.year();
+    if(month > 0 && month < 10)
+    {
+        dateS = QString::number(year) + "_0" + QString::number(month) + "_" + QString::number(day);
+    }
+    else
+    {
+        dateS = QString::number(year) + "_" + QString::number(month) + "_" + QString::number(day);
+    }
+    return dateS;
+}
+
+void MainWindow::getMinMaxAvg(QString sensor)
+{
+    QString date = getCurrentDate();
+    QString url = requestUrl(sensor, date);
+    qnam = new QNetworkAccessManager();
+    url.remove(QChar('"'));
+    QUrl processedURL = url;
+    qDebug() << "Sending request to: " << url;
+    request.setUrl(processedURL);
+    QObject::connect(qnam, &QNetworkAccessManager::finished,
+        this, [=](QNetworkReply *reply) {
+            if (reply->error()) {
+                qDebug() << reply->errorString();
+                return;
+            }
+
+            QByteArray buffer = reply->readAll();
+            QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
+            QJsonArray jsonReply = jsonDoc.array();
+            QJsonObject data = *new QJsonObject();
+
+
+
+            //qDebug() << buffer;
+
+            ui->LoadingBar->setValue(50);
+            for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
+                data = record->toObject();
+                if(sensor == "temperature")
+                {
+                    minTemp = data["min"].toDouble();
+                    maxTemp = data["max"].toDouble();
+                    avgTemp = data["average"].toDouble();
+                }
+                else if(sensor == "humidity")
+                {
+                    minHum = data["min"].toDouble();
+                    maxHum = data["max"].toDouble();
+                    avgHum = data["average"].toDouble();
+                }
+                else if(sensor == "windspeed")
+                {
+                    minWindSpeed = data["min"].toDouble();
+                    maxWindSpeed = data["max"].toDouble();
+                    avgWindSpeed = data["average"].toDouble();
+                }
+                else if(sensor == "pressure")
+                {
+                    minPressure = data["min"].toDouble();
+                    maxPressure = data["max"].toDouble();
+                    avgPressure = data["average"].toDouble();
+                }
+                else if(sensor == "aqi")
+                {
+                    minAqi = data["min"].toDouble();
+                    maxAqi = data["max"].toDouble();
+                    avgAqi = data["average"].toDouble();
+                }
+            }
+            reply->deleteLater();
+    });
+    qnam->get(request);
+}
+
+void MainWindow::on_FirstDate_2_userDateChanged(const QDate &date)
+{
+    startDate = date;
+}
+
+
+void MainWindow::on_SecondDate_2_userDateChanged(const QDate &date)
+{
+    endDate = date;
+}
+
+void MainWindow::getHttpMultidate()
+{
+    //QDate tempDate = startDate;
+    //Only do up to one year for now
+    if(startDate.year() == endDate.year())
+    {
+        if(startDate.month() == endDate.month())
+        {
+            while(startDate.day() <= endDate.day())
+            {
+                //getHttp(tempDate);
+                //tempDate.setDate(tempDate.day()+1);
+            }
+        }
+        else if(startDate.month() < endDate.month())
+        {
+
+        }
+    }
 }
 

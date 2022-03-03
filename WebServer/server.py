@@ -238,8 +238,8 @@ class database:
         )
         with db_con:    #open db_con and retrieve latest record
             cursor = db_con.cursor()
-            request_str = """SELECT * FROM weather
-            WHERE timestamp = (SELECT MAX(timestamp) FROM weather);
+            request_str = f"""SELECT * FROM weather
+            WHERE timestamp = (SELECT MAX(timestamp) FROM weather) AND deviceid = {deviceid};
             """
             cursor.execute(request_str)
             result = cursor.fetchall()

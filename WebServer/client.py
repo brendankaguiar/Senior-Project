@@ -22,7 +22,6 @@ PORT = 5000        # The port used by the server
 #"GET /get/thingy HTTP/1.1\r\nHost:%s\r\n\r\n" % HOST
 
 
-
 def get_data(request):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))

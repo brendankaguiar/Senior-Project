@@ -19,7 +19,6 @@ DATABASE_URL = "postgres://ntmlgtzglebvxt:7f29de081a06069389993e83b304eabc7a607e
 #Contains methods for querying database
 class database:
 
-
     def __init__(self,
                  url_ : str,
                  reset_ : bool = False):
@@ -52,7 +51,8 @@ class database:
             db_cursor = db_con.cursor()
             db_cursor.execute("""
             CREATE TABLE IF NOT EXISTS weather (
-                timestamp INT PRIMARY KEY,
+                id SERIAL,
+                timestamp INT,
                 date TEXT,
                 deviceid INT,
                 temperature REAL,
@@ -114,15 +114,7 @@ class database:
             db_cursor.execute(request_str)
             db_cursor.close()
 
-    #Public delete records for either certain
-    def delete(self,table,data):
-        if table == "weather":
-            if data is not None:
-                self._weatherdelete(data)
-            else:
-                self._weatherdeleteall()
-
-    def _weatherdelete(self,date):
+    def weatherdeletedate(self,date):
         db_con = psycopg2.connect(
             dbname=self.dbname,
             user=self.user,
@@ -138,7 +130,7 @@ class database:
             db_cursor.execute(request_str)
             db_cursor.close()
 
-    def _weatherdeleteall(self):
+    def weatherdeleteall(self):
         db_con = psycopg2.connect(
             dbname=self.dbname,
             user=self.user,
@@ -151,6 +143,27 @@ class database:
             request_str = "DELETE FROM weather;"
             db_cursor.execute(request_str)
             db_cursor.close()
+
+    def weatherdeletedevice(self,device_id):
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+        with db_con:
+            db_cursor = db_con.cursor()
+            try:
+                request_str = f"""DELETE FROM weather 
+                                 WHERE deviceid = {device_id};"""
+                db_cursor.execute(request_str)
+            except:
+                db_cursor.close()
+                return False
+            db_cursor.close()
+            return True
+
 
     #return all records of a certain date and device
     def getday(self,deviceid,date : str):
@@ -171,21 +184,22 @@ class database:
             result = cursor.fetchall()
         record_list = []
         for record in result:   #convert records into dictionary
-            record_dict = {'timestamp':record[0],
-                           'date':record[1],
-                           'deviceid':record[2],
-                           'temperature':record[3],
-                           'windspeed':record[4],
-                           'winddirection':record[5],
-                           'humidity':record[6],
-                           'pressure':record[7],
-                           'aqi':record[8],
+            record_dict = {'timestamp':record[1],
+                           'date':record[2],
+                           'deviceid':record[3],
+                           'temperature':record[4],
+                           'windspeed':record[5],
+                           'winddirection':record[6],
+                           'humidity':record[7],
+                           'pressure':record[8],
+                           'aqi':record[9],
                            }
             #print(record_dict)
             record_list.append(record_dict)
         #return flask.jsonify(json)
         return json.dumps(record_list)  #Return json object array with records
 
+    #return only <sensor> records with timestamp, date, and id
     def getsensor(self,deviceid,date,sensor):
         db_con = psycopg2.connect(
             dbname=self.dbname,
@@ -231,19 +245,23 @@ class database:
             result = cursor.fetchall()
             record_dict = {}
             for record in result:   #convert record into dictionary
-                record_dict = {'timestamp': record[0],
-                               'date':record[1],
-                               'deviceid':record[2],
-                               'temperature':record[3],
-                               'windspeed':record[4],
-                               'winddirection':record[5],
-                               'humidity':record[6],
-                               'pressure':record[7],
-                               'aqi':record[8],
+                record_dict = {'timestamp': record[1],
+                               'date':record[2],
+                               'deviceid':record[3],
+                               'temperature':record[4],
+                               'windspeed':record[5],
+                               'winddirection':record[6],
+                               'humidity':record[7],
+                               'pressure':record[8],
+                               'aqi':record[9],
                                }
             return json.dumps(record_dict)  #Return json object with record
 
+    #return json object with min, max, avg stats of <sensor> on <date>
     def getstats(self,deviceid,date,sensor):
+        if sensor!="temperature" and sensor!="windspeed" and sensor!="humidity" and sensor!="pressure" and sensor!="aqi":
+            return ""
+
         db_con = psycopg2.connect(
             dbname=self.dbname,
             user=self.user,
@@ -298,10 +316,10 @@ def get(device_id,date):
         return "post_success"
     if request.method == 'DELETE':
         print(f"Deleting records for date {date}")
-        db.delete("weather",date)
+        db.weatherdeletedate(date)
         return "delete_success"
 
-
+#get all records for certain device, only return <sensor> along with timestamp, date, deviceid
 @app.route('/devicedata/sensor/<sensor>/<device_id>/<date>', methods = ['GET'])
 def getsensor(sensor,device_id,date):
     print(f"\nReceived request from {request.remote_addr}")
@@ -315,6 +333,7 @@ def getsensor(sensor,device_id,date):
 #get record for each hour of a certain date and device
 @app.route('/devicedata/hour/<device_id>/<date>', methods = ['GET'])
 def hour(device_id, date):
+    print(f"\nReceived request from {request.remote_addr}")
     if request.method == 'GET':
         print("Getting hourly records for device " + device_id + " on date " + date)
 
@@ -328,18 +347,31 @@ def latest(device_id):
         print(record)
         return record
 
+#get min, max, avg values for <sensor> for device <device> on <date>
 @app.route('/devicedata/stats/<sensor>/<device_id>/<date>', methods = ['GET'])
 def stats(sensor, device_id, date):
+    print(f"\nReceived request from {request.remote_addr}")
     if request.method == 'GET':
         print(f"Getting min/max/average {sensor} for device " + device_id + " on date " + date)
         return db.getstats(device_id,date,sensor)
 
-#delete all route
+#delete all route, deletes all tuples in database
 @app.route('/devicedata/delete')
 def delete():
     print(f"\nReceived request from {request.remote_addr}")
-    db.delete("weather",None)
+    db.weatherdeleteall()
     return "delete_success"
+
+#delete all records for <device_id>
+@app.route('/devicedata/delete/<device_id>')
+def delete_device(device_id):
+    print(f"\nReceived request from {request.remote_addr}")
+    print(f"Delete all records for device {device_id}")
+    result = db.weatherdeletedevice(device_id)
+    if result:
+        return "delete_success"
+    return "delete_fail"
+
 
 if __name__ == '__main__':
     app.run()

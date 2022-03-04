@@ -29,7 +29,6 @@ public:
     void convertKph();
     void convertMbars();
     void convertPas();
-    void updateHomepage();
     void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/latest/0");
 
 private slots:
@@ -51,6 +50,8 @@ private slots:
     void on_pushButton_clicked();
 
     void on_tabWidget_currentChanged(int index);
+
+    void updateHomepage();
 
     void downloadFile();
 
@@ -76,6 +77,16 @@ private slots:
 
     void getHttpMultidate();
 
+    void getHttpTemp();
+
+    void getHttpHum();
+
+    void getHttpWindSpeedDirection();
+
+    void getHttpPressure();
+
+    void getHttpAqi();
+
 private:
     Ui::MainWindow *ui;
 
@@ -88,7 +99,9 @@ private:
     QNetworkAccessManager* qnam;
     QJsonArray jsonReply;
 
-protected:
+    int timerId;
 
+protected:
+    void timerEvent(QTimerEvent *event);
 };
 #endif // MAINWINDOW_H

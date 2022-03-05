@@ -933,6 +933,26 @@ void MainWindow::refreshCurrentTab()
 //change color to default if user leave homepage or change color back if homepage is clicked on again
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
+    if(index == 1)
+    {
+        getMinMaxAvg("humidity");
+    }
+    else if(index == 2)
+    {
+        getMinMaxAvg("temperature");
+    }
+    else if(index == 3)
+    {
+        getMinMaxAvg("windspeed");
+    }
+    else if(index == 4)
+    {
+        getMinMaxAvg("pressure");
+    }
+    else if(index == 5)
+    {
+        getMinMaxAvg("aqi");
+    }
     refreshCurrentTab();
     ui->AboutFrame->setVisible(FALSE);
     ui->DeleteFrame->setVisible(FALSE);
@@ -1151,7 +1171,6 @@ void MainWindow::deleteFinished()
 
 void MainWindow::on_DeleteAll_clicked()
 {
-    qDebug() << "Iam clkj";
     ui->AboutFrame->setVisible(FALSE);
     if(ui->DeleteFrame->isVisible()) { ui->DeleteFrame->setVisible(FALSE); }
     else { ui->DeleteFrame->setVisible(TRUE); }
@@ -1193,8 +1212,9 @@ QString MainWindow::getCurrentDate()
 
 void MainWindow::getMinMaxAvg(QString sensor)
 {
+    QString pr = "stats/";
     QString date = getCurrentDate();
-    QString url = requestUrl(sensor, date);
+    QString url = requestUrl(pr.append(sensor.append("/")), date);
     qnam = new QNetworkAccessManager();
     url.remove(QChar('"'));
     QUrl processedURL = url;
@@ -1251,6 +1271,40 @@ void MainWindow::getMinMaxAvg(QString sensor)
             reply->deleteLater();
     });
     qnam->get(request);
+
+
+    if(ui->FarenheitButton->isChecked())
+    {
+        ui->TemperatureStats->setText("24 hour average: " + QString::number(avgTemp)+ " °F\nPast 24 hour high: " + QString::number(maxTemp) + " °F\nPast 24 hour low: " + QString::number(minTemp) + " °F");
+    }
+    else
+    {
+        ui->TemperatureStats->setText("24 hour average: " + QString::number(avgTemp)+ " °C\nPast 24 hour high: " + QString::number(maxTemp) + " °C\nPast 24 hour low: " + QString::number(minTemp) + " °C");
+    }
+
+    ui->HumidityStats->setText("24 hour average: " + QString::number(avgHum)+ "%\nPast 24 hour high: " + QString::number(maxHum) + "%\nPast 24 hour low: " + QString::number(minHum) + "%");
+
+    if(ui->MPHButton->isChecked())
+        {
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed)+ " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
+        }
+        else
+        {
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed)+ " KM/H\nPast 24 hour high: " + QString::number(maxWindSpeed) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
+        }
+
+
+        if(ui->MillibarsButton->isChecked())
+        {
+            ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure)+ " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
+        }
+        else
+        {
+            ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure)+ " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
+        }
+          ui->AQStats->setText("24 hour average: " + QString::number(avgAqi) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
+
+
 }
 
 void MainWindow::on_FirstDate_2_userDateChanged(const QDate &date)
@@ -1419,7 +1473,9 @@ void MainWindow::getHttpWindSpeedDirection()
             plot();
         }
     );
-    updateHomepage();
+    ui->HomeWindDir->setText(windDirection);
+    ui->WindDirection->setText("Current Wind Direction:\n" + windDirection);
+    updateWind();
     qnam->get(request);
 }
 

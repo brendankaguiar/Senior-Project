@@ -53,6 +53,28 @@ private slots:
 
     void updateHomepage();
 
+    void updateHumidity();
+
+    void updateTemperature();
+
+    void updateWind();
+
+    void updatePressure();
+
+    void updateAQ();
+
+    void setTempBG();
+
+    void setHumidityBG();
+
+    void setWindBG();
+
+    void setPressureBG();
+
+    void setAQBG();
+
+    void refreshCurrentTab();
+
     void downloadFile();
 
     void on_DownloadAll_clicked();
@@ -86,6 +108,14 @@ private slots:
     void getHttpPressure();
 
     void getHttpAqi();
+
+    void on_AboutButton_clicked();
+
+    void on_AboutClose_clicked();
+
+    void on_DeleteConfirm_clicked();
+
+    void on_DeleteDeny_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -96,7 +96,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -119,7 +119,7 @@ QTabWidget::tab-bar{
         <property name="geometry">
          <rect>
           <x>60</x>
-          <y>30</y>
+          <y>0</y>
           <width>531</width>
           <height>251</height>
          </rect>
@@ -209,7 +209,7 @@ QTabWidget::tab-bar{
         <property name="geometry">
          <rect>
           <x>40</x>
-          <y>320</y>
+          <y>280</y>
           <width>501</width>
           <height>111</height>
          </rect>
@@ -227,7 +227,7 @@ QTabWidget::tab-bar{
         <property name="geometry">
          <rect>
           <x>40</x>
-          <y>400</y>
+          <y>380</y>
           <width>511</width>
           <height>71</height>
          </rect>
@@ -318,7 +318,7 @@ Excellent</string>
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="UpdateHomepage">
         <property name="geometry">
          <rect>
           <x>290</x>
@@ -331,65 +331,6 @@ Excellent</string>
          <string>Update Homepage (temp debugging)</string>
         </property>
        </widget>
-       <widget class="QFrame" name="LoadingScreen">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>60</y>
-          <width>301</width>
-          <height>191</height>
-         </rect>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-background:rgb(135,211,124)
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Panel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <widget class="QProgressBar" name="LoadingBar">
-         <property name="geometry">
-          <rect>
-           <x>90</x>
-           <y>130</y>
-           <width>118</width>
-           <height>23</height>
-          </rect>
-         </property>
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>-2</x>
-           <y>30</y>
-           <width>301</width>
-           <height>71</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>22</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Loading Data
-Please Wait...</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </widget>
       </widget>
       <widget class="QWidget" name="Humidity">
        <attribute name="title">
@@ -398,28 +339,18 @@ Please Wait...</string>
        <widget class="QCustomPlot" name="PlotHumidity" native="true">
         <property name="geometry">
          <rect>
-          <x>270</x>
-          <y>230</y>
+          <x>290</x>
+          <y>210</y>
           <width>441</width>
           <height>281</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLCDNumber" name="LCDHumidity">
-        <property name="geometry">
-         <rect>
-          <x>410</x>
-          <y>30</y>
-          <width>231</width>
-          <height>171</height>
          </rect>
         </property>
        </widget>
        <widget class="QWidget" name="verticalLayoutWidget_2">
         <property name="geometry">
          <rect>
-          <x>40</x>
-          <y>430</y>
+          <x>30</x>
+          <y>410</y>
           <width>231</width>
           <height>78</height>
          </rect>
@@ -469,11 +400,11 @@ Please Wait...</string>
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="HumidityVal">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>10</y>
+          <x>50</x>
+          <y>0</y>
           <width>941</width>
           <height>211</height>
          </rect>
@@ -490,11 +421,11 @@ Please Wait...</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QLabel" name="label_14">
+       <widget class="QLabel" name="HumidityStats">
         <property name="geometry">
          <rect>
-          <x>810</x>
-          <y>320</y>
+          <x>860</x>
+          <y>350</y>
           <width>341</width>
           <height>121</height>
          </rect>
@@ -510,7 +441,7 @@ Past 24 hour high: #%
 Past 24 hour low: #%</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_15">
+       <widget class="QLabel" name="HumidityUpdated">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -528,31 +459,21 @@ Past 24 hour low: #%</string>
        <attribute name="title">
         <string>Temperature</string>
        </attribute>
-       <widget class="QLCDNumber" name="LCDTemperature">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>10</y>
-          <width>231</width>
-          <height>171</height>
-         </rect>
-        </property>
-       </widget>
        <widget class="QCustomPlot" name="PlotTemperature" native="true">
         <property name="geometry">
          <rect>
-          <x>360</x>
+          <x>290</x>
           <y>210</y>
           <width>441</width>
           <height>281</height>
          </rect>
         </property>
        </widget>
-       <widget class="QLabel" name="label_10">
+       <widget class="QLabel" name="TemperatureVal">
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>-10</y>
+          <y>0</y>
           <width>941</width>
           <height>211</height>
          </rect>
@@ -572,13 +493,13 @@ Past 24 hour low: #%</string>
        <widget class="QWidget" name="verticalLayoutWidget">
         <property name="geometry">
          <rect>
-          <x>100</x>
+          <x>30</x>
           <y>410</y>
           <width>231</width>
           <height>78</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="DateSelector">
+        <layout class="QVBoxLayout" name="TemperatureSelector">
          <item>
           <widget class="QLabel" name="label_6">
            <property name="font">
@@ -623,7 +544,7 @@ Past 24 hour low: #%</string>
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="TemperatureUpdated">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -636,11 +557,11 @@ Past 24 hour low: #%</string>
          <string>Last Updated: 1:00 PM 2/18/22</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="TemperatureStats">
         <property name="geometry">
          <rect>
           <x>860</x>
-          <y>280</y>
+          <y>350</y>
           <width>341</width>
           <height>121</height>
          </rect>
@@ -664,28 +585,18 @@ Past 24 hour low: #ºC</string>
        <widget class="QCustomPlot" name="PlotWindSpeedDirection" native="true">
         <property name="geometry">
          <rect>
-          <x>310</x>
-          <y>250</y>
+          <x>290</x>
+          <y>210</y>
           <width>441</width>
           <height>281</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLCDNumber" name="LCDWind">
-        <property name="geometry">
-         <rect>
-          <x>480</x>
-          <y>40</y>
-          <width>231</width>
-          <height>171</height>
          </rect>
         </property>
        </widget>
        <widget class="QWidget" name="verticalLayoutWidget_3">
         <property name="geometry">
          <rect>
-          <x>60</x>
-          <y>440</y>
+          <x>30</x>
+          <y>410</y>
           <width>231</width>
           <height>78</height>
          </rect>
@@ -735,11 +646,11 @@ Past 24 hour low: #ºC</string>
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_16">
+       <widget class="QLabel" name="WindVal">
         <property name="geometry">
          <rect>
-          <x>30</x>
-          <y>20</y>
+          <x>50</x>
+          <y>0</y>
           <width>941</width>
           <height>211</height>
          </rect>
@@ -756,7 +667,7 @@ Past 24 hour low: #ºC</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QLabel" name="label_17">
+       <widget class="QLabel" name="WindStats">
         <property name="geometry">
          <rect>
           <x>860</x>
@@ -776,7 +687,7 @@ Past 24 hour high: #MPH
 Past 24 hour low: #MPH</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_18">
+       <widget class="QLabel" name="WindUpdated">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -789,7 +700,7 @@ Past 24 hour low: #MPH</string>
          <string>Last Updated: 1:00 PM 2/18/22</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_19">
+       <widget class="QLabel" name="WindDirection">
         <property name="geometry">
          <rect>
           <x>840</x>
@@ -820,27 +731,17 @@ NNW</string>
         <property name="geometry">
          <rect>
           <x>290</x>
-          <y>240</y>
+          <y>210</y>
           <width>441</width>
           <height>281</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLCDNumber" name="LCDPressure">
-        <property name="geometry">
-         <rect>
-          <x>390</x>
-          <y>40</y>
-          <width>231</width>
-          <height>171</height>
          </rect>
         </property>
        </widget>
        <widget class="QWidget" name="verticalLayoutWidget_4">
         <property name="geometry">
          <rect>
-          <x>40</x>
-          <y>440</y>
+          <x>30</x>
+          <y>410</y>
           <width>231</width>
           <height>78</height>
          </rect>
@@ -890,7 +791,7 @@ NNW</string>
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_20">
+       <widget class="QLabel" name="PressureUpdated">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -903,11 +804,11 @@ NNW</string>
          <string>Last Updated: 1:00 PM 2/18/22</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_21">
+       <widget class="QLabel" name="PressureVal">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>20</y>
+          <x>50</x>
+          <y>0</y>
           <width>941</width>
           <height>211</height>
          </rect>
@@ -924,11 +825,11 @@ NNW</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QLabel" name="label_22">
+       <widget class="QLabel" name="PressureStats">
         <property name="geometry">
          <rect>
-          <x>820</x>
-          <y>360</y>
+          <x>860</x>
+          <y>350</y>
           <width>381</width>
           <height>121</height>
          </rect>
@@ -952,8 +853,8 @@ Past 24 hour low: #mbars</string>
        <widget class="QCustomPlot" name="PlotAirQuality" native="true">
         <property name="geometry">
          <rect>
-          <x>320</x>
-          <y>240</y>
+          <x>290</x>
+          <y>210</y>
           <width>441</width>
           <height>281</height>
          </rect>
@@ -962,21 +863,11 @@ Past 24 hour low: #mbars</string>
          <string notr="true"/>
         </property>
        </widget>
-       <widget class="QLCDNumber" name="LCDAirQuality">
-        <property name="geometry">
-         <rect>
-          <x>460</x>
-          <y>40</y>
-          <width>231</width>
-          <height>171</height>
-         </rect>
-        </property>
-       </widget>
        <widget class="QWidget" name="verticalLayoutWidget_5">
         <property name="geometry">
          <rect>
-          <x>70</x>
-          <y>440</y>
+          <x>30</x>
+          <y>410</y>
           <width>231</width>
           <height>78</height>
          </rect>
@@ -1026,11 +917,11 @@ Past 24 hour low: #mbars</string>
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_23">
+       <widget class="QLabel" name="AQVal">
         <property name="geometry">
          <rect>
-          <x>60</x>
-          <y>30</y>
+          <x>50</x>
+          <y>0</y>
           <width>391</width>
           <height>211</height>
          </rect>
@@ -1047,7 +938,7 @@ Past 24 hour low: #mbars</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QLabel" name="label_24">
+       <widget class="QLabel" name="AQUpdated">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -1060,11 +951,11 @@ Past 24 hour low: #mbars</string>
          <string>Last Updated: 1:00 PM 2/18/22</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_25">
+       <widget class="QLabel" name="AQStats">
         <property name="geometry">
          <rect>
           <x>860</x>
-          <y>330</y>
+          <y>350</y>
           <width>381</width>
           <height>121</height>
          </rect>
@@ -1080,12 +971,12 @@ Past 24 hour high: #
 Past 24 hour low: #</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="AQState">
         <property name="geometry">
          <rect>
-          <x>920</x>
-          <y>200</y>
-          <width>191</width>
+          <x>840</x>
+          <y>210</y>
+          <width>341</width>
           <height>161</height>
          </rect>
         </property>
@@ -1096,6 +987,9 @@ Past 24 hour low: #</string>
         </property>
         <property name="text">
          <string>Excellent</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </widget>
@@ -1324,6 +1218,151 @@ Past 24 hour low: #</string>
          <string>About</string>
         </property>
        </widget>
+       <widget class="QFrame" name="AboutFrame">
+        <property name="geometry">
+         <rect>
+          <x>560</x>
+          <y>80</y>
+          <width>601</width>
+          <height>371</height>
+         </rect>
+        </property>
+        <property name="autoFillBackground">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+	background: rgb(236,235,242);
+	border: 1px solid black;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="AboutDetails">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>20</y>
+           <width>511</width>
+           <height>271</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border: 0px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Cool about page
+We made this thing</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="AboutClose">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>330</y>
+           <width>80</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Close About</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="DeleteFrame">
+        <property name="geometry">
+         <rect>
+          <x>560</x>
+          <y>80</y>
+          <width>601</width>
+          <height>371</height>
+         </rect>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+	background: rgb(236,235,242);
+	border: 1px solid black;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="DeleteText">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>20</y>
+           <width>511</width>
+           <height>271</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border: 0px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Are you sure you wish to delete all data?
+This process is irreversible </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="DeleteConfirm">
+         <property name="geometry">
+          <rect>
+           <x>360</x>
+           <y>310</y>
+           <width>221</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Yes, Delete All Data Permanently</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="DeleteDeny">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>310</y>
+           <width>221</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>No, go back and do not delete data</string>
+         </property>
+        </widget>
+       </widget>
+       <zorder>AboutFrame</zorder>
+       <zorder>SettingsTitle</zorder>
+       <zorder>SettingsOptions</zorder>
+       <zorder>DeleteAll</zorder>
+       <zorder>DownloadAll</zorder>
+       <zorder>AboutButton</zorder>
+       <zorder>DeleteFrame</zorder>
       </widget>
      </widget>
     </item>

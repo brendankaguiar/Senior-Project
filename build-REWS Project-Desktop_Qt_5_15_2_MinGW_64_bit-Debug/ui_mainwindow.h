@@ -16,11 +16,9 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
@@ -50,13 +48,10 @@ public:
     QLabel *HomeWindVal;
     QLabel *HomePressureVal;
     QLabel *HomeAQVal;
-    QPushButton *pushButton;
-    QFrame *LoadingScreen;
-    QProgressBar *LoadingBar;
-    QLabel *label;
+    QPushButton *UpdateHomepage;
+    QLabel *HomeWindDir;
     QWidget *Humidity;
     QCustomPlot *PlotHumidity;
-    QLCDNumber *LCDHumidity;
     QWidget *verticalLayoutWidget_2;
     QVBoxLayout *DateSelector_2;
     QLabel *label_8;
@@ -65,26 +60,24 @@ public:
     QDateEdit *FirstDate_2;
     QLabel *To_2;
     QDateEdit *SecondDate_2;
-    QLabel *label_13;
-    QLabel *label_14;
-    QLabel *label_15;
+    QLabel *HumidityVal;
+    QLabel *HumidityStats;
+    QLabel *HumidityUpdated;
     QWidget *Temperature;
-    QLCDNumber *LCDTemperature;
     QCustomPlot *PlotTemperature;
-    QLabel *label_10;
+    QLabel *TemperatureVal;
     QWidget *verticalLayoutWidget;
-    QVBoxLayout *DateSelector;
+    QVBoxLayout *TemperatureSelector;
     QLabel *label_6;
     QHBoxLayout *horizontalLayout;
     QLabel *From;
     QDateEdit *FirstDate;
     QLabel *To;
     QDateEdit *SecondDate;
-    QLabel *label_3;
-    QLabel *label_5;
+    QLabel *TemperatureUpdated;
+    QLabel *TemperatureStats;
     QWidget *Wind;
     QCustomPlot *PlotWindSpeedDirection;
-    QLCDNumber *LCDWind;
     QWidget *verticalLayoutWidget_3;
     QVBoxLayout *DateSelector_3;
     QLabel *label_9;
@@ -93,13 +86,12 @@ public:
     QDateEdit *FirstDate_3;
     QLabel *To_3;
     QDateEdit *SecondDate_3;
-    QLabel *label_16;
-    QLabel *label_17;
-    QLabel *label_18;
-    QLabel *label_19;
+    QLabel *WindVal;
+    QLabel *WindStats;
+    QLabel *WindUpdated;
+    QLabel *WindDirection;
     QWidget *Pressure;
     QCustomPlot *PlotPressure;
-    QLCDNumber *LCDPressure;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *DateSelector_4;
     QLabel *label_11;
@@ -108,12 +100,11 @@ public:
     QDateEdit *FirstDate_4;
     QLabel *To_4;
     QDateEdit *SecondDate_4;
-    QLabel *label_20;
-    QLabel *label_21;
-    QLabel *label_22;
+    QLabel *PressureUpdated;
+    QLabel *PressureVal;
+    QLabel *PressureStats;
     QWidget *AirQuality;
     QCustomPlot *PlotAirQuality;
-    QLCDNumber *LCDAirQuality;
     QWidget *verticalLayoutWidget_5;
     QVBoxLayout *DateSelector_5;
     QLabel *label_12;
@@ -122,10 +113,10 @@ public:
     QDateEdit *FirstDate_5;
     QLabel *To_5;
     QDateEdit *SecondDate_5;
-    QLabel *label_23;
-    QLabel *label_24;
-    QLabel *label_25;
-    QLabel *label_2;
+    QLabel *AQVal;
+    QLabel *AQUpdated;
+    QLabel *AQStats;
+    QLabel *AQState;
     QWidget *Settings;
     QLineEdit *SettingsTitle;
     QFrame *SettingsOptions;
@@ -148,6 +139,13 @@ public:
     QPushButton *DeleteAll;
     QPushButton *DownloadAll;
     QPushButton *AboutButton;
+    QFrame *AboutFrame;
+    QLabel *AboutDetails;
+    QPushButton *AboutClose;
+    QFrame *DeleteFrame;
+    QLabel *DeleteText;
+    QPushButton *DeleteConfirm;
+    QPushButton *DeleteDeny;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -233,7 +231,7 @@ public:
         HTTPButton->setGeometry(QRect(30, 500, 201, 21));
         HomeTemp = new QLabel(Homepage);
         HomeTemp->setObjectName(QString::fromUtf8("HomeTemp"));
-        HomeTemp->setGeometry(QRect(60, 30, 531, 251));
+        HomeTemp->setGeometry(QRect(60, 0, 531, 251));
         QFont font;
         font.setPointSize(72);
         HomeTemp->setFont(font);
@@ -257,11 +255,11 @@ public:
         HomeWind->setFont(font1);
         HomeTime = new QLabel(Homepage);
         HomeTime->setObjectName(QString::fromUtf8("HomeTime"));
-        HomeTime->setGeometry(QRect(40, 320, 501, 111));
+        HomeTime->setGeometry(QRect(40, 280, 501, 111));
         HomeTime->setFont(font);
         HomeDate = new QLabel(Homepage);
         HomeDate->setObjectName(QString::fromUtf8("HomeDate"));
-        HomeDate->setGeometry(QRect(40, 400, 511, 71));
+        HomeDate->setGeometry(QRect(40, 380, 511, 71));
         QFont font2;
         font2.setPointSize(28);
         HomeDate->setFont(font2);
@@ -282,49 +280,30 @@ public:
         HomeAQVal->setGeometry(QRect(900, 370, 251, 111));
         HomeAQVal->setFont(font2);
         HomeAQVal->setAlignment(Qt::AlignCenter);
-        pushButton = new QPushButton(Homepage);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(290, 500, 221, 24));
-        LoadingScreen = new QFrame(Homepage);
-        LoadingScreen->setObjectName(QString::fromUtf8("LoadingScreen"));
-        LoadingScreen->setGeometry(QRect(40, 60, 301, 191));
-        LoadingScreen->setAutoFillBackground(false);
-        LoadingScreen->setStyleSheet(QString::fromUtf8("QFrame{\n"
-"background:rgb(135,211,124)\n"
-"}"));
-        LoadingScreen->setFrameShape(QFrame::Panel);
-        LoadingScreen->setFrameShadow(QFrame::Raised);
-        LoadingBar = new QProgressBar(LoadingScreen);
-        LoadingBar->setObjectName(QString::fromUtf8("LoadingBar"));
-        LoadingBar->setGeometry(QRect(90, 130, 118, 23));
-        LoadingBar->setValue(24);
-        label = new QLabel(LoadingScreen);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(-2, 30, 301, 71));
-        QFont font3;
-        font3.setPointSize(22);
-        label->setFont(font3);
-        label->setAlignment(Qt::AlignCenter);
+        UpdateHomepage = new QPushButton(Homepage);
+        UpdateHomepage->setObjectName(QString::fromUtf8("UpdateHomepage"));
+        UpdateHomepage->setGeometry(QRect(290, 500, 221, 24));
+        HomeWindDir = new QLabel(Homepage);
+        HomeWindDir->setObjectName(QString::fromUtf8("HomeWindDir"));
+        HomeWindDir->setGeometry(QRect(980, 170, 231, 171));
+        HomeWindDir->setFont(font2);
         tabWidget->addTab(Homepage, QString());
         Humidity = new QWidget();
         Humidity->setObjectName(QString::fromUtf8("Humidity"));
         PlotHumidity = new QCustomPlot(Humidity);
         PlotHumidity->setObjectName(QString::fromUtf8("PlotHumidity"));
-        PlotHumidity->setGeometry(QRect(270, 230, 441, 281));
-        LCDHumidity = new QLCDNumber(Humidity);
-        LCDHumidity->setObjectName(QString::fromUtf8("LCDHumidity"));
-        LCDHumidity->setGeometry(QRect(410, 30, 231, 171));
+        PlotHumidity->setGeometry(QRect(290, 210, 441, 281));
         verticalLayoutWidget_2 = new QWidget(Humidity);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(40, 430, 231, 78));
+        verticalLayoutWidget_2->setGeometry(QRect(30, 410, 231, 78));
         DateSelector_2 = new QVBoxLayout(verticalLayoutWidget_2);
         DateSelector_2->setObjectName(QString::fromUtf8("DateSelector_2"));
         DateSelector_2->setContentsMargins(0, 0, 0, 0);
         label_8 = new QLabel(verticalLayoutWidget_2);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        QFont font4;
-        font4.setPointSize(12);
-        label_8->setFont(font4);
+        QFont font3;
+        font3.setPointSize(12);
+        label_8->setFont(font3);
 
         DateSelector_2->addWidget(label_8);
 
@@ -355,47 +334,44 @@ public:
 
         DateSelector_2->addLayout(horizontalLayout_2);
 
-        label_13 = new QLabel(Humidity);
-        label_13->setObjectName(QString::fromUtf8("label_13"));
-        label_13->setGeometry(QRect(10, 10, 941, 211));
+        HumidityVal = new QLabel(Humidity);
+        HumidityVal->setObjectName(QString::fromUtf8("HumidityVal"));
+        HumidityVal->setGeometry(QRect(50, 0, 941, 211));
+        QFont font4;
+        font4.setPointSize(36);
+        HumidityVal->setFont(font4);
+        HumidityVal->setScaledContents(false);
+        HumidityStats = new QLabel(Humidity);
+        HumidityStats->setObjectName(QString::fromUtf8("HumidityStats"));
+        HumidityStats->setGeometry(QRect(840, 350, 341, 121));
         QFont font5;
-        font5.setPointSize(36);
-        label_13->setFont(font5);
-        label_13->setScaledContents(false);
-        label_14 = new QLabel(Humidity);
-        label_14->setObjectName(QString::fromUtf8("label_14"));
-        label_14->setGeometry(QRect(810, 320, 341, 121));
-        QFont font6;
-        font6.setPointSize(24);
-        label_14->setFont(font6);
-        label_15 = new QLabel(Humidity);
-        label_15->setObjectName(QString::fromUtf8("label_15"));
-        label_15->setGeometry(QRect(0, 520, 211, 16));
+        font5.setPointSize(24);
+        HumidityStats->setFont(font5);
+        HumidityUpdated = new QLabel(Humidity);
+        HumidityUpdated->setObjectName(QString::fromUtf8("HumidityUpdated"));
+        HumidityUpdated->setGeometry(QRect(0, 520, 211, 16));
         tabWidget->addTab(Humidity, QString());
         Temperature = new QWidget();
         Temperature->setObjectName(QString::fromUtf8("Temperature"));
-        LCDTemperature = new QLCDNumber(Temperature);
-        LCDTemperature->setObjectName(QString::fromUtf8("LCDTemperature"));
-        LCDTemperature->setGeometry(QRect(500, 10, 231, 171));
         PlotTemperature = new QCustomPlot(Temperature);
         PlotTemperature->setObjectName(QString::fromUtf8("PlotTemperature"));
-        PlotTemperature->setGeometry(QRect(360, 210, 441, 281));
-        label_10 = new QLabel(Temperature);
-        label_10->setObjectName(QString::fromUtf8("label_10"));
-        label_10->setGeometry(QRect(50, -10, 941, 211));
-        label_10->setFont(font5);
-        label_10->setScaledContents(false);
+        PlotTemperature->setGeometry(QRect(290, 210, 441, 281));
+        TemperatureVal = new QLabel(Temperature);
+        TemperatureVal->setObjectName(QString::fromUtf8("TemperatureVal"));
+        TemperatureVal->setGeometry(QRect(50, 0, 941, 211));
+        TemperatureVal->setFont(font4);
+        TemperatureVal->setScaledContents(false);
         verticalLayoutWidget = new QWidget(Temperature);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(100, 410, 231, 78));
-        DateSelector = new QVBoxLayout(verticalLayoutWidget);
-        DateSelector->setObjectName(QString::fromUtf8("DateSelector"));
-        DateSelector->setContentsMargins(0, 0, 0, 0);
+        verticalLayoutWidget->setGeometry(QRect(30, 410, 231, 78));
+        TemperatureSelector = new QVBoxLayout(verticalLayoutWidget);
+        TemperatureSelector->setObjectName(QString::fromUtf8("TemperatureSelector"));
+        TemperatureSelector->setContentsMargins(0, 0, 0, 0);
         label_6 = new QLabel(verticalLayoutWidget);
         label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setFont(font4);
+        label_6->setFont(font3);
 
-        DateSelector->addWidget(label_6);
+        TemperatureSelector->addWidget(label_6);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -422,33 +398,30 @@ public:
         horizontalLayout->addWidget(SecondDate);
 
 
-        DateSelector->addLayout(horizontalLayout);
+        TemperatureSelector->addLayout(horizontalLayout);
 
-        label_3 = new QLabel(Temperature);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(0, 520, 211, 16));
-        label_5 = new QLabel(Temperature);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(860, 280, 341, 121));
-        label_5->setFont(font6);
+        TemperatureUpdated = new QLabel(Temperature);
+        TemperatureUpdated->setObjectName(QString::fromUtf8("TemperatureUpdated"));
+        TemperatureUpdated->setGeometry(QRect(0, 520, 211, 16));
+        TemperatureStats = new QLabel(Temperature);
+        TemperatureStats->setObjectName(QString::fromUtf8("TemperatureStats"));
+        TemperatureStats->setGeometry(QRect(840, 350, 341, 121));
+        TemperatureStats->setFont(font5);
         tabWidget->addTab(Temperature, QString());
         Wind = new QWidget();
         Wind->setObjectName(QString::fromUtf8("Wind"));
         PlotWindSpeedDirection = new QCustomPlot(Wind);
         PlotWindSpeedDirection->setObjectName(QString::fromUtf8("PlotWindSpeedDirection"));
-        PlotWindSpeedDirection->setGeometry(QRect(310, 250, 441, 281));
-        LCDWind = new QLCDNumber(Wind);
-        LCDWind->setObjectName(QString::fromUtf8("LCDWind"));
-        LCDWind->setGeometry(QRect(480, 40, 231, 171));
+        PlotWindSpeedDirection->setGeometry(QRect(290, 210, 441, 281));
         verticalLayoutWidget_3 = new QWidget(Wind);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(60, 440, 231, 78));
+        verticalLayoutWidget_3->setGeometry(QRect(30, 410, 231, 78));
         DateSelector_3 = new QVBoxLayout(verticalLayoutWidget_3);
         DateSelector_3->setObjectName(QString::fromUtf8("DateSelector_3"));
         DateSelector_3->setContentsMargins(0, 0, 0, 0);
         label_9 = new QLabel(verticalLayoutWidget_3);
         label_9->setObjectName(QString::fromUtf8("label_9"));
-        label_9->setFont(font4);
+        label_9->setFont(font3);
 
         DateSelector_3->addWidget(label_9);
 
@@ -479,41 +452,38 @@ public:
 
         DateSelector_3->addLayout(horizontalLayout_3);
 
-        label_16 = new QLabel(Wind);
-        label_16->setObjectName(QString::fromUtf8("label_16"));
-        label_16->setGeometry(QRect(30, 20, 941, 211));
-        label_16->setFont(font5);
-        label_16->setScaledContents(false);
-        label_17 = new QLabel(Wind);
-        label_17->setObjectName(QString::fromUtf8("label_17"));
-        label_17->setGeometry(QRect(860, 350, 361, 121));
-        label_17->setFont(font6);
-        label_18 = new QLabel(Wind);
-        label_18->setObjectName(QString::fromUtf8("label_18"));
-        label_18->setGeometry(QRect(0, 520, 211, 16));
-        label_19 = new QLabel(Wind);
-        label_19->setObjectName(QString::fromUtf8("label_19"));
-        label_19->setGeometry(QRect(840, 210, 361, 121));
-        label_19->setFont(font6);
-        label_19->setAlignment(Qt::AlignCenter);
+        WindVal = new QLabel(Wind);
+        WindVal->setObjectName(QString::fromUtf8("WindVal"));
+        WindVal->setGeometry(QRect(50, 0, 941, 211));
+        WindVal->setFont(font4);
+        WindVal->setScaledContents(false);
+        WindStats = new QLabel(Wind);
+        WindStats->setObjectName(QString::fromUtf8("WindStats"));
+        WindStats->setGeometry(QRect(840, 350, 361, 121));
+        WindStats->setFont(font5);
+        WindUpdated = new QLabel(Wind);
+        WindUpdated->setObjectName(QString::fromUtf8("WindUpdated"));
+        WindUpdated->setGeometry(QRect(0, 520, 211, 16));
+        WindDirection = new QLabel(Wind);
+        WindDirection->setObjectName(QString::fromUtf8("WindDirection"));
+        WindDirection->setGeometry(QRect(820, 210, 361, 121));
+        WindDirection->setFont(font5);
+        WindDirection->setAlignment(Qt::AlignCenter);
         tabWidget->addTab(Wind, QString());
         Pressure = new QWidget();
         Pressure->setObjectName(QString::fromUtf8("Pressure"));
         PlotPressure = new QCustomPlot(Pressure);
         PlotPressure->setObjectName(QString::fromUtf8("PlotPressure"));
-        PlotPressure->setGeometry(QRect(290, 240, 441, 281));
-        LCDPressure = new QLCDNumber(Pressure);
-        LCDPressure->setObjectName(QString::fromUtf8("LCDPressure"));
-        LCDPressure->setGeometry(QRect(390, 40, 231, 171));
+        PlotPressure->setGeometry(QRect(290, 210, 441, 281));
         verticalLayoutWidget_4 = new QWidget(Pressure);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(40, 440, 231, 78));
+        verticalLayoutWidget_4->setGeometry(QRect(30, 410, 231, 78));
         DateSelector_4 = new QVBoxLayout(verticalLayoutWidget_4);
         DateSelector_4->setObjectName(QString::fromUtf8("DateSelector_4"));
         DateSelector_4->setContentsMargins(0, 0, 0, 0);
         label_11 = new QLabel(verticalLayoutWidget_4);
         label_11->setObjectName(QString::fromUtf8("label_11"));
-        label_11->setFont(font4);
+        label_11->setFont(font3);
 
         DateSelector_4->addWidget(label_11);
 
@@ -544,37 +514,34 @@ public:
 
         DateSelector_4->addLayout(horizontalLayout_4);
 
-        label_20 = new QLabel(Pressure);
-        label_20->setObjectName(QString::fromUtf8("label_20"));
-        label_20->setGeometry(QRect(0, 520, 211, 16));
-        label_21 = new QLabel(Pressure);
-        label_21->setObjectName(QString::fromUtf8("label_21"));
-        label_21->setGeometry(QRect(10, 20, 941, 211));
-        label_21->setFont(font5);
-        label_21->setScaledContents(false);
-        label_22 = new QLabel(Pressure);
-        label_22->setObjectName(QString::fromUtf8("label_22"));
-        label_22->setGeometry(QRect(820, 360, 381, 121));
-        label_22->setFont(font6);
+        PressureUpdated = new QLabel(Pressure);
+        PressureUpdated->setObjectName(QString::fromUtf8("PressureUpdated"));
+        PressureUpdated->setGeometry(QRect(0, 520, 211, 16));
+        PressureVal = new QLabel(Pressure);
+        PressureVal->setObjectName(QString::fromUtf8("PressureVal"));
+        PressureVal->setGeometry(QRect(50, 0, 941, 211));
+        PressureVal->setFont(font4);
+        PressureVal->setScaledContents(false);
+        PressureStats = new QLabel(Pressure);
+        PressureStats->setObjectName(QString::fromUtf8("PressureStats"));
+        PressureStats->setGeometry(QRect(840, 350, 381, 121));
+        PressureStats->setFont(font5);
         tabWidget->addTab(Pressure, QString());
         AirQuality = new QWidget();
         AirQuality->setObjectName(QString::fromUtf8("AirQuality"));
         PlotAirQuality = new QCustomPlot(AirQuality);
         PlotAirQuality->setObjectName(QString::fromUtf8("PlotAirQuality"));
-        PlotAirQuality->setGeometry(QRect(320, 240, 441, 281));
+        PlotAirQuality->setGeometry(QRect(290, 210, 441, 281));
         PlotAirQuality->setStyleSheet(QString::fromUtf8(""));
-        LCDAirQuality = new QLCDNumber(AirQuality);
-        LCDAirQuality->setObjectName(QString::fromUtf8("LCDAirQuality"));
-        LCDAirQuality->setGeometry(QRect(460, 40, 231, 171));
         verticalLayoutWidget_5 = new QWidget(AirQuality);
         verticalLayoutWidget_5->setObjectName(QString::fromUtf8("verticalLayoutWidget_5"));
-        verticalLayoutWidget_5->setGeometry(QRect(70, 440, 231, 78));
+        verticalLayoutWidget_5->setGeometry(QRect(30, 410, 231, 78));
         DateSelector_5 = new QVBoxLayout(verticalLayoutWidget_5);
         DateSelector_5->setObjectName(QString::fromUtf8("DateSelector_5"));
         DateSelector_5->setContentsMargins(0, 0, 0, 0);
         label_12 = new QLabel(verticalLayoutWidget_5);
         label_12->setObjectName(QString::fromUtf8("label_12"));
-        label_12->setFont(font4);
+        label_12->setFont(font3);
 
         DateSelector_5->addWidget(label_12);
 
@@ -605,31 +572,32 @@ public:
 
         DateSelector_5->addLayout(horizontalLayout_5);
 
-        label_23 = new QLabel(AirQuality);
-        label_23->setObjectName(QString::fromUtf8("label_23"));
-        label_23->setGeometry(QRect(60, 30, 391, 211));
-        label_23->setFont(font5);
-        label_23->setScaledContents(false);
-        label_24 = new QLabel(AirQuality);
-        label_24->setObjectName(QString::fromUtf8("label_24"));
-        label_24->setGeometry(QRect(0, 520, 211, 16));
-        label_25 = new QLabel(AirQuality);
-        label_25->setObjectName(QString::fromUtf8("label_25"));
-        label_25->setGeometry(QRect(860, 330, 381, 121));
-        label_25->setFont(font6);
-        label_2 = new QLabel(AirQuality);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(920, 200, 191, 161));
-        label_2->setFont(font6);
+        AQVal = new QLabel(AirQuality);
+        AQVal->setObjectName(QString::fromUtf8("AQVal"));
+        AQVal->setGeometry(QRect(50, 0, 391, 211));
+        AQVal->setFont(font4);
+        AQVal->setScaledContents(false);
+        AQUpdated = new QLabel(AirQuality);
+        AQUpdated->setObjectName(QString::fromUtf8("AQUpdated"));
+        AQUpdated->setGeometry(QRect(0, 520, 211, 16));
+        AQStats = new QLabel(AirQuality);
+        AQStats->setObjectName(QString::fromUtf8("AQStats"));
+        AQStats->setGeometry(QRect(840, 350, 381, 121));
+        AQStats->setFont(font5);
+        AQState = new QLabel(AirQuality);
+        AQState->setObjectName(QString::fromUtf8("AQState"));
+        AQState->setGeometry(QRect(820, 210, 341, 161));
+        AQState->setFont(font5);
+        AQState->setAlignment(Qt::AlignCenter);
         tabWidget->addTab(AirQuality, QString());
         Settings = new QWidget();
         Settings->setObjectName(QString::fromUtf8("Settings"));
         SettingsTitle = new QLineEdit(Settings);
         SettingsTitle->setObjectName(QString::fromUtf8("SettingsTitle"));
         SettingsTitle->setGeometry(QRect(510, 20, 131, 41));
-        QFont font7;
-        font7.setPointSize(20);
-        SettingsTitle->setFont(font7);
+        QFont font6;
+        font6.setPointSize(20);
+        SettingsTitle->setFont(font6);
         SettingsTitle->setReadOnly(true);
         SettingsOptions = new QFrame(Settings);
         SettingsOptions->setObjectName(QString::fromUtf8("SettingsOptions"));
@@ -638,9 +606,9 @@ public:
         formLayout->setObjectName(QString::fromUtf8("formLayout"));
         AirTitle = new QLabel(SettingsOptions);
         AirTitle->setObjectName(QString::fromUtf8("AirTitle"));
-        QFont font8;
-        font8.setPointSize(16);
-        AirTitle->setFont(font8);
+        QFont font7;
+        font7.setPointSize(16);
+        AirTitle->setFont(font7);
 
         formLayout->setWidget(0, QFormLayout::LabelRole, AirTitle);
 
@@ -650,16 +618,16 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         MillibarsButton = new QRadioButton(verticalFrame);
         MillibarsButton->setObjectName(QString::fromUtf8("MillibarsButton"));
-        QFont font9;
-        font9.setPointSize(11);
-        MillibarsButton->setFont(font9);
+        QFont font8;
+        font8.setPointSize(11);
+        MillibarsButton->setFont(font8);
         MillibarsButton->setChecked(true);
 
         verticalLayout->addWidget(MillibarsButton);
 
         PascalButton = new QRadioButton(verticalFrame);
         PascalButton->setObjectName(QString::fromUtf8("PascalButton"));
-        PascalButton->setFont(font9);
+        PascalButton->setFont(font8);
 
         verticalLayout->addWidget(PascalButton);
 
@@ -668,7 +636,7 @@ public:
 
         WindTitle = new QLabel(SettingsOptions);
         WindTitle->setObjectName(QString::fromUtf8("WindTitle"));
-        WindTitle->setFont(font8);
+        WindTitle->setFont(font7);
 
         formLayout->setWidget(1, QFormLayout::LabelRole, WindTitle);
 
@@ -678,14 +646,14 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         MPHButton = new QRadioButton(WindOptions);
         MPHButton->setObjectName(QString::fromUtf8("MPHButton"));
-        MPHButton->setFont(font9);
+        MPHButton->setFont(font8);
         MPHButton->setChecked(true);
 
         verticalLayout_2->addWidget(MPHButton);
 
         KPHButton = new QRadioButton(WindOptions);
         KPHButton->setObjectName(QString::fromUtf8("KPHButton"));
-        KPHButton->setFont(font9);
+        KPHButton->setFont(font8);
 
         verticalLayout_2->addWidget(KPHButton);
 
@@ -694,7 +662,7 @@ public:
 
         TemperatureTitle = new QLabel(SettingsOptions);
         TemperatureTitle->setObjectName(QString::fromUtf8("TemperatureTitle"));
-        TemperatureTitle->setFont(font8);
+        TemperatureTitle->setFont(font7);
 
         formLayout->setWidget(2, QFormLayout::LabelRole, TemperatureTitle);
 
@@ -704,14 +672,14 @@ public:
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         CelciusButton = new QRadioButton(TemperatureOptions);
         CelciusButton->setObjectName(QString::fromUtf8("CelciusButton"));
-        CelciusButton->setFont(font9);
+        CelciusButton->setFont(font8);
         CelciusButton->setChecked(true);
 
         verticalLayout_3->addWidget(CelciusButton);
 
         FarenheitButton = new QRadioButton(TemperatureOptions);
         FarenheitButton->setObjectName(QString::fromUtf8("FarenheitButton"));
-        FarenheitButton->setFont(font9);
+        FarenheitButton->setFont(font8);
         FarenheitButton->setChecked(false);
 
         verticalLayout_3->addWidget(FarenheitButton);
@@ -724,18 +692,69 @@ public:
         DeleteAll->setGeometry(QRect(1120, 490, 121, 41));
         DownloadAll = new QPushButton(Settings);
         DownloadAll->setObjectName(QString::fromUtf8("DownloadAll"));
-        DownloadAll->setGeometry(QRect(890, 180, 121, 41));
+        DownloadAll->setGeometry(QRect(980, 490, 121, 41));
         AboutButton = new QPushButton(Settings);
         AboutButton->setObjectName(QString::fromUtf8("AboutButton"));
         AboutButton->setGeometry(QRect(10, 510, 80, 24));
-        QFont font10;
-        font10.setUnderline(true);
-        AboutButton->setFont(font10);
+        QFont font9;
+        font9.setUnderline(true);
+        AboutButton->setFont(font9);
         AboutButton->setStyleSheet(QString::fromUtf8("QPushButton{\n"
 "	color:blue;\n"
 "	background:transparent;\n"
 "}"));
+        AboutFrame = new QFrame(Settings);
+        AboutFrame->setObjectName(QString::fromUtf8("AboutFrame"));
+        AboutFrame->setGeometry(QRect(560, 80, 601, 371));
+        AboutFrame->setAutoFillBackground(false);
+        AboutFrame->setStyleSheet(QString::fromUtf8("QFrame{\n"
+"	background: rgb(236,235,242);\n"
+"	border: 1px solid black;\n"
+"}"));
+        AboutFrame->setFrameShape(QFrame::StyledPanel);
+        AboutFrame->setFrameShadow(QFrame::Raised);
+        AboutDetails = new QLabel(AboutFrame);
+        AboutDetails->setObjectName(QString::fromUtf8("AboutDetails"));
+        AboutDetails->setGeometry(QRect(30, 20, 511, 271));
+        AboutDetails->setStyleSheet(QString::fromUtf8("QLabel{\n"
+"	border: 0px;\n"
+"}"));
+        AboutDetails->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        AboutClose = new QPushButton(AboutFrame);
+        AboutClose->setObjectName(QString::fromUtf8("AboutClose"));
+        AboutClose->setGeometry(QRect(270, 330, 80, 24));
+        DeleteFrame = new QFrame(Settings);
+        DeleteFrame->setObjectName(QString::fromUtf8("DeleteFrame"));
+        DeleteFrame->setGeometry(QRect(560, 80, 601, 371));
+        DeleteFrame->setAutoFillBackground(false);
+        DeleteFrame->setStyleSheet(QString::fromUtf8("QFrame{\n"
+"	background: rgb(236,235,242);\n"
+"	border: 1px solid black;\n"
+"}"));
+        DeleteFrame->setFrameShape(QFrame::StyledPanel);
+        DeleteFrame->setFrameShadow(QFrame::Raised);
+        DeleteText = new QLabel(DeleteFrame);
+        DeleteText->setObjectName(QString::fromUtf8("DeleteText"));
+        DeleteText->setGeometry(QRect(30, 20, 511, 271));
+        DeleteText->setFont(font6);
+        DeleteText->setStyleSheet(QString::fromUtf8("QLabel{\n"
+"	border: 0px;\n"
+"}"));
+        DeleteText->setAlignment(Qt::AlignCenter);
+        DeleteConfirm = new QPushButton(DeleteFrame);
+        DeleteConfirm->setObjectName(QString::fromUtf8("DeleteConfirm"));
+        DeleteConfirm->setGeometry(QRect(360, 310, 221, 51));
+        DeleteDeny = new QPushButton(DeleteFrame);
+        DeleteDeny->setObjectName(QString::fromUtf8("DeleteDeny"));
+        DeleteDeny->setGeometry(QRect(20, 310, 221, 51));
         tabWidget->addTab(Settings, QString());
+        AboutFrame->raise();
+        SettingsTitle->raise();
+        SettingsOptions->raise();
+        DeleteAll->raise();
+        DownloadAll->raise();
+        AboutButton->raise();
+        DeleteFrame->raise();
 
         gridLayout_2->addWidget(tabWidget, 0, 0, 1, 1);
 
@@ -746,7 +765,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -769,57 +788,57 @@ public:
         HomePressureVal->setText(QCoreApplication::translate("MainWindow", "1000 mbar", nullptr));
         HomeAQVal->setText(QCoreApplication::translate("MainWindow", "18\n"
 "Excellent", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "Update Homepage (temp debugging)", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Loading Data\n"
-"Please Wait...", nullptr));
+        UpdateHomepage->setText(QCoreApplication::translate("MainWindow", "Update Homepage (temp debugging)", nullptr));
+        HomeWindDir->setText(QCoreApplication::translate("MainWindow", "5 MPH\n"
+"NNW", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Homepage), QCoreApplication::translate("MainWindow", "Homepage", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From_2->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
         To_2->setText(QCoreApplication::translate("MainWindow", "to", nullptr));
-        label_13->setText(QCoreApplication::translate("MainWindow", "Current Humidity                     %", nullptr));
-        label_14->setText(QCoreApplication::translate("MainWindow", "24 hour average: #%\n"
+        HumidityVal->setText(QCoreApplication::translate("MainWindow", "Current Humidity                     %", nullptr));
+        HumidityStats->setText(QCoreApplication::translate("MainWindow", "24 hour average: #%\n"
 "Past 24 hour high: #%\n"
 "Past 24 hour low: #%", nullptr));
-        label_15->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
+        HumidityUpdated->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Humidity), QCoreApplication::translate("MainWindow", "Humidity", nullptr));
-        label_10->setText(QCoreApplication::translate("MainWindow", "Current Temperature                     \302\272C", nullptr));
+        TemperatureVal->setText(QCoreApplication::translate("MainWindow", "Current Temperature                     \302\272C", nullptr));
         label_6->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
         To->setText(QCoreApplication::translate("MainWindow", "to", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
-        label_5->setText(QCoreApplication::translate("MainWindow", "24 hour average: #\302\272C\n"
+        TemperatureUpdated->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
+        TemperatureStats->setText(QCoreApplication::translate("MainWindow", "24 hour average: #\302\272C\n"
 "Past 24 hour high: #\302\272C\n"
 "Past 24 hour low: #\302\272C", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Temperature), QCoreApplication::translate("MainWindow", "Temperature", nullptr));
         label_9->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From_3->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
         To_3->setText(QCoreApplication::translate("MainWindow", "to", nullptr));
-        label_16->setText(QCoreApplication::translate("MainWindow", "Current Wind Speed                     MPH", nullptr));
-        label_17->setText(QCoreApplication::translate("MainWindow", "24 hour average: #MPH\n"
+        WindVal->setText(QCoreApplication::translate("MainWindow", "Current Wind Speed                     MPH", nullptr));
+        WindStats->setText(QCoreApplication::translate("MainWindow", "24 hour average: #MPH\n"
 "Past 24 hour high: #MPH\n"
 "Past 24 hour low: #MPH", nullptr));
-        label_18->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
-        label_19->setText(QCoreApplication::translate("MainWindow", "Current Wind Direction:\n"
+        WindUpdated->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
+        WindDirection->setText(QCoreApplication::translate("MainWindow", "Current Wind Direction:\n"
 "NNW", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Wind), QCoreApplication::translate("MainWindow", "Wind Speed/Direction", nullptr));
         label_11->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From_4->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
         To_4->setText(QCoreApplication::translate("MainWindow", "to", nullptr));
-        label_20->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
-        label_21->setText(QCoreApplication::translate("MainWindow", "Current Pressure                     mbars", nullptr));
-        label_22->setText(QCoreApplication::translate("MainWindow", "24 hour average: #mbars\n"
+        PressureUpdated->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
+        PressureVal->setText(QCoreApplication::translate("MainWindow", "Current Pressure                     mbars", nullptr));
+        PressureStats->setText(QCoreApplication::translate("MainWindow", "24 hour average: #mbars\n"
 "Past 24 hour high: #mbars\n"
 "Past 24 hour low: #mbars", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Pressure), QCoreApplication::translate("MainWindow", "Pressure", nullptr));
         label_12->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From_5->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
         To_5->setText(QCoreApplication::translate("MainWindow", "to", nullptr));
-        label_23->setText(QCoreApplication::translate("MainWindow", "Current AQI Level", nullptr));
-        label_24->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
-        label_25->setText(QCoreApplication::translate("MainWindow", "24 hour average: #\n"
+        AQVal->setText(QCoreApplication::translate("MainWindow", "Current AQI Level", nullptr));
+        AQUpdated->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
+        AQStats->setText(QCoreApplication::translate("MainWindow", "24 hour average: #\n"
 "Past 24 hour high: #\n"
 "Past 24 hour low: #", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "Excellent", nullptr));
+        AQState->setText(QCoreApplication::translate("MainWindow", "Excellent", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(AirQuality), QCoreApplication::translate("MainWindow", "Air Quality", nullptr));
         SettingsTitle->setText(QCoreApplication::translate("MainWindow", "SETTINGS", nullptr));
         AirTitle->setText(QCoreApplication::translate("MainWindow", "Air Pressure", nullptr));
@@ -834,6 +853,13 @@ public:
         DeleteAll->setText(QCoreApplication::translate("MainWindow", "DELETE ALL DATA", nullptr));
         DownloadAll->setText(QCoreApplication::translate("MainWindow", "Download all data", nullptr));
         AboutButton->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
+        AboutDetails->setText(QCoreApplication::translate("MainWindow", "Cool about page\n"
+"We made this thing", nullptr));
+        AboutClose->setText(QCoreApplication::translate("MainWindow", "Close About", nullptr));
+        DeleteText->setText(QCoreApplication::translate("MainWindow", "Are you sure you wish to delete all data?\n"
+"This process is irreversible ", nullptr));
+        DeleteConfirm->setText(QCoreApplication::translate("MainWindow", "Yes, Delete All Data Permanently", nullptr));
+        DeleteDeny->setText(QCoreApplication::translate("MainWindow", "No, go back and do not delete data", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Settings), QCoreApplication::translate("MainWindow", "Settings", nullptr));
     } // retranslateUi
 

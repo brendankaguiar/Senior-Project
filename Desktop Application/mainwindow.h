@@ -29,8 +29,7 @@ public:
     void convertKph();
     void convertMbars();
     void convertPas();
-    void updateHomepage();
-    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16");
+    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/latest/0");
 
 private slots:
 
@@ -52,11 +51,71 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void updateHomepage();
+
+    void updateHumidity();
+
+    void updateTemperature();
+
+    void updateWind();
+
+    void updatePressure();
+
+    void updateAQ();
+
+    void setTempBG();
+
+    void setHumidityBG();
+
+    void setWindBG();
+
+    void setPressureBG();
+
+    void setAQBG();
+
+    void refreshCurrentTab();
+
     void downloadFile();
 
     void on_DownloadAll_clicked();
 
     void downloadFinished();
+
+    QString requestUrl(QString type, QString date);
+
+    void deleteAllData();
+
+    void on_DeleteAll_clicked();
+
+    void deleteFinished();
+
+    QString getCurrentDate();
+
+    void getMinMaxAvg(QString sensor);
+
+    void on_FirstDate_2_userDateChanged(const QDate &date);
+
+    void on_SecondDate_2_userDateChanged(const QDate &date);
+
+    void getHttpMultidate();
+
+    void getHttpTemp();
+
+    void getHttpHum();
+
+    void getHttpWindSpeedDirection();
+
+    void getHttpPressure();
+
+    void getHttpAqi();
+
+    void on_AboutButton_clicked();
+
+    void on_AboutClose_clicked();
+
+    void on_DeleteConfirm_clicked();
+
+    void on_DeleteDeny_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -70,7 +129,9 @@ private:
     QNetworkAccessManager* qnam;
     QJsonArray jsonReply;
 
-protected:
+    int timerId;
 
+protected:
+    void timerEvent(QTimerEvent *event);
 };
 #endif // MAINWINDOW_H

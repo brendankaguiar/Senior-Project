@@ -8,15 +8,27 @@
 
 import requests
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import math
 
 #*****Number of hours worth of data to generate before current time*****
-hours = 6
+days = 1
+hours = 24*days
 
-HOST = 'http://127.0.0.1:5000'  # The server's hostname or IP address
-#HOST = 'http://75.38.110.170:5000/'
+def getday(day):
+    endday = datetime.now().date().day
+    startday = datetime.now()-timedelta(days=days)
+
+    print(f"{startday}, {endday}")
+
+    #for x in range(,)
+    #r = requests.get(HOST+ROUTE+)
+
+getday(days)
+
+#HOST = 'http://127.0.0.1:5000'  # The server's hostname or IP address
+HOST = 'https://flask-rews.herokuapp.com/'
 ROUTE = '/devicedata/all/0/'
 
 wind_direction = ['N','NW','NE','S','SW','SE']
@@ -33,8 +45,10 @@ current_hour = 0
 current_wind = 'NW'
 current_timestamp = start_timestamp
 
+
 #Attempt insert requests to server until current timestamp > end timestamp
 while current_timestamp <= end_timestamp:
+
     t = datetime.fromtimestamp(current_timestamp)
     d = str(t.date())
     d = d.replace('-','_')
@@ -124,6 +138,9 @@ def postnow():
     except:
         print(f"Error Posting {current_timestamp}")
     current_timestamp+=60
+
+
+
 
 #Post a new record every minute until script is exited
 while True:

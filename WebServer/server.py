@@ -349,7 +349,9 @@ class database:
                                'pressure':record[8],
                                'aqi':record[9],
                                }
-            return json.dumps(record_dict)  #Return json object with record
+            record_list = []
+            record_list.append(record_dict)
+            return json.dumps(record_list)  #Return json object with record
 
     #return json object with min, max, avg stats of <sensor> on <date>
     def getstats(self,deviceid,date,sensor):
@@ -376,8 +378,10 @@ class database:
                         'max':result[1],
                         'average':result[2]
                       }
+        record_list = []
+        record_list.append(record_dict)
 
-        return json.dumps(record_dict)  #Return json object array with records
+        return json.dumps(record_list)  #Return json object array with records
 
 
 #####################################################

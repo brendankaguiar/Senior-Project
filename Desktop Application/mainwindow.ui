@@ -96,7 +96,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -333,7 +333,7 @@ Excellent</string>
        <widget class="QLabel" name="HomeWindDir">
         <property name="geometry">
          <rect>
-          <x>980</x>
+          <x>910</x>
           <y>170</y>
           <width>231</width>
           <height>171</height>
@@ -345,7 +345,7 @@ Excellent</string>
          </font>
         </property>
         <property name="text">
-         <string>NNW</string>
+         <string>Direction: </string>
         </property>
        </widget>
       </widget>
@@ -733,7 +733,7 @@ Past 24 hour low: #MPH</string>
         </property>
         <property name="text">
          <string>Current Wind Direction:
-NNW</string>
+</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

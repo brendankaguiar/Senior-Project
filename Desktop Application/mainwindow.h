@@ -91,23 +91,17 @@ private slots:
 
     QString getCurrentDate();
 
-    void getMinMaxAvg(QString sensor);
+    QString getDate(QDate date);
+
+    void getMinMaxAvg(QString sensor, QString date);
 
     void on_FirstDate_2_userDateChanged(const QDate &date);
 
     void on_SecondDate_2_userDateChanged(const QDate &date);
 
-    void getHttpMultidate();
+    void getHttpSensor(QString sensor, QString date);
 
-    void getHttpTemp();
-
-    void getHttpHum();
-
-    void getHttpWindSpeedDirection();
-
-    void getHttpPressure();
-
-    void getHttpAqi();
+    void multHttp(QString sensor);
 
     void on_AboutButton_clicked();
 
@@ -116,6 +110,22 @@ private slots:
     void on_DeleteConfirm_clicked();
 
     void on_DeleteDeny_clicked();
+
+    void on_FirstDate_userDateChanged(const QDate &date);
+
+    void on_SecondDate_userDateChanged(const QDate &date);
+
+    void on_FirstDate_3_userDateChanged(const QDate &date);
+
+    void on_SecondDate_3_userDateChanged(const QDate &date);
+
+    void on_FirstDate_4_userDateChanged(const QDate &date);
+
+    void on_SecondDate_4_userDateChanged(const QDate &date);
+
+    void on_FirstDate_5_userDateChanged(const QDate &date);
+
+    void on_SecondDate_5_userDateChanged(const QDate &date);
 
 private:
     Ui::MainWindow *ui;

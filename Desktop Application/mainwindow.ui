@@ -96,7 +96,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -441,9 +441,9 @@ Excellent</string>
        <widget class="QLabel" name="HumidityStats">
         <property name="geometry">
          <rect>
-          <x>840</x>
+          <x>770</x>
           <y>350</y>
-          <width>341</width>
+          <width>411</width>
           <height>121</height>
          </rect>
         </property>
@@ -577,9 +577,9 @@ Past 24 hour low: #%</string>
        <widget class="QLabel" name="TemperatureStats">
         <property name="geometry">
          <rect>
-          <x>840</x>
+          <x>770</x>
           <y>350</y>
-          <width>341</width>
+          <width>411</width>
           <height>121</height>
          </rect>
         </property>
@@ -687,9 +687,9 @@ Past 24 hour low: #ºC</string>
        <widget class="QLabel" name="WindStats">
         <property name="geometry">
          <rect>
-          <x>840</x>
+          <x>760</x>
           <y>350</y>
-          <width>361</width>
+          <width>441</width>
           <height>121</height>
          </rect>
         </property>
@@ -845,9 +845,9 @@ Past 24 hour low: #MPH</string>
        <widget class="QLabel" name="PressureStats">
         <property name="geometry">
          <rect>
-          <x>840</x>
+          <x>760</x>
           <y>350</y>
-          <width>381</width>
+          <width>461</width>
           <height>121</height>
          </rect>
         </property>
@@ -971,9 +971,9 @@ Past 24 hour low: #mbars</string>
        <widget class="QLabel" name="AQStats">
         <property name="geometry">
          <rect>
-          <x>840</x>
+          <x>780</x>
           <y>350</y>
-          <width>381</width>
+          <width>441</width>
           <height>121</height>
          </rect>
         </property>

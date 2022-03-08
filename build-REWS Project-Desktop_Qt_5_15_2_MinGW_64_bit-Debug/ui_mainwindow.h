@@ -19,6 +19,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
@@ -142,6 +143,12 @@ public:
     QFrame *AboutFrame;
     QLabel *AboutDetails;
     QPushButton *AboutClose;
+    QPlainTextEdit *DebugBox;
+    QPushButton *TempDebug;
+    QPushButton *HumidityDebug;
+    QPushButton *WindDebug;
+    QPushButton *PressureDebug;
+    QPushButton *AQDebug;
     QFrame *DeleteFrame;
     QLabel *DeleteText;
     QPushButton *DeleteConfirm;
@@ -285,7 +292,7 @@ public:
         UpdateHomepage->setGeometry(QRect(290, 500, 221, 24));
         HomeWindDir = new QLabel(Homepage);
         HomeWindDir->setObjectName(QString::fromUtf8("HomeWindDir"));
-        HomeWindDir->setGeometry(QRect(980, 170, 231, 171));
+        HomeWindDir->setGeometry(QRect(910, 170, 231, 171));
         HomeWindDir->setFont(font2);
         tabWidget->addTab(Homepage, QString());
         Humidity = new QWidget();
@@ -343,7 +350,7 @@ public:
         HumidityVal->setScaledContents(false);
         HumidityStats = new QLabel(Humidity);
         HumidityStats->setObjectName(QString::fromUtf8("HumidityStats"));
-        HumidityStats->setGeometry(QRect(840, 350, 341, 121));
+        HumidityStats->setGeometry(QRect(770, 350, 411, 121));
         QFont font5;
         font5.setPointSize(24);
         HumidityStats->setFont(font5);
@@ -405,7 +412,7 @@ public:
         TemperatureUpdated->setGeometry(QRect(0, 520, 211, 16));
         TemperatureStats = new QLabel(Temperature);
         TemperatureStats->setObjectName(QString::fromUtf8("TemperatureStats"));
-        TemperatureStats->setGeometry(QRect(840, 350, 341, 121));
+        TemperatureStats->setGeometry(QRect(770, 350, 411, 121));
         TemperatureStats->setFont(font5);
         tabWidget->addTab(Temperature, QString());
         Wind = new QWidget();
@@ -459,7 +466,7 @@ public:
         WindVal->setScaledContents(false);
         WindStats = new QLabel(Wind);
         WindStats->setObjectName(QString::fromUtf8("WindStats"));
-        WindStats->setGeometry(QRect(840, 350, 361, 121));
+        WindStats->setGeometry(QRect(760, 350, 441, 121));
         WindStats->setFont(font5);
         WindUpdated = new QLabel(Wind);
         WindUpdated->setObjectName(QString::fromUtf8("WindUpdated"));
@@ -524,7 +531,7 @@ public:
         PressureVal->setScaledContents(false);
         PressureStats = new QLabel(Pressure);
         PressureStats->setObjectName(QString::fromUtf8("PressureStats"));
-        PressureStats->setGeometry(QRect(840, 350, 381, 121));
+        PressureStats->setGeometry(QRect(760, 350, 461, 121));
         PressureStats->setFont(font5);
         tabWidget->addTab(Pressure, QString());
         AirQuality = new QWidget();
@@ -582,7 +589,7 @@ public:
         AQUpdated->setGeometry(QRect(0, 520, 211, 16));
         AQStats = new QLabel(AirQuality);
         AQStats->setObjectName(QString::fromUtf8("AQStats"));
-        AQStats->setGeometry(QRect(840, 350, 381, 121));
+        AQStats->setGeometry(QRect(780, 350, 441, 121));
         AQStats->setFont(font5);
         AQState = new QLabel(AirQuality);
         AQState->setObjectName(QString::fromUtf8("AQState"));
@@ -723,6 +730,24 @@ public:
         AboutClose = new QPushButton(AboutFrame);
         AboutClose->setObjectName(QString::fromUtf8("AboutClose"));
         AboutClose->setGeometry(QRect(270, 330, 80, 24));
+        DebugBox = new QPlainTextEdit(AboutFrame);
+        DebugBox->setObjectName(QString::fromUtf8("DebugBox"));
+        DebugBox->setGeometry(QRect(260, 190, 104, 70));
+        TempDebug = new QPushButton(AboutFrame);
+        TempDebug->setObjectName(QString::fromUtf8("TempDebug"));
+        TempDebug->setGeometry(QRect(50, 280, 80, 24));
+        HumidityDebug = new QPushButton(AboutFrame);
+        HumidityDebug->setObjectName(QString::fromUtf8("HumidityDebug"));
+        HumidityDebug->setGeometry(QRect(160, 280, 80, 24));
+        WindDebug = new QPushButton(AboutFrame);
+        WindDebug->setObjectName(QString::fromUtf8("WindDebug"));
+        WindDebug->setGeometry(QRect(270, 280, 80, 24));
+        PressureDebug = new QPushButton(AboutFrame);
+        PressureDebug->setObjectName(QString::fromUtf8("PressureDebug"));
+        PressureDebug->setGeometry(QRect(380, 280, 80, 24));
+        AQDebug = new QPushButton(AboutFrame);
+        AQDebug->setObjectName(QString::fromUtf8("AQDebug"));
+        AQDebug->setGeometry(QRect(490, 280, 80, 24));
         DeleteFrame = new QFrame(Settings);
         DeleteFrame->setObjectName(QString::fromUtf8("DeleteFrame"));
         DeleteFrame->setGeometry(QRect(560, 80, 601, 371));
@@ -748,13 +773,13 @@ public:
         DeleteDeny->setObjectName(QString::fromUtf8("DeleteDeny"));
         DeleteDeny->setGeometry(QRect(20, 310, 221, 51));
         tabWidget->addTab(Settings, QString());
+        DeleteFrame->raise();
         AboutFrame->raise();
         SettingsTitle->raise();
         SettingsOptions->raise();
         DeleteAll->raise();
         DownloadAll->raise();
         AboutButton->raise();
-        DeleteFrame->raise();
 
         gridLayout_2->addWidget(tabWidget, 0, 0, 1, 1);
 
@@ -765,7 +790,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -783,14 +808,12 @@ public:
         HomeTime->setText(QCoreApplication::translate("MainWindow", "00:00 AM", nullptr));
         HomeDate->setText(QCoreApplication::translate("MainWindow", "Friday, Feburary 18th, 2022", nullptr));
         HomeHumidityVal->setText(QCoreApplication::translate("MainWindow", "34%", nullptr));
-        HomeWindVal->setText(QCoreApplication::translate("MainWindow", "5 MPH\n"
-"NNW", nullptr));
+        HomeWindVal->setText(QCoreApplication::translate("MainWindow", "5 MPH", nullptr));
         HomePressureVal->setText(QCoreApplication::translate("MainWindow", "1000 mbar", nullptr));
         HomeAQVal->setText(QCoreApplication::translate("MainWindow", "18\n"
 "Excellent", nullptr));
         UpdateHomepage->setText(QCoreApplication::translate("MainWindow", "Update Homepage (temp debugging)", nullptr));
-        HomeWindDir->setText(QCoreApplication::translate("MainWindow", "5 MPH\n"
-"NNW", nullptr));
+        HomeWindDir->setText(QCoreApplication::translate("MainWindow", "Direction: ", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Homepage), QCoreApplication::translate("MainWindow", "Homepage", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From_2->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
@@ -819,7 +842,7 @@ public:
 "Past 24 hour low: #MPH", nullptr));
         WindUpdated->setText(QCoreApplication::translate("MainWindow", "Last Updated: 1:00 PM 2/18/22", nullptr));
         WindDirection->setText(QCoreApplication::translate("MainWindow", "Current Wind Direction:\n"
-"NNW", nullptr));
+"", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Wind), QCoreApplication::translate("MainWindow", "Wind Speed/Direction", nullptr));
         label_11->setText(QCoreApplication::translate("MainWindow", "Select Graphing Date Range", nullptr));
         From_4->setText(QCoreApplication::translate("MainWindow", "From", nullptr));
@@ -856,6 +879,12 @@ public:
         AboutDetails->setText(QCoreApplication::translate("MainWindow", "Cool about page\n"
 "We made this thing", nullptr));
         AboutClose->setText(QCoreApplication::translate("MainWindow", "Close About", nullptr));
+        DebugBox->setPlainText(QCoreApplication::translate("MainWindow", "Enter Value", nullptr));
+        TempDebug->setText(QCoreApplication::translate("MainWindow", "Update Temp", nullptr));
+        HumidityDebug->setText(QCoreApplication::translate("MainWindow", "Update Humid", nullptr));
+        WindDebug->setText(QCoreApplication::translate("MainWindow", "Update Wind", nullptr));
+        PressureDebug->setText(QCoreApplication::translate("MainWindow", "Update Pressure", nullptr));
+        AQDebug->setText(QCoreApplication::translate("MainWindow", "Update AQ", nullptr));
         DeleteText->setText(QCoreApplication::translate("MainWindow", "Are you sure you wish to delete all data?\n"
 "This process is irreversible ", nullptr));
         DeleteConfirm->setText(QCoreApplication::translate("MainWindow", "Yes, Delete All Data Permanently", nullptr));

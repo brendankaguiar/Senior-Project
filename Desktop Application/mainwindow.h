@@ -29,7 +29,7 @@ public:
     void convertKph();
     void convertMbars();
     void convertPas();
-    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/latest/0");
+    void getHttp(QString http = "https://flask-rews.herokuapp.com/devicedata/all/0/latest");
 
 private slots:
 
@@ -126,6 +126,16 @@ private slots:
     void on_FirstDate_5_userDateChanged(const QDate &date);
 
     void on_SecondDate_5_userDateChanged(const QDate &date);
+
+    void on_TempDebug_clicked();
+
+    void on_HumidityDebug_clicked();
+
+    void on_WindDebug_clicked();
+
+    void on_PressureDebug_clicked();
+
+    void on_AQDebug_clicked();
 
 private:
     Ui::MainWindow *ui;

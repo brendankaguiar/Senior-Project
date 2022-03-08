@@ -587,9 +587,9 @@ void MainWindow::updateHomepage()
     QDateTime datetime = QDateTime::currentDateTime();
     //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
     //12 hour time
-    if(datetime.time().toString().left(2).toInt() > 12)
+    if(datetime.time().toString().leftRef(2).toInt() > 12)
     {
-        ui->HomeTime->setText(QString::number(datetime.time().toString().left(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
+        ui->HomeTime->setText(QString::number(datetime.time().toString().leftRef(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
     }
     else
     {
@@ -1763,5 +1763,40 @@ void MainWindow::on_SecondDate_5_userDateChanged(const QDate &date)
 {
     endDate = date;
     multHttp("aqi");
+}
+
+
+void MainWindow::on_TempDebug_clicked()
+{
+    double value = ui->DebugBox->toPlainText().toDouble();
+    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x2, qv_y2);
+}
+
+
+void MainWindow::on_HumidityDebug_clicked()
+{
+    double value = ui->DebugBox->toPlainText().toDouble();
+    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x3, qv_y3);
+}
+
+
+void MainWindow::on_WindDebug_clicked()
+{
+    double value = ui->DebugBox->toPlainText().toDouble();
+    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x4, qv_y4);
+}
+
+
+void MainWindow::on_PressureDebug_clicked()
+{
+    double value = ui->DebugBox->toPlainText().toDouble();
+    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x5, qv_y5);
+}
+
+
+void MainWindow::on_AQDebug_clicked()
+{
+    double value = ui->DebugBox->toPlainText().toDouble();
+    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x6, qv_y6);
 }
 

@@ -1294,6 +1294,97 @@ We made this thing</string>
           <string>Close About</string>
          </property>
         </widget>
+        <widget class="QPlainTextEdit" name="DebugBox">
+         <property name="geometry">
+          <rect>
+           <x>260</x>
+           <y>190</y>
+           <width>104</width>
+           <height>70</height>
+          </rect>
+         </property>
+         <property name="plainText">
+          <string>0</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="TempDebug">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>280</y>
+           <width>80</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update Temp</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="HumidityDebug">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>280</y>
+           <width>80</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update Humid</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="WindDebug">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>280</y>
+           <width>80</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update Wind</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="PressureDebug">
+         <property name="geometry">
+          <rect>
+           <x>380</x>
+           <y>280</y>
+           <width>80</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update Pressure</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="AQDebug">
+         <property name="geometry">
+          <rect>
+           <x>490</x>
+           <y>280</y>
+           <width>80</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update AQ</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>260</x>
+           <y>170</y>
+           <width>101</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enter Value</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QFrame" name="DeleteFrame">
         <property name="geometry">
@@ -1373,13 +1464,13 @@ This process is irreversible </string>
          </property>
         </widget>
        </widget>
+       <zorder>DeleteFrame</zorder>
        <zorder>AboutFrame</zorder>
        <zorder>SettingsTitle</zorder>
        <zorder>SettingsOptions</zorder>
        <zorder>DeleteAll</zorder>
        <zorder>DownloadAll</zorder>
        <zorder>AboutButton</zorder>
-       <zorder>DeleteFrame</zorder>
       </widget>
      </widget>
     </item>

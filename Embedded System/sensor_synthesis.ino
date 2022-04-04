@@ -21,7 +21,7 @@ struct Weather {
 #include <DHT.h>
 #include <DHT_U.h>
 
-#define Altitude 4505
+#define Altitude 1373
 #define DHTPIN 2
 #define DHTTYPE    DHT11   
 DHT_Unified dht(DHTPIN, DHTTYPE);
@@ -47,8 +47,9 @@ HM330XErrorCode print_result(const char* str, uint16_t value) {
     if (NULL == str) {
         return ERROR_PARAM;
     }
-    Serial.print(str);
-    Serial.println(value);
+    //Serial.print(str);
+    W_Data.dens = value;
+    //Serial.println(value);
     return NO_ERROR;
 }
 
@@ -95,12 +96,6 @@ void setup() {
 
 void loop() {
     getData();
-    if (sensor.read_sensor_value(buf, 29)) {
-        Serial.println("HM330X read result failed!!");
-    }
-    parse_result_value(buf);//parse error results
-    parse_result(buf);//parse error results
-    Serial.println("");
     delay(5000);
 }
 
@@ -109,10 +104,18 @@ void getData()
   Get_Hum_Temp();
   Get_Wind_Dir();
   Get_Wind_Spd();
-  get_random_values();
-  getPressure();
-  //get_location();
+  getPressureData();
+  getAirQuality();
+  get_location();
   sendData();
+}
+void getAirQuality()
+{
+  if (sensor.read_sensor_value(buf, 29)) {
+      Serial.println("HM330X read result failed!!");
+  }
+  parse_result_value(buf);//parse error results
+  parse_result(buf);//parse error results
 }
 void get_location()
 {
@@ -138,7 +141,7 @@ void get_location()
     }
   }
 }
-void getPressure()
+void getPressureData()
 {
   // put your main code here, to run repeatedly:
   //bool status;
@@ -150,20 +153,14 @@ void getPressure()
   pSensor.startPressure(3);
   delay(100);
   pSensor.getPressure(AP,T);
-  Serial.print("Absolute Pressure: ");
-  Serial.print((float)AP,4);
-  Serial.print(" Millibars\n");
+  //Serial.print("Absolute Pressure: ");
+  //Serial.print((float)AP,4);
+  //Serial.print(" Millibars\n");
   RP = pSensor.sealevel(AP, Altitude);
-  Serial.print("Relative to Sea Level Pressure: ");
-  Serial.print((float)RP,4);
-  Serial.print(" Millibars\n\n");
-}
+  //Serial.print("Relative to Sea Level Pressure: ");
+  //Serial.print((float)RP,4);
+  W_Data.pres = (float)RP;
 
-void get_random_values()//to use in place of vacant sensors
-{
-  float rand_float = (float)random(94,103) / (float) random(94,103);//add more randomness
-  W_Data.pres = (float) random(999,1019) * rand_float; //generate random float
-  W_Data.dens = (float) random(20,25) * rand_float;
 }
 
 void sendData()
@@ -180,8 +177,10 @@ void sendData()
   WD += String(W_Data.w_dir);
   WD += '\n';
   WD += String(W_Data.w_spd);
+  WD += '\n';
+  WD += W_Data.gps_loc;
   int val = WD.length();
-  char buf[29];//check val if changing size
+  char buf[1000];//check val of changing size
   WD.toCharArray(buf, val);
   Serial.println(buf);
 }
@@ -216,7 +215,7 @@ void Get_Wind_Dir()
     W_Data.w_dir = "N";
   else if (W_voltage < 920 && W_voltage > 910)
     W_Data.w_dir = "NE";
-  else if (W_voltage < 517 && W_voltage > 508)
+  else if (W_voltage < 525 && W_voltage > 508)
     W_Data.w_dir = "E";
   else if (W_voltage < 709 && W_voltage > 699)
     W_Data.w_dir = "SE";

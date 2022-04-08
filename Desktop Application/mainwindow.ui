@@ -1031,6 +1031,9 @@ Past 24 hour low: #</string>
         <property name="text">
          <string>SETTINGS</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>

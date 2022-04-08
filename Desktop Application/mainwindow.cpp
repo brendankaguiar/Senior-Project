@@ -81,6 +81,42 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotPressure->addGraph();
    ui->PlotAirQuality->addGraph();
 
+   QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
+   ui->PlotTemperature->xAxis->setTicker(dateTimeTicker);
+   dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
+   ui->PlotTemperature->xAxis->setLabel("Date & Time");
+   ui->PlotTemperature->yAxis->setLabel("Temperature °C");
+   ui->PlotTemperature->xAxis->setPadding(10);
+   ui->PlotTemperature->yAxis->setPadding(10);
+
+   ui->PlotHumidity->xAxis->setTicker(dateTimeTicker);
+   dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
+   ui->PlotHumidity->xAxis->setLabel("Date & Time");
+   ui->PlotHumidity->yAxis->setLabel("Humidity %");
+   ui->PlotHumidity->xAxis->setPadding(10);
+   ui->PlotHumidity->yAxis->setPadding(10);
+
+   ui->PlotWindSpeedDirection->xAxis->setTicker(dateTimeTicker);
+   dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
+   ui->PlotWindSpeedDirection->xAxis->setLabel("Date & Time");
+   ui->PlotWindSpeedDirection->yAxis->setLabel("Wind Speed MPH");
+   ui->PlotWindSpeedDirection->xAxis->setPadding(10);
+   ui->PlotWindSpeedDirection->yAxis->setPadding(10);
+
+   ui->PlotPressure->xAxis->setTicker(dateTimeTicker);
+   dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
+   ui->PlotPressure->xAxis->setLabel("Date & Time");
+   ui->PlotPressure->yAxis->setLabel("Pressure mbars");
+   ui->PlotPressure->xAxis->setPadding(10);
+   ui->PlotPressure->yAxis->setPadding(10);
+
+   ui->PlotAirQuality->xAxis->setTicker(dateTimeTicker);
+   dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
+   ui->PlotAirQuality->xAxis->setLabel("Date & Time");
+   ui->PlotAirQuality->yAxis->setLabel("Air Quality Index");
+   ui->PlotAirQuality->xAxis->setPadding(10);
+   ui->PlotAirQuality->yAxis->setPadding(10);
+
    //ui->HomepagePlot->xAxis->setRange(0, 100);
    //ui->HomepagePlot->yAxis->setRange(-5, 6); //in celsius
    ui->PlotTemperature->xAxis->setRange(0, 100);
@@ -113,7 +149,7 @@ MainWindow::MainWindow(QWidget *parent)
    ui->DeleteFrame->setVisible(FALSE);
    ui->HTTPButton->setVisible(FALSE);
    ui->UpdateHomepage->setVisible(FALSE);
-   timerId = startTimer(15000);
+   timerId = startTimer(11000);
 
 }
 
@@ -241,6 +277,7 @@ void MainWindow::convertF()
     maxTemp = ((maxTemp*9)/5)+ 32;
     avgTemp = ((avgTemp*9)/5)+ 32;
     ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
+    ui->PlotTemperature->yAxis->setLabel("Temperature °F");
     plot();
 }
 
@@ -260,6 +297,7 @@ void MainWindow::convertC()
     maxTemp = ((maxTemp-32)*5)/9;
     avgTemp = ((avgTemp-32)*5)/9;
     ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
+    ui->PlotTemperature->yAxis->setLabel("Temperature °C");
     plot();
 }
 
@@ -587,9 +625,9 @@ void MainWindow::updateHomepage()
     QDateTime datetime = QDateTime::currentDateTime();
     //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
     //12 hour time
-    if(datetime.time().toString().leftRef(2).toInt() > 12)
+    if(datetime.time().toString().left(2).toInt() > 12)
     {
-        ui->HomeTime->setText(QString::number(datetime.time().toString().leftRef(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
+        ui->HomeTime->setText(QString::number(datetime.time().toString().left(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
     }
     else
     {
@@ -681,7 +719,7 @@ void MainWindow::updateHumidity()
     QDateTime datetime = QDateTime::currentDateTime();
     if(qv_y3.isEmpty())
     {
-        ui->HumidityVal->setText("Current Humidty: 0%");
+        ui->HumidityVal->setText("Current Humidity: 0%");
     }
     else
     {
@@ -1288,7 +1326,7 @@ QString MainWindow::getCurrentDate()
         }
         else
         {
-            dateS = QString::number(year) + "_0" + QString::number(month) + "_0" + QString::number(day);
+            dateS = QString::number(year) + "_0" + QString::number(month) + "_" + QString::number(day);
         }
     }
     else
@@ -1320,7 +1358,7 @@ QString MainWindow::getDate(QDate date)
         }
         else
         {
-            dateS = QString::number(year) + "_0" + QString::number(month) + "_0" + QString::number(day);
+            dateS = QString::number(year) + "_0" + QString::number(month) + "_" + QString::number(day);
         }
     }
     else
@@ -1770,6 +1808,7 @@ void MainWindow::on_TempDebug_clicked()
 {
     double value = ui->DebugBox->toPlainText().toDouble();
     addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x2, qv_y2);
+    plot();
 }
 
 
@@ -1777,6 +1816,7 @@ void MainWindow::on_HumidityDebug_clicked()
 {
     double value = ui->DebugBox->toPlainText().toDouble();
     addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x3, qv_y3);
+    plot();
 }
 
 
@@ -1784,6 +1824,7 @@ void MainWindow::on_WindDebug_clicked()
 {
     double value = ui->DebugBox->toPlainText().toDouble();
     addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x4, qv_y4);
+    plot();
 }
 
 
@@ -1791,6 +1832,7 @@ void MainWindow::on_PressureDebug_clicked()
 {
     double value = ui->DebugBox->toPlainText().toDouble();
     addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x5, qv_y5);
+    plot();
 }
 
 
@@ -1798,5 +1840,6 @@ void MainWindow::on_AQDebug_clicked()
 {
     double value = ui->DebugBox->toPlainText().toDouble();
     addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x6, qv_y6);
+    plot();
 }
 

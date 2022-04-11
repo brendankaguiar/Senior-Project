@@ -63,6 +63,8 @@ private slots:
 
     void updateAQ();
 
+    void updateGPS();
+
     void setTempBG();
 
     void setHumidityBG();
@@ -126,6 +128,8 @@ private slots:
     void on_FirstDate_5_userDateChanged(const QDate &date);
 
     void on_SecondDate_5_userDateChanged(const QDate &date);
+
+    void getGPSLocation();
 
     void on_TempDebug_clicked();
 

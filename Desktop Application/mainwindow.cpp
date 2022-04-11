@@ -54,8 +54,10 @@ double maxTemp = 0,
         avgHum = 0,
         avgWindSpeed = 0,
         avgPressure = 0,
-        avgTemp = 0;
+        avgTemp = 0,
+        updateTime = 0;
 QString windDirection;
+QString GPSlocation;
 int digit = 1;
 int button = 100;
 bool check, Mcheck, Fcheck = 0;
@@ -879,6 +881,16 @@ void MainWindow::updateAQ()
      ui->AQStats->setText("24 hour average: " + QString::number(avgAqi) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
 }
 
+void MainWindow::updateGPS()
+{
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(updateTime);
+    if(updateTime != 0)
+    {
+        ui -> GPS_Val -> setText("Current Location: \nNear " + GPSlocation + "\n" + "Last Updated:\n" + lastUpdatedDate.toString("MM/dd/yyyy h:mm ap"));
+    }
+}
+
 //sets the background color based off temp
 void MainWindow::setTempBG()
 {
@@ -1040,8 +1052,10 @@ void MainWindow::refreshCurrentTab()
         ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
         plot();
     }
-    else
+    else if(index == 6)
     {
+        getGPSLocation();
+        updateGPS();
         ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
     }
 }
@@ -1071,6 +1085,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     else if(index == 5)
     {
         getMinMaxAvg("aqi", getDate(QDate::currentDate()));
+    }
+    else
+    {
+        getGPSLocation();
     }
     refreshCurrentTab();
     ui->AboutFrame->setVisible(FALSE);
@@ -1803,6 +1821,42 @@ void MainWindow::on_SecondDate_5_userDateChanged(const QDate &date)
     multHttp("aqi");
 }
 
+void MainWindow::getGPSLocation()
+{
+    QString url = "https://flask-rews.herokuapp.com/devicedata/metadata/location/0";
+    qnam = new QNetworkAccessManager();
+    url.remove(QChar('"'));
+    QUrl processedURL = url;
+    qDebug() << "Sending request to: " << url;
+    request.setUrl(processedURL);
+    QObject::connect(qnam, &QNetworkAccessManager::finished,
+        this, [=](QNetworkReply *reply) {
+            if (reply->error()) {
+                qDebug() << reply->errorString();
+                return;
+            }
+
+            QByteArray buffer = reply->readAll();
+            QJsonDocument jsonDoc(QJsonDocument::fromJson(buffer));
+            QJsonArray jsonReply = jsonDoc.array();
+            QJsonObject data = *new QJsonObject();
+
+
+
+            qDebug() << buffer;
+            for(QJsonArray::iterator record = jsonReply.begin(); record != jsonReply.end(); record++) {
+                data = record->toObject();
+                if(!data["location"].isNull() && updateTime != data["lastupdated"].toDouble())
+                {
+                GPSlocation = data["location"].toString();
+                updateTime = data["lastupdated"].toDouble();
+                }
+            }
+
+            reply->deleteLater();
+    });
+    qnam->get(request);
+}
 
 void MainWindow::on_TempDebug_clicked()
 {

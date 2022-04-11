@@ -96,7 +96,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <attribute name="title">
@@ -118,15 +118,15 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomeTemp">
         <property name="geometry">
          <rect>
-          <x>60</x>
-          <y>0</y>
+          <x>180</x>
+          <y>80</y>
           <width>531</width>
           <height>251</height>
          </rect>
         </property>
         <property name="font">
          <font>
-          <pointsize>72</pointsize>
+          <pointsize>28</pointsize>
          </font>
         </property>
         <property name="text">
@@ -136,7 +136,7 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomePressure">
         <property name="geometry">
          <rect>
-          <x>560</x>
+          <x>520</x>
           <y>230</y>
           <width>301</width>
           <height>181</height>
@@ -154,7 +154,7 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomeHumidity">
         <property name="geometry">
          <rect>
-          <x>560</x>
+          <x>520</x>
           <y>20</y>
           <width>301</width>
           <height>181</height>
@@ -172,7 +172,7 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomeAQ">
         <property name="geometry">
          <rect>
-          <x>900</x>
+          <x>880</x>
           <y>230</y>
           <width>301</width>
           <height>181</height>
@@ -190,7 +190,7 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomeWind">
         <property name="geometry">
          <rect>
-          <x>900</x>
+          <x>870</x>
           <y>20</y>
           <width>431</width>
           <height>181</height>
@@ -216,7 +216,7 @@ QTabWidget::tab-bar{
         </property>
         <property name="font">
          <font>
-          <pointsize>72</pointsize>
+          <pointsize>64</pointsize>
          </font>
         </property>
         <property name="text">
@@ -234,7 +234,7 @@ QTabWidget::tab-bar{
         </property>
         <property name="font">
          <font>
-          <pointsize>28</pointsize>
+          <pointsize>24</pointsize>
          </font>
         </property>
         <property name="text">
@@ -244,7 +244,7 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomeHumidityVal">
         <property name="geometry">
          <rect>
-          <x>630</x>
+          <x>600</x>
           <y>120</y>
           <width>141</width>
           <height>171</height>
@@ -280,7 +280,7 @@ QTabWidget::tab-bar{
        <widget class="QLabel" name="HomePressureVal">
         <property name="geometry">
          <rect>
-          <x>600</x>
+          <x>560</x>
           <y>370</y>
           <width>261</width>
           <height>81</height>
@@ -299,7 +299,7 @@ QTabWidget::tab-bar{
         <property name="geometry">
          <rect>
           <x>900</x>
-          <y>370</y>
+          <y>380</y>
           <width>251</width>
           <height>111</height>
          </rect>
@@ -333,10 +333,10 @@ Excellent</string>
        <widget class="QLabel" name="HomeWindDir">
         <property name="geometry">
          <rect>
-          <x>910</x>
-          <y>170</y>
-          <width>231</width>
-          <height>171</height>
+          <x>950</x>
+          <y>210</y>
+          <width>261</width>
+          <height>81</height>
          </rect>
         </property>
         <property name="font">
@@ -346,6 +346,24 @@ Excellent</string>
         </property>
         <property name="text">
          <string>Direction: </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeHumidity_2">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>20</y>
+          <width>421</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>48</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Temperature</string>
         </property>
        </widget>
       </widget>
@@ -432,7 +450,7 @@ Excellent</string>
          </font>
         </property>
         <property name="text">
-         <string>Current Humidity                     %</string>
+         <string>Current Humidity:</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -501,7 +519,7 @@ Past 24 hour low: #%</string>
          </font>
         </property>
         <property name="text">
-         <string>Current Temperature                     ºC</string>
+         <string>Current Temperature:</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -678,7 +696,7 @@ Past 24 hour low: #ºC</string>
          </font>
         </property>
         <property name="text">
-         <string>Current Wind Speed                     MPH</string>
+         <string>Current Wind Speed:</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -836,7 +854,7 @@ Past 24 hour low: #MPH</string>
          </font>
         </property>
         <property name="text">
-         <string>Current Pressure                     mbars</string>
+         <string>Current Pressure:</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -949,7 +967,7 @@ Past 24 hour low: #mbars</string>
          </font>
         </property>
         <property name="text">
-         <string>Current AQI Level</string>
+         <string>Current AQI Level:</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -1302,7 +1320,7 @@ We made this thing</string>
           <rect>
            <x>260</x>
            <y>190</y>
-           <width>104</width>
+           <width>101</width>
            <height>70</height>
           </rect>
          </property>
@@ -1467,6 +1485,36 @@ This process is irreversible </string>
          </property>
         </widget>
        </widget>
+       <widget class="QLabel" name="GPS_Val">
+        <property name="geometry">
+         <rect>
+          <x>510</x>
+          <y>70</y>
+          <width>681</width>
+          <height>211</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>24</pointsize>
+         </font>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>Current Location:
+
+Last updated:</string>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <zorder>GPS_Val</zorder>
        <zorder>DeleteFrame</zorder>
        <zorder>AboutFrame</zorder>
        <zorder>SettingsTitle</zorder>

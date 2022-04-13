@@ -499,7 +499,7 @@ class database:
 
             geolocator = geopy.Nominatim(user_agent="rews")
             location = geolocator.reverse(geopy.Point(dec_location))
-            city = location.raw['address']['city']
+            city = location.raw['address']['city'] + ", " + location.raw['address']['state']
 
 
             record_list.append({'location':dec_location, 'lastupdated':result[0][1], 'city':city})

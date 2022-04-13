@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[46];
-    char stringdata0[737];
+    QByteArrayData data[56];
+    char stringdata0[1034];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -64,20 +64,30 @@ QT_MOC_LITERAL(28, 404, 13), // "deleteAllData"
 QT_MOC_LITERAL(29, 418, 20), // "on_DeleteAll_clicked"
 QT_MOC_LITERAL(30, 439, 14), // "deleteFinished"
 QT_MOC_LITERAL(31, 454, 14), // "getCurrentDate"
-QT_MOC_LITERAL(32, 469, 12), // "getMinMaxAvg"
-QT_MOC_LITERAL(33, 482, 6), // "sensor"
-QT_MOC_LITERAL(34, 489, 30), // "on_FirstDate_2_userDateChanged"
-QT_MOC_LITERAL(35, 520, 31), // "on_SecondDate_2_userDateChanged"
-QT_MOC_LITERAL(36, 552, 16), // "getHttpMultidate"
-QT_MOC_LITERAL(37, 569, 11), // "getHttpTemp"
-QT_MOC_LITERAL(38, 581, 10), // "getHttpHum"
-QT_MOC_LITERAL(39, 592, 25), // "getHttpWindSpeedDirection"
-QT_MOC_LITERAL(40, 618, 15), // "getHttpPressure"
-QT_MOC_LITERAL(41, 634, 10), // "getHttpAqi"
-QT_MOC_LITERAL(42, 645, 22), // "on_AboutButton_clicked"
-QT_MOC_LITERAL(43, 668, 21), // "on_AboutClose_clicked"
-QT_MOC_LITERAL(44, 690, 24), // "on_DeleteConfirm_clicked"
-QT_MOC_LITERAL(45, 715, 21) // "on_DeleteDeny_clicked"
+QT_MOC_LITERAL(32, 469, 7), // "getDate"
+QT_MOC_LITERAL(33, 477, 12), // "getMinMaxAvg"
+QT_MOC_LITERAL(34, 490, 6), // "sensor"
+QT_MOC_LITERAL(35, 497, 30), // "on_FirstDate_2_userDateChanged"
+QT_MOC_LITERAL(36, 528, 31), // "on_SecondDate_2_userDateChanged"
+QT_MOC_LITERAL(37, 560, 13), // "getHttpSensor"
+QT_MOC_LITERAL(38, 574, 8), // "multHttp"
+QT_MOC_LITERAL(39, 583, 22), // "on_AboutButton_clicked"
+QT_MOC_LITERAL(40, 606, 21), // "on_AboutClose_clicked"
+QT_MOC_LITERAL(41, 628, 24), // "on_DeleteConfirm_clicked"
+QT_MOC_LITERAL(42, 653, 21), // "on_DeleteDeny_clicked"
+QT_MOC_LITERAL(43, 675, 28), // "on_FirstDate_userDateChanged"
+QT_MOC_LITERAL(44, 704, 29), // "on_SecondDate_userDateChanged"
+QT_MOC_LITERAL(45, 734, 30), // "on_FirstDate_3_userDateChanged"
+QT_MOC_LITERAL(46, 765, 31), // "on_SecondDate_3_userDateChanged"
+QT_MOC_LITERAL(47, 797, 30), // "on_FirstDate_4_userDateChanged"
+QT_MOC_LITERAL(48, 828, 31), // "on_SecondDate_4_userDateChanged"
+QT_MOC_LITERAL(49, 860, 30), // "on_FirstDate_5_userDateChanged"
+QT_MOC_LITERAL(50, 891, 31), // "on_SecondDate_5_userDateChanged"
+QT_MOC_LITERAL(51, 923, 20), // "on_TempDebug_clicked"
+QT_MOC_LITERAL(52, 944, 24), // "on_HumidityDebug_clicked"
+QT_MOC_LITERAL(53, 969, 20), // "on_WindDebug_clicked"
+QT_MOC_LITERAL(54, 990, 24), // "on_PressureDebug_clicked"
+QT_MOC_LITERAL(55, 1015, 18) // "on_AQDebug_clicked"
 
     },
     "MainWindow\0on_HTTPButton_clicked\0\0"
@@ -92,14 +102,23 @@ QT_MOC_LITERAL(45, 715, 21) // "on_DeleteDeny_clicked"
     "on_DownloadAll_clicked\0downloadFinished\0"
     "requestUrl\0type\0date\0deleteAllData\0"
     "on_DeleteAll_clicked\0deleteFinished\0"
-    "getCurrentDate\0getMinMaxAvg\0sensor\0"
-    "on_FirstDate_2_userDateChanged\0"
+    "getCurrentDate\0getDate\0getMinMaxAvg\0"
+    "sensor\0on_FirstDate_2_userDateChanged\0"
     "on_SecondDate_2_userDateChanged\0"
-    "getHttpMultidate\0getHttpTemp\0getHttpHum\0"
-    "getHttpWindSpeedDirection\0getHttpPressure\0"
-    "getHttpAqi\0on_AboutButton_clicked\0"
+    "getHttpSensor\0multHttp\0on_AboutButton_clicked\0"
     "on_AboutClose_clicked\0on_DeleteConfirm_clicked\0"
-    "on_DeleteDeny_clicked"
+    "on_DeleteDeny_clicked\0"
+    "on_FirstDate_userDateChanged\0"
+    "on_SecondDate_userDateChanged\0"
+    "on_FirstDate_3_userDateChanged\0"
+    "on_SecondDate_3_userDateChanged\0"
+    "on_FirstDate_4_userDateChanged\0"
+    "on_SecondDate_4_userDateChanged\0"
+    "on_FirstDate_5_userDateChanged\0"
+    "on_SecondDate_5_userDateChanged\0"
+    "on_TempDebug_clicked\0on_HumidityDebug_clicked\0"
+    "on_WindDebug_clicked\0on_PressureDebug_clicked\0"
+    "on_AQDebug_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -109,7 +128,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      39,   14, // methods
+      49,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -117,45 +136,55 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  209,    2, 0x08 /* Private */,
-       3,    1,  210,    2, 0x08 /* Private */,
-       5,    1,  213,    2, 0x08 /* Private */,
-       6,    1,  216,    2, 0x08 /* Private */,
-       7,    0,  219,    2, 0x08 /* Private */,
-       8,    1,  220,    2, 0x08 /* Private */,
-      10,    0,  223,    2, 0x08 /* Private */,
-      11,    0,  224,    2, 0x08 /* Private */,
-      12,    0,  225,    2, 0x08 /* Private */,
-      13,    0,  226,    2, 0x08 /* Private */,
-      14,    0,  227,    2, 0x08 /* Private */,
-      15,    0,  228,    2, 0x08 /* Private */,
-      16,    0,  229,    2, 0x08 /* Private */,
-      17,    0,  230,    2, 0x08 /* Private */,
-      18,    0,  231,    2, 0x08 /* Private */,
-      19,    0,  232,    2, 0x08 /* Private */,
-      20,    0,  233,    2, 0x08 /* Private */,
-      21,    0,  234,    2, 0x08 /* Private */,
-      22,    0,  235,    2, 0x08 /* Private */,
-      23,    0,  236,    2, 0x08 /* Private */,
-      24,    0,  237,    2, 0x08 /* Private */,
-      25,    2,  238,    2, 0x08 /* Private */,
-      28,    0,  243,    2, 0x08 /* Private */,
-      29,    0,  244,    2, 0x08 /* Private */,
-      30,    0,  245,    2, 0x08 /* Private */,
-      31,    0,  246,    2, 0x08 /* Private */,
-      32,    1,  247,    2, 0x08 /* Private */,
-      34,    1,  250,    2, 0x08 /* Private */,
-      35,    1,  253,    2, 0x08 /* Private */,
-      36,    0,  256,    2, 0x08 /* Private */,
-      37,    0,  257,    2, 0x08 /* Private */,
-      38,    0,  258,    2, 0x08 /* Private */,
-      39,    0,  259,    2, 0x08 /* Private */,
-      40,    0,  260,    2, 0x08 /* Private */,
-      41,    0,  261,    2, 0x08 /* Private */,
-      42,    0,  262,    2, 0x08 /* Private */,
-      43,    0,  263,    2, 0x08 /* Private */,
-      44,    0,  264,    2, 0x08 /* Private */,
-      45,    0,  265,    2, 0x08 /* Private */,
+       1,    0,  259,    2, 0x08 /* Private */,
+       3,    1,  260,    2, 0x08 /* Private */,
+       5,    1,  263,    2, 0x08 /* Private */,
+       6,    1,  266,    2, 0x08 /* Private */,
+       7,    0,  269,    2, 0x08 /* Private */,
+       8,    1,  270,    2, 0x08 /* Private */,
+      10,    0,  273,    2, 0x08 /* Private */,
+      11,    0,  274,    2, 0x08 /* Private */,
+      12,    0,  275,    2, 0x08 /* Private */,
+      13,    0,  276,    2, 0x08 /* Private */,
+      14,    0,  277,    2, 0x08 /* Private */,
+      15,    0,  278,    2, 0x08 /* Private */,
+      16,    0,  279,    2, 0x08 /* Private */,
+      17,    0,  280,    2, 0x08 /* Private */,
+      18,    0,  281,    2, 0x08 /* Private */,
+      19,    0,  282,    2, 0x08 /* Private */,
+      20,    0,  283,    2, 0x08 /* Private */,
+      21,    0,  284,    2, 0x08 /* Private */,
+      22,    0,  285,    2, 0x08 /* Private */,
+      23,    0,  286,    2, 0x08 /* Private */,
+      24,    0,  287,    2, 0x08 /* Private */,
+      25,    2,  288,    2, 0x08 /* Private */,
+      28,    0,  293,    2, 0x08 /* Private */,
+      29,    0,  294,    2, 0x08 /* Private */,
+      30,    0,  295,    2, 0x08 /* Private */,
+      31,    0,  296,    2, 0x08 /* Private */,
+      32,    1,  297,    2, 0x08 /* Private */,
+      33,    2,  300,    2, 0x08 /* Private */,
+      35,    1,  305,    2, 0x08 /* Private */,
+      36,    1,  308,    2, 0x08 /* Private */,
+      37,    2,  311,    2, 0x08 /* Private */,
+      38,    1,  316,    2, 0x08 /* Private */,
+      39,    0,  319,    2, 0x08 /* Private */,
+      40,    0,  320,    2, 0x08 /* Private */,
+      41,    0,  321,    2, 0x08 /* Private */,
+      42,    0,  322,    2, 0x08 /* Private */,
+      43,    1,  323,    2, 0x08 /* Private */,
+      44,    1,  326,    2, 0x08 /* Private */,
+      45,    1,  329,    2, 0x08 /* Private */,
+      46,    1,  332,    2, 0x08 /* Private */,
+      47,    1,  335,    2, 0x08 /* Private */,
+      48,    1,  338,    2, 0x08 /* Private */,
+      49,    1,  341,    2, 0x08 /* Private */,
+      50,    1,  344,    2, 0x08 /* Private */,
+      51,    0,  347,    2, 0x08 /* Private */,
+      52,    0,  348,    2, 0x08 /* Private */,
+      53,    0,  349,    2, 0x08 /* Private */,
+      54,    0,  350,    2, 0x08 /* Private */,
+      55,    0,  351,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -184,14 +213,24 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::QString,
-    QMetaType::Void, QMetaType::QString,   33,
+    QMetaType::QString, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,   34,   27,
     QMetaType::Void, QMetaType::QDate,   27,
     QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,   34,   27,
+    QMetaType::Void, QMetaType::QString,   34,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
+    QMetaType::Void, QMetaType::QDate,   27,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -235,19 +274,30 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 24: _t->deleteFinished(); break;
         case 25: { QString _r = _t->getCurrentDate();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 26: _t->getMinMaxAvg((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 27: _t->on_FirstDate_2_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
-        case 28: _t->on_SecondDate_2_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
-        case 29: _t->getHttpMultidate(); break;
-        case 30: _t->getHttpTemp(); break;
-        case 31: _t->getHttpHum(); break;
-        case 32: _t->getHttpWindSpeedDirection(); break;
-        case 33: _t->getHttpPressure(); break;
-        case 34: _t->getHttpAqi(); break;
-        case 35: _t->on_AboutButton_clicked(); break;
-        case 36: _t->on_AboutClose_clicked(); break;
-        case 37: _t->on_DeleteConfirm_clicked(); break;
-        case 38: _t->on_DeleteDeny_clicked(); break;
+        case 26: { QString _r = _t->getDate((*reinterpret_cast< QDate(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 27: _t->getMinMaxAvg((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 28: _t->on_FirstDate_2_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 29: _t->on_SecondDate_2_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 30: _t->getHttpSensor((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 31: _t->multHttp((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 32: _t->on_AboutButton_clicked(); break;
+        case 33: _t->on_AboutClose_clicked(); break;
+        case 34: _t->on_DeleteConfirm_clicked(); break;
+        case 35: _t->on_DeleteDeny_clicked(); break;
+        case 36: _t->on_FirstDate_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 37: _t->on_SecondDate_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 38: _t->on_FirstDate_3_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 39: _t->on_SecondDate_3_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 40: _t->on_FirstDate_4_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 41: _t->on_SecondDate_4_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 42: _t->on_FirstDate_5_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 43: _t->on_SecondDate_5_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
+        case 44: _t->on_TempDebug_clicked(); break;
+        case 45: _t->on_HumidityDebug_clicked(); break;
+        case 46: _t->on_WindDebug_clicked(); break;
+        case 47: _t->on_PressureDebug_clicked(); break;
+        case 48: _t->on_AQDebug_clicked(); break;
         default: ;
         }
     }
@@ -282,13 +332,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 39)
+        if (_id < 49)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 39;
+        _id -= 49;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 39)
+        if (_id < 49)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 39;
+        _id -= 49;
     }
     return _id;
 }

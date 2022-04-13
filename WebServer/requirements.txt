@@ -4,6 +4,7 @@
 # Flask Framework
 
 gunicorn==20.1.0
+geopy==2.2.0
 
 click==7.1.2
 Flask==1.1.2

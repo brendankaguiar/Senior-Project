@@ -12,6 +12,7 @@ import urllib.parse as urlparse
 import random
 import math
 import json
+import geopy
 
 import urllib.parse as urlparse
 
@@ -51,9 +52,19 @@ class database:
 
         with db_con:    #create weather table
             db_cursor = db_con.cursor()
+
+            db_cursor.execute("""
+            CREATE TABLE IF NOT EXISTS device (
+                deviceid INT PRIMARY KEY,
+                location TEXT,
+                batterylevel INT,
+                lastupdated INT
+            );
+            """)
+
             db_cursor.execute("""
             CREATE TABLE IF NOT EXISTS weather (
-                id SERIAL,
+                id SERIAL PRIMARY KEY,
                 timestamp INT,
                 date TEXT,
                 deviceid INT,
@@ -62,7 +73,11 @@ class database:
                 winddirection TEXT,
                 humidity REAL,
                 pressure REAL,
-                aqi REAL
+                aqi REAL,
+                time TIME,
+                CONSTRAINT deviceid_fk
+                    FOREIGN KEY(deviceid) 
+                    REFERENCES device(deviceid)
             );
             """)
 
@@ -353,6 +368,53 @@ class database:
             record_list.append(record_dict)
             return json.dumps(record_list)  #Return json object with record
 
+    def registerdevice(self, deviceid):
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+        with db_con:
+            try:
+                cursor = db_con.cursor()
+                request_str = f"""SELECT deviceid FROM device
+                WHERE deviceid = {deviceid};
+                """
+                cursor.execute(request_str)
+                result = cursor.fetchall()
+                if len(result) != 0:
+                    return "device_already_exists"
+                request_str = f"""INSERT INTO device (deviceid) VALUES({deviceid})"""
+                cursor.execute(request_str)
+            except:
+                return "register_failed"
+
+            return "register_success"
+
+    #deletes device and all its data
+    def deletedevice(self, deviceid):
+        if not self.weatherdeletedevice(deviceid):  #delete device data from weather table
+            return "delete_failed"
+
+        db_con = psycopg2.connect(
+             dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port)
+
+        with db_con:    #delete device from device table
+            try:
+                cursor = db_con.cursor()
+                request_str = f"""DELETE FROM device 
+                                 WHERE deviceid = {deviceid};"""
+                cursor.execute(request_str)
+            except:
+                return "delete_failed"
+        return "delete_success"
+
     #return json object with min, max, avg stats of <sensor> on <date>
     def getstats(self,deviceid,date,sensor):
         if sensor!="temperature" and sensor!="windspeed" and sensor!="humidity" and sensor!="pressure" and sensor!="aqi":
@@ -382,6 +444,71 @@ class database:
         record_list.append(record_dict)
 
         return json.dumps(record_list)  #Return json object array with records
+
+    def updatedevice(self,deviceid,json_data):
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+        with db_con:
+            try:
+                db_cursor = db_con.cursor()
+                request_str = f"""UPDATE device SET location = \'{json_data["location"]}\', lastupdated = \'{int(json_data["lastupdated"])}\'
+                            WHERE deviceid = {deviceid};
+                            """
+                db_cursor.execute(request_str)
+                db_cursor.close()
+            except:
+                return "update_failed"
+        return "update_success"
+
+    def getlocation(self,deviceid):
+        db_con = psycopg2.connect(
+            dbname=self.dbname,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port
+        )
+        result = None
+        try:
+            with db_con:    #open db_con and retrieve records
+                cursor = db_con.cursor()
+                request_str = f"""SELECT location, lastupdated FROM device 
+                WHERE deviceid = {deviceid};"""
+
+                cursor.execute(request_str)
+                result = cursor.fetchall()
+            record_list = []
+
+            location = result[0][0].split(",")
+            lat = [location[0][0:location[0].find(".") - 2],location[0][location[0].find(".") - 2:len(location[0])]]
+            location[0] = round(float(lat[0]) + float(lat[1])/60,5)
+            long = [location[2][0:location[2].find(".") - 2],location[2][location[2].find(".") - 2:len(location[2])]]
+            location[2] = round(float(long[0]) + float(long[1])/60,5)
+
+            if location[1] == 'S':
+                location[0] *= -1
+            if location[3] == 'W':
+                location[2] *= -1
+
+            dec_location = str(location[0])+', '+str(location[2])
+
+            geolocator = geopy.Nominatim(user_agent="rews")
+            location = geolocator.reverse(geopy.Point(dec_location))
+            city = location.raw['address']['city']
+
+
+            record_list.append({'location':dec_location, 'lastupdated':result[0][1], 'city':city})
+
+            return json.dumps(record_list)  #Return json object array with records
+        except:
+            return "failed"
+
+
 
 
 #####################################################
@@ -482,6 +609,33 @@ def delete_device(device_id):
     if result:
         return "delete_success"
     return "delete_fail"
+
+
+@app.route('/devicedata/register/<device_id>')
+def register(device_id):
+    print(f"\nReceived request from {request.remote_addr}")
+    print(f"Attempting to register device {device_id}")
+    return db.registerdevice(device_id)
+
+@app.route('/devicedata/unregister/<device_id>')
+def unregister(device_id):
+    print(f"\nReceived request from {request.remote_addr}")
+    print(f"Attempting to unregister device {device_id}")
+    return db.deletedevice(device_id)
+
+@app.route('/devicedata/metadata/<device_id>', methods=['POST'])
+def metadata(device_id):
+    data = request.get_json()
+    print(f"\nReceived request from {request.remote_addr}")
+    print(f"Updating metadata for {device_id}")
+    json_data = request.get_json()
+    return db.updatedevice(device_id,json_data)
+
+@app.route('/devicedata/metadata/location/<device_id>', methods=['GET'])
+def locationdata(device_id):
+    print(f"\nReceived request from {request.remote_addr}")
+    print(f"Returning location metadata for {device_id}")
+    return db.getlocation(device_id)
 
 
 @app.route('/debug/generate_data/<days>')

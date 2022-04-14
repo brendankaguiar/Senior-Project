@@ -627,7 +627,7 @@ void MainWindow::updateHomepage()
     QDateTime datetime = QDateTime::currentDateTime();
     //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
     //12 hour time
-    if(datetime.time().toString().left(2).toInt() > 12)
+    if(datetime.time().toString().leftRef(2).toInt() > 12)
     {
         ui->HomeTime->setText(QString::number(datetime.time().toString().left(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
     }
@@ -725,10 +725,10 @@ void MainWindow::updateHumidity()
     }
     else
     {
-        ui -> HumidityVal->setText("Current Humidity: " + QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
+        ui -> HumidityVal->setText("Current Humidity: \n" + QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
     }
     ui -> HumidityUpdated -> setText("Last updated: " + datetime.toString());
-    ui->HumidityStats->setText("24 hour average: " + QString::number(avgHum)+ "%\nPast 24 hour high: " + QString::number(maxHum) + "%\nPast 24 hour low: " + QString::number(minHum) + "%");
+    ui->HumidityStats->setText("24 hour average: " + QString::number(avgHum).left(QString::number(avgHum).indexOf(".")+3) + "%\nPast 24 hour high: " + QString::number(maxHum) + "%\nPast 24 hour low: " + QString::number(minHum) + "%");
 }
 
 //update temp page with data from graphs
@@ -746,21 +746,21 @@ void MainWindow::updateTemperature()
     }
     if(ui->FarenheitButton->isChecked())
     {
-        ui->TemperatureVal->setText("Current Temperature: " + temp.left(temp.indexOf(".") + 3) + " °F");
+        ui->TemperatureVal->setText("Current Temperature: \n" + temp.left(temp.indexOf(".") + 3) + " °F");
     }
     else
     {
-        ui->TemperatureVal->setText("Current Temperature: " + temp.left(temp.indexOf(".") + 3) + " °C");
+        ui->TemperatureVal->setText("Current Temperature: \n" + temp.left(temp.indexOf(".") + 3) + " °C");
     }
     ui -> TemperatureUpdated -> setText("Last updated: " + datetime.toString());
 
     if(ui->FarenheitButton->isChecked())
     {
-        ui->TemperatureStats->setText("24 hour average: " + QString::number(avgTemp)+ " °F\nPast 24 hour high: " + QString::number(maxTemp) + " °F\nPast 24 hour low: " + QString::number(minTemp) + " °F");
+        ui->TemperatureStats->setText("24 hour average: " + QString::number(avgTemp).left(QString::number(avgTemp).indexOf(".")+3) + " °F\nPast 24 hour high: " + QString::number(maxTemp) + " °F\nPast 24 hour low: " + QString::number(minTemp) + " °F");
     }
     else
     {
-        ui->TemperatureStats->setText("24 hour average: " + QString::number(avgTemp)+ " °C\nPast 24 hour high: " + QString::number(maxTemp) + " °C\nPast 24 hour low: " + QString::number(minTemp) + " °C");
+        ui->TemperatureStats->setText("24 hour average: " +  QString::number(avgTemp).left(QString::number(avgTemp).indexOf(".")+3) + " °C\nPast 24 hour high: " + QString::number(maxTemp) + " °C\nPast 24 hour low: " + QString::number(minTemp) + " °C");
     }
 }
 
@@ -774,22 +774,22 @@ void MainWindow::updateWind()
     {
         if(ui->MPHButton->isChecked())
         {
-            ui -> WindVal -> setText("Current Wind Speed: " + QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
         }
         else
         {
-            ui -> WindVal -> setText("Current Wind Speed: " + QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
         }
     }
-    ui -> WindDirection->setText("Current Wind Direction: \n"  + windDirection);
+    ui -> WindDirection->setText("Current Wind Direction: "  + windDirection);
     ui -> WindUpdated -> setText("Last updated: " + datetime.toString());
     if(ui->MPHButton->isChecked())
         {
-            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed)+ " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+3) + " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
         }
         else
         {
-            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed)+ " KM/H\nPast 24 hour high: " + QString::number(maxWindSpeed) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+3) + " KM/H\nPast 24 hour high: " + QString::number(maxWindSpeed) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
         }
 
 }
@@ -814,22 +814,22 @@ void MainWindow::updatePressure()
     {
         if(ui->MillibarsButton->isChecked())
         {
-            ui -> PressureVal -> setText("Current Pressure: " + QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
         }
         else
         {
-            ui -> PressureVal -> setText("Current Pressure: " + QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
         }
     }
     ui -> PressureUpdated -> setText("Last updated: " + datetime.toString());
 
     if(ui->MillibarsButton->isChecked())
     {
-        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure)+ " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
+        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+3) + " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
     }
     else
     {
-        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure)+ " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
+        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+3) + " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
     }
 
 }
@@ -849,36 +849,36 @@ void MainWindow::updateAQ()
     }
     if(curAQ > 301)
     {
-        ui -> AQVal -> setText("Current AQI: " + QString::number(curAQ));
+        ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Hazardous");
     }
     else if (curAQ > 201)
     {
-        ui -> AQVal -> setText("Current AQI: " + QString::number(curAQ));
+        ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Very Unhealthy");
     }
     else if (curAQ > 201)
     {
-        ui -> AQVal -> setText("Current AQI: " + QString::number(curAQ));
+        ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Unhealthy");
     }
     else if (curAQ > 201)
     {
-        ui -> AQVal -> setText("Current AQI: " + QString::number(curAQ));
+        ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Unhealthy for Senstive Groups");
     }
     else if (curAQ > 201)
     {
-        ui -> AQVal -> setText("Current AQI: " + QString::number(curAQ));
+        ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Moderate");
     }
     else
     {
-        ui -> AQVal -> setText("Current AQI: " + QString::number(curAQ));
+        ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Good");
     }
     ui -> AQUpdated -> setText("Last updated: " + datetime.toString());
-     ui->AQStats->setText("24 hour average: " + QString::number(avgAqi) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
+     ui->AQStats->setText("24 hour average: " + QString::number(avgAqi).left(QString::number(avgAqi).indexOf(".")+3) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
 }
 
 void MainWindow::updateGPS()

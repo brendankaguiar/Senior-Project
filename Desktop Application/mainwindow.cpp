@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotWindSpeedDirection->addGraph();
    ui->PlotPressure->addGraph();
    ui->PlotAirQuality->addGraph();
-
+   ui->statusbar->hide();
    QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
    ui->PlotTemperature->xAxis->setTicker(dateTimeTicker);
    dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
@@ -891,6 +891,7 @@ void MainWindow::updateGPS()
     }
 }
 
+
 //sets the background color based off temp
 void MainWindow::setTempBG()
 {
@@ -904,13 +905,42 @@ void MainWindow::setTempBG()
         tempVal = (qv_y2.at(qv_y2.length()-1));
     }
     if(!ui->FarenheitButton->isChecked()) { tempVal = (tempVal *9/5) + 32;} //if temp is in celcius convert it to farenheight for temp color
-    if(tempVal > 100) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,86,1);}"); }
-    else if( tempVal > 85) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(253,200,36);}"); }
-    else if( tempVal > 65) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(247,255,144);}"); }
-    else if( tempVal > 45) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(186,255,236);}"); }
-    else if( tempVal > 25) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(144,242,255);}"); }
-    else if( tempVal > -10) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(40,114,213);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}"); }
+    if(tempVal > 100)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(180, 76, 14);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(180, 76, 14);}");
+
+    }
+    else if( tempVal > 85)
+    {//edited color
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(203, 179, 24);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(203, 179, 24);}");
+    }
+    else if( tempVal > 65)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(89, 163, 202);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(89, 163, 202);}");
+    }
+    else if( tempVal > 45)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(107, 197, 208);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(107, 197, 208);}");
+    }
+    else if( tempVal > 25)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(93, 97, 175);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(93, 97, 175);}");
+    }
+    else if( tempVal > -10)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(28, 56, 148);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(28, 56, 148);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(225,225,225);}");
+    }
 }
 
 //sets the background color based off humidity
@@ -925,13 +955,42 @@ void MainWindow::setHumidityBG()
     {
         humidVal = (qv_y3.at(qv_y3.length()-1));
     }
-    if(humidVal < 10) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(152,192,240);}"); }
-    else if (humidVal < 20) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(117,177,240);}"); }
-    else if (humidVal < 30) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(103,167,240);}"); }
-    else if (humidVal < 40) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(95,162,240);}"); }
-    else if (humidVal < 50) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(84,154,240);}"); }
-    else if (humidVal < 60) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(86,152,239);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(20,124,235);}"); }
+    if(humidVal < 10)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(135, 172, 216);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(135, 172, 216);}");
+    }
+    else if (humidVal < 20)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(98, 142, 223);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(98, 142, 223);}");
+
+    }
+    else if (humidVal < 30)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(84, 157, 240);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(84, 157, 240);}");
+    }
+    else if (humidVal < 40)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(55, 130, 217);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(55, 130, 217);}");
+    }
+    else if (humidVal < 50)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(64, 81, 202);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(64, 81, 202);}");
+    }
+    else if (humidVal < 60)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(31, 45, 151);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(31, 45, 151);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(17, 32, 141);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(17, 32, 141);}");
+    }
 }
 
 //sets the background color based off wind
@@ -947,15 +1006,51 @@ void MainWindow::setWindBG()
         //convert km/h to m/h
         windVal = windVal/1.609344;
     }
-    if(windVal < 3) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(103,203,255);}"); }
-    else if (windVal < 7) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(120,207,193);}"); }
-    else if (windVal < 12) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(0,228,1);}"); }
-    else if (windVal < 18) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(102,255,51);}"); }
-    else if (windVal < 24) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(203,254,50);}"); }
-    else if (windVal < 31) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(226,254,153);}"); }
-    else if (windVal < 38) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,153);}"); }
-    else if (windVal < 46) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(251,220,87);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,154,101);}"); }
+    if(windVal < 3)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(174, 194, 191);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(174, 194, 191);}");
+    }
+    else if (windVal < 7)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(145, 205, 195);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(145, 205, 195);}");
+    }
+    else if (windVal < 12)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(109, 151, 179);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(109, 151, 179);}");
+    }
+    else if (windVal < 18)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(102,255,51);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(102,255,51);}");
+    }
+    else if (windVal < 24)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(203,254,50);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(203,254,50);}");
+    }
+    else if (windVal < 31)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(226,254,153);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(226,254,153);}");
+    }
+    else if (windVal < 38)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,153);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,255,153);}");
+    }
+    else if (windVal < 46)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(251,220,87);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(251,220,87);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,154,101);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,154,101);}");
+    }
 }
 
 //sets the background color based off pressure
@@ -970,11 +1065,31 @@ void MainWindow::setPressureBG()
     {
         pressureVal = pressureVal/100;
     }
-    if(pressureVal < 950) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(70,117,235);}"); }
-    else if (pressureVal < 990) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(117,151,235);}"); }
-    else if (pressureVal < 1020) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(188,201,235);}"); }
-    else if (pressureVal < 1050) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,188,194);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,106,125);}"); }
+    if(pressureVal < 950)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(70,117,235);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(70,117,235);}");
+    }
+    else if (pressureVal < 990)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(117,151,235);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(117,151,235);}");
+    }
+    else if (pressureVal < 1020)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(188,201,235);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(188,201,235);}");
+    }
+    else if (pressureVal < 1050)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,188,194);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(235,188,194);}");
+    }
+    else
+    {
+       ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,106,125);}");
+       ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(235,106,125);}");
+    }
 }
 
 //sets the background color based off air quality (AQ)
@@ -989,12 +1104,36 @@ void MainWindow::setAQBG()
     {
         curAQ = qv_y6.at(qv_y6.length()-1);
     }
-    if(curAQ > 301) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(125,75,89);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(147,105,150);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,102,102);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,179,102);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,179);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(87,217,87);}"); }
+    if(curAQ > 301)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(125,75,89);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(125,75,89);}");
+    }
+    else if (curAQ > 201)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(147,105,150);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(147,105,150);}");
+    }
+    else if (curAQ > 151)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,102,102);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,102,102);}");
+    }
+    else if (curAQ > 101)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,179,102);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,179,102);}");
+    }
+    else if (curAQ > 51)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,179);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,255,179);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(116, 208, 116);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(116, 208, 116);}");
+    }
 }
 
 //update the homepage
@@ -1056,7 +1195,8 @@ void MainWindow::refreshCurrentTab()
     {
         getGPSLocation();
         updateGPS();
-        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(225,225,225);}");
     }
 }
 //change color to default if user leave homepage or change color back if homepage is clicked on again

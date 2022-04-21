@@ -101,7 +101,9 @@ QTabWidget::tab-bar{
       </property>
       <property name="font">
        <font>
+        <family>Microsoft YaHei UI</family>
         <pointsize>16</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -110,7 +112,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <property name="styleSheet">
@@ -220,24 +222,6 @@ QTabWidget::tab-bar{
         </property>
         <property name="text">
          <string>Wind Speed</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeTime">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>280</y>
-          <width>501</width>
-          <height>111</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>64</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>00:00 AM</string>
         </property>
        </widget>
        <widget class="QLabel" name="HomeDate">
@@ -352,7 +336,7 @@ Excellent</string>
          <rect>
           <x>870</x>
           <y>180</y>
-          <width>261</width>
+          <width>351</width>
           <height>81</height>
          </rect>
         </property>
@@ -498,6 +482,24 @@ background: rgb(215, 215, 215); /*185 */
          <enum>QFrame::Raised</enum>
         </property>
        </widget>
+       <widget class="QLabel" name="HomeTime">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>280</y>
+          <width>501</width>
+          <height>111</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>64</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>00:00 AM</string>
+        </property>
+       </widget>
        <zorder>frame_7</zorder>
        <zorder>frame_6</zorder>
        <zorder>frame_5</zorder>
@@ -509,7 +511,6 @@ background: rgb(215, 215, 215); /*185 */
        <zorder>HomeHumidity</zorder>
        <zorder>HomeAQ</zorder>
        <zorder>HomeWind</zorder>
-       <zorder>HomeTime</zorder>
        <zorder>HomeDate</zorder>
        <zorder>HomeHumidityVal</zorder>
        <zorder>HomeWindVal</zorder>
@@ -518,6 +519,7 @@ background: rgb(215, 215, 215); /*185 */
        <zorder>UpdateHomepage</zorder>
        <zorder>HomeWindDir</zorder>
        <zorder>HomeHumidity_2</zorder>
+       <zorder>HomeTime</zorder>
       </widget>
       <widget class="QWidget" name="Humidity">
        <attribute name="title">
@@ -613,7 +615,7 @@ QFrame{
           <rect>
            <x>40</x>
            <y>190</y>
-           <width>411</width>
+           <width>471</width>
            <height>121</height>
           </rect>
          </property>
@@ -701,6 +703,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -739,6 +751,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -751,7 +773,7 @@ background: rgb(210, 210, 210);
           <rect>
            <x>50</x>
            <y>360</y>
-           <width>211</width>
+           <width>461</width>
            <height>16</height>
           </rect>
          </property>
@@ -850,7 +872,7 @@ QFrame{
           <rect>
            <x>40</x>
            <y>190</y>
-           <width>411</width>
+           <width>491</width>
            <height>121</height>
           </rect>
          </property>
@@ -932,6 +954,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -970,6 +1002,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -982,7 +1024,7 @@ background: rgb(210, 210, 210);
           <rect>
            <x>50</x>
            <y>360</y>
-           <width>211</width>
+           <width>461</width>
            <height>16</height>
           </rect>
          </property>
@@ -1025,10 +1067,10 @@ QFrame{
         <widget class="QLabel" name="WindDirection">
          <property name="geometry">
           <rect>
-           <x>30</x>
-           <y>320</y>
+           <x>-10</x>
+           <y>200</y>
            <width>501</width>
-           <height>41</height>
+           <height>221</height>
           </rect>
          </property>
          <property name="font">
@@ -1074,8 +1116,8 @@ background:transparent;
          <property name="geometry">
           <rect>
            <x>40</x>
-           <y>170</y>
-           <width>441</width>
+           <y>160</y>
+           <width>501</width>
            <height>121</height>
           </rect>
          </property>
@@ -1162,6 +1204,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1200,6 +1252,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1212,7 +1274,7 @@ background: rgb(210, 210, 210);
           <rect>
            <x>50</x>
            <y>360</y>
-           <width>211</width>
+           <width>371</width>
            <height>16</height>
           </rect>
          </property>
@@ -1406,6 +1468,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1444,6 +1516,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1476,7 +1558,7 @@ Past 24 hour low: #mbars</string>
           <rect>
            <x>50</x>
            <y>360</y>
-           <width>211</width>
+           <width>451</width>
            <height>16</height>
           </rect>
          </property>
@@ -1601,7 +1683,7 @@ background:transparent;
           <rect>
            <x>40</x>
            <y>190</y>
-           <width>441</width>
+           <width>491</width>
            <height>121</height>
           </rect>
          </property>
@@ -1700,6 +1782,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1738,6 +1830,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1750,7 +1852,7 @@ background: rgb(210, 210, 210);
           <rect>
            <x>50</x>
            <y>360</y>
-           <width>211</width>
+           <width>451</width>
            <height>16</height>
           </rect>
          </property>
@@ -1794,7 +1896,7 @@ background: rgb(210, 210, 210);
           <x>120</x>
           <y>100</y>
           <width>371</width>
-          <height>211</height>
+          <height>241</height>
          </rect>
         </property>
         <layout class="QFormLayout" name="formLayout">
@@ -1888,18 +1990,6 @@ background: rgb(210, 210, 210);
            </layout>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="TemperatureTitle">
-           <property name="font">
-            <font>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Temperature</string>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="1">
           <widget class="QFrame" name="TemperatureOptions">
            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1934,6 +2024,18 @@ background: rgb(210, 210, 210);
              </widget>
             </item>
            </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="TemperatureTitle">
+           <property name="font">
+            <font>
+             <pointsize>16</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Temperature</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -2220,15 +2322,15 @@ This process is irreversible </string>
        <widget class="QLabel" name="GPS_Val">
         <property name="geometry">
          <rect>
-          <x>510</x>
-          <y>80</y>
+          <x>520</x>
+          <y>0</y>
           <width>681</width>
-          <height>211</height>
+          <height>451</height>
          </rect>
         </property>
         <property name="font">
          <font>
-          <pointsize>24</pointsize>
+          <pointsize>20</pointsize>
          </font>
         </property>
         <property name="layoutDirection">
@@ -2237,7 +2339,9 @@ This process is irreversible </string>
         <property name="text">
          <string>Current Location:
 
-Last updated:</string>
+Last updated:
+
+Latitude/Longitude:</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -2252,7 +2356,7 @@ Last updated:</string>
           <x>110</x>
           <y>90</y>
           <width>371</width>
-          <height>241</height>
+          <height>271</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -2275,7 +2379,7 @@ background: rgb(215, 215, 215); /*185 */
           <x>620</x>
           <y>90</y>
           <width>481</width>
-          <height>241</height>
+          <height>271</height>
          </rect>
         </property>
         <property name="styleSheet">

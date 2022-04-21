@@ -55,12 +55,19 @@ double maxTemp = 0,
         avgWindSpeed = 0,
         avgPressure = 0,
         avgTemp = 0,
-        updateTime = 0;
+        updateTime = 0,
+        lastTemp = -10000,
+        lastHum = -10000,
+        lastWindSpeed = -10000,
+        lastPressure = -10000,
+        lastAqi = -10000;
 QString windDirection;
 QString GPSlocation;
+QString CITYlocation;
+
 int digit = 1;
 int button = 100;
-bool check, Mcheck, Fcheck = 0;
+bool check = 0, Mcheck = 0, Fcheck = 0;
 QDate startDate = QDate::currentDate();
 QDate endDate = QDate::currentDate();
 
@@ -151,7 +158,7 @@ MainWindow::MainWindow(QWidget *parent)
    ui->DeleteFrame->setVisible(FALSE);
    ui->HTTPButton->setVisible(FALSE);
    ui->UpdateHomepage->setVisible(FALSE);
-   timerId = startTimer(11000);
+   timerId = startTimer(2000);
 
 }
 
@@ -270,14 +277,16 @@ void MainWindow::on_ChangeTemperature_sliderMoved(int position)
 void MainWindow::convertF()
 {
     int i = 0;
+    minTemp = ((minTemp*9)/5)+ 32;
+    maxTemp = ((maxTemp*9)/5)+ 32;
+    avgTemp = ((avgTemp*9)/5)+ 32;
+    lastTemp = ((lastTemp*9/5)+32);
     while(i < qv_y2.length())
     {
         qv_y2.replace(i, (((qv_y2.at(i)*9)/5) + 32));
         i++;
     }
-    minTemp = ((minTemp*9)/5)+ 32;
-    maxTemp = ((maxTemp*9)/5)+ 32;
-    avgTemp = ((avgTemp*9)/5)+ 32;
+
     ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
     ui->PlotTemperature->yAxis->setLabel("Temperature °F");
     plot();
@@ -290,14 +299,16 @@ void MainWindow::convertF()
 void MainWindow::convertC()
 {
     int i = 0;
+    minTemp = ((minTemp-32)*5)/9;
+    maxTemp = ((maxTemp-32)*5)/9;
+    avgTemp = ((avgTemp-32)*5)/9;
+    lastTemp = ((lastTemp-32)*5)/9;
     while(i < qv_y2.length())
     {
         qv_y2.replace(i, (((qv_y2.at(i)-32)*5)/9));
         i++;
     }
-    minTemp = ((minTemp-32)*5)/9;
-    maxTemp = ((maxTemp-32)*5)/9;
-    avgTemp = ((avgTemp-32)*5)/9;
+
     ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
     ui->PlotTemperature->yAxis->setLabel("Temperature °C");
     plot();
@@ -327,15 +338,18 @@ void MainWindow::on_ChangeWind_sliderMoved(int position)
 void MainWindow::convertMph()
 {
     int i = 0;
+    minWindSpeed = minWindSpeed/1.609;
+    maxWindSpeed = maxWindSpeed/1.609;
+    avgWindSpeed = avgWindSpeed/1.609;
+    lastWindSpeed = lastWindSpeed/1.609;
     while(i < qv_y4.length())
     {
         qv_y4.replace(i, (qv_y4.at(i)/1.609));
         i++;
     }
-    minWindSpeed = minWindSpeed/1.609;
-    maxWindSpeed = maxWindSpeed/1.609;
-    avgWindSpeed = minWindSpeed/1.609;
+
     ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5.0), (maxWindSpeed+5.0));
+    ui->PlotWindSpeedDirection->yAxis->setLabel("Wind Speed MPH");
     plot();
 }
 
@@ -346,15 +360,18 @@ void MainWindow::convertMph()
 void MainWindow::convertKph()
 {
     int i = 0;
+    minWindSpeed = minWindSpeed*1.609;
+    maxWindSpeed = maxWindSpeed*1.609;
+    avgWindSpeed = avgWindSpeed*1.609;
+    lastWindSpeed = lastWindSpeed*1.609;
     while(i < qv_y4.length())
     {
         qv_y4.replace(i, (qv_y4.at(i)*1.609));
         i++;
     }
-    minWindSpeed = minWindSpeed*1.609;
-    maxWindSpeed = maxWindSpeed*1.609;
-    avgWindSpeed = minWindSpeed*1.609;
+
     ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5.0), (maxWindSpeed+5.0));
+    ui->PlotWindSpeedDirection->yAxis->setLabel("Wind Speed KPH");
     plot();
 }
 
@@ -382,15 +399,18 @@ void MainWindow::on_ChangePressure_sliderMoved(int position)
 void MainWindow::convertMbars()
 {
     int i = 0;
+    minPressure = minPressure/100;
+    maxPressure = maxPressure/100;
+    avgPressure = avgPressure/100;
+    lastPressure = lastPressure/100;
     while(i < qv_y5.length())
     {
         qv_y5.replace(i, (qv_y5.at(i)/100));
         i++;
     }
-    minPressure = minPressure/100;
-    maxPressure = maxPressure/100;
-    avgPressure = minPressure/100;
+
     ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+    ui->PlotPressure->yAxis->setLabel("Pressure mbars");
     plot();
 }
 
@@ -401,15 +421,18 @@ void MainWindow::convertMbars()
 void MainWindow::convertPas()
 {
     int i = 0;
+    minPressure = minPressure*100;
+    maxPressure = maxPressure*100;
+    avgPressure = avgPressure*100;
+    lastPressure = lastPressure*100;
     while(i < qv_y5.length())
     {
         qv_y5.replace(i, (qv_y5.at(i)*100));
         i++;
     }
-    minPressure = minPressure*100;
-    maxPressure = maxPressure*100;
-    avgPressure = minPressure*100;
+
     ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+    ui->PlotPressure->yAxis->setLabel("Pressure Pa");
     plot();
 }
 
@@ -545,17 +568,18 @@ void MainWindow::on_HTTPButton_clicked()
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
 
-void MainWindow::on_MillibarsButton_toggled(bool checked)
+void MainWindow::on_PascalButton_toggled(bool checked)
 {
     check = checked;
     if(checked)
     {
-        convertMbars();
+        convertPas();
         //qDebug("converting to millibar");
     }
     else
     {
-        convertPas();
+
+        convertMbars();
         //qDebug("converting to pascal");
     }
 }
@@ -565,17 +589,17 @@ void MainWindow::on_MillibarsButton_toggled(bool checked)
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
 
-void MainWindow::on_MPHButton_toggled(bool Mchecked)
+void MainWindow::on_KPHButton_toggled(bool Mchecked)
 {
     Mcheck = Mchecked;
     if(Mchecked)
     {
-        convertMph();
+         convertKph();
          //qDebug("converting to mph");
     }
     else
     {
-        convertKph();
+        convertMph();
         //qDebug("converting to kph");
     }
 }
@@ -604,15 +628,15 @@ void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
 void MainWindow::updateHomepage()
 {
     //set the temp @ homescreen
-    QString temp;
+    QString temp = "0";
 
-    if(qv_y2.isEmpty())
+    if(lastTemp == -10000)
     {
         temp = "0";
     }
     else
     {
-        temp = QString::number(qv_y2.at(qv_y2.length()-1));
+        temp = QString::number(lastTemp);
     }
     if(ui->FarenheitButton->isChecked())
     {
@@ -627,7 +651,7 @@ void MainWindow::updateHomepage()
     QDateTime datetime = QDateTime::currentDateTime();
     //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
     //12 hour time
-    if(datetime.time().toString().leftRef(2).toInt() > 12)
+    if(datetime.time().toString().left(2).toInt() > 12)
     {
         ui->HomeTime->setText(QString::number(datetime.time().toString().left(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
     }
@@ -638,17 +662,17 @@ void MainWindow::updateHomepage()
     ui->HomeDate->setText(QLocale().toString(datetime.date(),QLocale::LongFormat));
 
     //update humidity
-    if(qv_y3.isEmpty())
+    if(lastHum == -10000)
     {
         ui->HomeHumidityVal->setText("0%");
     }
     else
     {
-        ui -> HomeHumidityVal->setText(QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
+        ui -> HomeHumidityVal->setText(QString::number(lastHum) + "%");
     }
 
     //update windspeed
-    if(qv_y4.isEmpty())
+    if(lastWindSpeed == -10000)
     {
         if(ui->MPHButton->isChecked())
         {
@@ -664,16 +688,16 @@ void MainWindow::updateHomepage()
     {
         if(ui->MPHButton->isChecked())
         {
-            ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+            ui -> HomeWindVal -> setText(QString::number(lastWindSpeed) + " MPH");
         }
         else
         {
-            ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+            ui -> HomeWindVal -> setText(QString::number(lastWindSpeed) + " KM/H");
         }
         ui->HomeWindDir->setText("Direction: " + windDirection);
     }
     //update pressure
-    if(qv_y5.isEmpty())
+    if(lastPressure == -10000)
     {
         if(ui->MillibarsButton->isChecked())
         {
@@ -688,23 +712,23 @@ void MainWindow::updateHomepage()
     {
         if(ui->MillibarsButton->isChecked())
         {
-            ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+            ui -> HomePressureVal -> setText(QString::number(lastPressure) + " mbars");
         }
         else
         {
-            ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+            ui -> HomePressureVal -> setText(QString::number(lastPressure) + " P");
         }
     }
 
     //update air quality
     int curAQ;
-    if(qv_y6.isEmpty())
+    if(lastAqi == -10000)
     {
         curAQ = 0;
     }
     else
     {
-        curAQ = qv_y6.at(qv_y6.length()-1);
+        curAQ = lastAqi;
     }
     if(curAQ > 301) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nHazardous"); }
     else if (curAQ > 201) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nVery Unhealthy"); }
@@ -719,15 +743,17 @@ void MainWindow::updateHomepage()
 void MainWindow::updateHumidity()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    if(qv_y3.isEmpty())
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    if(lastHum == -10000)
     {
         ui->HumidityVal->setText("Current Humidity: 0%");
     }
     else
     {
-        ui -> HumidityVal->setText("Current Humidity: \n" + QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
+        ui -> HumidityVal->setText("Current Humidity: \n" + QString::number(lastHum) + "%");
     }
-    ui -> HumidityUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> HumidityUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
     ui->HumidityStats->setText("24 hour average: " + QString::number(avgHum).left(QString::number(avgHum).indexOf(".")+3) + "%\nPast 24 hour high: " + QString::number(maxHum) + "%\nPast 24 hour low: " + QString::number(minHum) + "%");
 }
 
@@ -735,14 +761,16 @@ void MainWindow::updateHumidity()
 void MainWindow::updateTemperature()
 {
     QDateTime datetime = QDateTime::currentDateTime();
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
     QString temp;
-    if(qv_y2.isEmpty())
+    if(lastTemp == -10000)
     {
         temp = "0";
     }
     else
     {
-        temp = QString::number(qv_y2.at(qv_y2.length()-1));
+        temp = QString::number(lastTemp);
     }
     if(ui->FarenheitButton->isChecked())
     {
@@ -752,7 +780,7 @@ void MainWindow::updateTemperature()
     {
         ui->TemperatureVal->setText("Current Temperature: \n" + temp.left(temp.indexOf(".") + 3) + " °C");
     }
-    ui -> TemperatureUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> TemperatureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
 
     if(ui->FarenheitButton->isChecked())
     {
@@ -770,26 +798,39 @@ void MainWindow::updateTemperature()
 void MainWindow::updateWind()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    if(!qv_y4.isEmpty())
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    if(lastWindSpeed != -10000)
     {
         if(ui->MPHButton->isChecked())
         {
-            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(lastWindSpeed) + " MPH");
         }
         else
         {
-            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(lastWindSpeed) + " KM/H");
+        }
+    }
+    else
+    {
+        if(ui->MPHButton->isChecked())
+        {
+            ui -> WindVal -> setText("Current Wind Speed: \n0 MPH");
+        }
+        else
+        {
+            ui -> WindVal -> setText("Current Wind Speed: \n0 KM/H");
         }
     }
     ui -> WindDirection->setText("Current Wind Direction: "  + windDirection);
-    ui -> WindUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> WindUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
     if(ui->MPHButton->isChecked())
         {
-            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+3) + " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+5) + " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
         }
         else
         {
-            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+3) + " KM/H\nPast 24 hour high: " + QString::number(maxWindSpeed) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+5) + " KM/H\nPast 24 hour high: " + (QString::number(maxWindSpeed).left(QString::number(maxWindSpeed).indexOf(".")+5)) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
         }
 
 }
@@ -799,7 +840,9 @@ void MainWindow::updateWind()
 void MainWindow::updatePressure()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    if(qv_y5.isEmpty())
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    if(lastPressure == -10000)
     {
         if(ui->MillibarsButton->isChecked())
         {
@@ -814,22 +857,22 @@ void MainWindow::updatePressure()
     {
         if(ui->MillibarsButton->isChecked())
         {
-            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(lastPressure) + " mbars");
         }
         else
         {
-            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(lastPressure) + " P");
         }
     }
-    ui -> PressureUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> PressureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
 
     if(ui->MillibarsButton->isChecked())
     {
-        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+3) + " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
+        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+6) + " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
     }
     else
     {
-        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+3) + " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
+        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+8) + " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
     }
 
 }
@@ -838,14 +881,16 @@ void MainWindow::updatePressure()
 void MainWindow::updateAQ()
 {
     QDateTime datetime = QDateTime::currentDateTime();
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
     int curAQ;
-    if(qv_y6.isEmpty())
+    if(lastAqi == -10000)
     {
         curAQ = 0;
     }
     else
     {
-        curAQ = qv_y6.at(qv_y6.length()-1);
+        curAQ = lastAqi;
     }
     if(curAQ > 301)
     {
@@ -877,8 +922,8 @@ void MainWindow::updateAQ()
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Good");
     }
-    ui -> AQUpdated -> setText("Last updated: " + datetime.toString());
-     ui->AQStats->setText("24 hour average: " + QString::number(avgAqi).left(QString::number(avgAqi).indexOf(".")+3) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
+    ui -> AQUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui->AQStats->setText("24 hour average: " + QString::number(avgAqi).left(QString::number(avgAqi).indexOf(".")+3) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
 }
 
 void MainWindow::updateGPS()
@@ -887,7 +932,7 @@ void MainWindow::updateGPS()
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(updateTime);
     if(updateTime != 0)
     {
-        ui -> GPS_Val -> setText("Current Location: \nNear " + GPSlocation + "\n" + "Last Updated:\n" + lastUpdatedDate.toString("MM/dd/yyyy h:mm ap"));
+        ui -> GPS_Val -> setText("Current Location: \nNear " + CITYlocation + "\n" + "Last Updated:\n" + lastUpdatedDate.toString("MM/dd/yyyy h:mm ap") + "\nLatitude/Longitude:\n" + GPSlocation);
     }
 }
 
@@ -896,13 +941,13 @@ void MainWindow::updateGPS()
 void MainWindow::setTempBG()
 {
     double tempVal;
-    if(qv_y2.isEmpty())
+    if(lastTemp == -10000)
     {
         tempVal = 0;
     }
     else
     {
-        tempVal = (qv_y2.at(qv_y2.length()-1));
+        tempVal = lastTemp;
     }
     if(!ui->FarenheitButton->isChecked()) { tempVal = (tempVal *9/5) + 32;} //if temp is in celcius convert it to farenheight for temp color
     if(tempVal > 100)
@@ -947,13 +992,13 @@ void MainWindow::setTempBG()
 void MainWindow::setHumidityBG()
 {
     int humidVal;
-    if(qv_y3.isEmpty())
+    if(lastHum == -10000)
     {
         humidVal = 0;
     }
     else
     {
-        humidVal = (qv_y3.at(qv_y3.length()-1));
+        humidVal = lastHum;
     }
     if(humidVal < 10)
     {
@@ -996,10 +1041,14 @@ void MainWindow::setHumidityBG()
 //sets the background color based off wind
 void MainWindow::setWindBG()
 {
-    double windVal = 0;
-    if(!qv_y4.isEmpty())
+    double windVal;
+    if(lastWindSpeed != -10000)
     {
-        windVal = (qv_y4.at(qv_y4.length()-1));;
+        windVal = lastWindSpeed;
+    }
+    else
+    {
+        windVal = 0;
     }
     if(!(ui->MPHButton->isChecked()))
     {
@@ -1056,10 +1105,14 @@ void MainWindow::setWindBG()
 //sets the background color based off pressure
 void MainWindow::setPressureBG()
 {
-    double pressureVal = 0;
-    if(!qv_y5.isEmpty())
+    double pressureVal;
+    if(lastPressure != -10000)
     {
-        pressureVal = (qv_y5.at(qv_y5.length()-1));
+        pressureVal = lastPressure;
+    }
+    else
+    {
+        pressureVal = 0;
     }
     if(!ui->MillibarsButton->isChecked())
     {
@@ -1096,13 +1149,13 @@ void MainWindow::setPressureBG()
 void MainWindow::setAQBG()
 {
     int curAQ;
-    if(qv_y6.isEmpty())
+    if(lastAqi == -10000)
     {
         curAQ = 0;
     }
     else
     {
-        curAQ = qv_y6.at(qv_y6.length()-1);
+        curAQ = lastAqi;
     }
     if(curAQ > 301)
     {
@@ -1284,25 +1337,7 @@ void MainWindow::getHttp(QString http)
                 addPoint(data["timestamp"].toDouble(), data["aqi"].toDouble(), qv_x6, qv_y6);
 
                 windDirection = data["winddirection"].toString();
-                if(data["temperature"].toDouble() > maxTemp) {
-                    maxTemp = data["temperature"].toDouble();
-                }else if(data["temperature"].toDouble() < minTemp) {
-                    minTemp = data["temperature"].toDouble();
-                }else if(data["humidity"].toDouble() > maxHum) {
-                    maxHum = data["humidity"].toDouble();
-                }else if(data["humidity"].toDouble() < minHum) {
-                    minHum = data["humidity"].toDouble();
-                }else if(data["windspeed"].toDouble() > maxWindSpeed) {
-                    maxWindSpeed = data["windspeed"].toDouble();
-                }else if(data["windspeed"].toDouble() < minWindSpeed) {
-                    minWindSpeed = data["windspeed"].toDouble();
-                }else if(data["pressure"].toDouble() > maxPressure) {
-                    maxPressure = data["pressure"].toDouble();
-                }else if(data["aqi"].toDouble() > maxAqi) {
-                    maxAqi = data["aqi"].toDouble();
-                }else if(data["aqi"].toDouble() < minAqi) {
-                    minAqi = data["aqi"].toDouble();
-                }else if(data["timestamp"].toDouble() > maxTimestamp) {
+                if(data["timestamp"].toDouble() > maxTimestamp) {
                     maxTimestamp = data["timestamp"].toDouble();
                 }
                 /*lastAQI = data["aqi"].toDouble();
@@ -1313,7 +1348,11 @@ void MainWindow::getHttp(QString http)
 
             }
             reply->deleteLater();
-
+            lastTemp = qv_y2.at(qv_y2.length()-1);
+            lastHum = qv_y3.at(qv_y3.length()-1);
+            lastWindSpeed = qv_y4.at(qv_y4.length()-1);
+            lastPressure = qv_y5.at(qv_y5.length()-1);
+            lastAqi = qv_y6.at(qv_y6.length()-1);
             //ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
             ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -1678,26 +1717,46 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
 
             if(sensor == "temperature")
             {
+                if(!qv_y2.isEmpty())
+                {
+                lastTemp = qv_y2.at(qv_y2.length()-1);
+                }
                 ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
                 ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "humidity")
             {
+                if(!qv_y3.isEmpty())
+                {
+                lastHum = qv_y3.at(qv_y3.length()-1);
+                }
                 ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
                 ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "windspeed")
             {
+                    if(!qv_y4.isEmpty())
+                    {
+                lastWindSpeed = qv_y4.at(qv_y4.length()-1);
+                    }
                 ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
                 ui->PlotWindSpeedDirection->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "pressure")
             {
+                        if(!qv_y5.isEmpty())
+                        {
+                lastPressure = qv_y5.at(qv_y5.length()-1);
+                        }
                 ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
                 ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "aqi")
             {
+                            if(!qv_y6.isEmpty())
+                            {
+                lastAqi = qv_y6.at(qv_y6.length()-1);
+                            }
                 ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
                 ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
             }
@@ -1767,6 +1826,7 @@ void MainWindow::multHttp(QString sensor)
                     else if(sensor == "windspeed")
                     {
                         addPoint(data["timestamp"].toDouble(), data[sensor].toDouble(), qv_x4, qv_y4);
+                        windDirection = data["winddirection"].toString();
                     }
                     else if(sensor == "pressure")
                     {
@@ -1787,30 +1847,50 @@ void MainWindow::multHttp(QString sensor)
                 reply->deleteLater();
                 if(sensor == "temperature")
                 {
+                    if(!qv_y2.isEmpty())
+                    {
+                    lastTemp = qv_y2.at(qv_y2.length()-1);
+                    }
                     ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
 
                     ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "humidity")
                 {
+                        if(!qv_y3.isEmpty())
+                        {
+                    lastHum = qv_y3.at(qv_y3.length()-1);
+                        }
                     ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
 
                     ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "windspeed")
                 {
+                        if(!qv_y4.isEmpty())
+                        {
+                    lastWindSpeed = qv_y4.at(qv_y4.length()-1);
+                        }
                     ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
 
                     ui->PlotWindSpeedDirection->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "pressure")
                 {
+                            if(!qv_y5.isEmpty())
+                            {
+                    lastPressure = qv_y5.at(qv_y5.length()-1);
+                            }
                     ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
 
                     ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "aqi")
                 {
+                                if(!qv_y6.isEmpty())
+                                {
+                    lastAqi = qv_y6.at(qv_y6.length()-1);
+                                }
                     ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
 
                     ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -1844,6 +1924,11 @@ void MainWindow::timerEvent(QTimerEvent *event)
     refreshCurrentTab();
     if(startDate == QDate::currentDate())
     {
+        getMinMaxAvg("humidity", getDate(QDate::currentDate()));
+        getMinMaxAvg("temperature", getDate(QDate::currentDate()));
+        getMinMaxAvg("windspeed", getDate(QDate::currentDate()));
+        getMinMaxAvg("pressure", getDate(QDate::currentDate()));
+        getMinMaxAvg("aqi", getDate(QDate::currentDate()));
         getHttp();
     }
 }
@@ -1988,8 +2073,9 @@ void MainWindow::getGPSLocation()
                 data = record->toObject();
                 if(!data["location"].isNull() && updateTime != data["lastupdated"].toDouble())
                 {
-                GPSlocation = data["location"].toString();
+                CITYlocation = data["city"].toString();
                 updateTime = data["lastupdated"].toDouble();
+                GPSlocation = data["location"].toString();
                 }
             }
 
@@ -2036,4 +2122,5 @@ void MainWindow::on_AQDebug_clicked()
     addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x6, qv_y6);
     plot();
 }
+
 

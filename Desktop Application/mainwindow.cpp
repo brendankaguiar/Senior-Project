@@ -2082,46 +2082,6 @@ void MainWindow::getGPSLocation()
     qnam->get(request);
 }
 
-void MainWindow::on_TempDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x2, qv_y2);
-    plot();
-}
-
-
-void MainWindow::on_HumidityDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x3, qv_y3);
-    plot();
-}
-
-
-void MainWindow::on_WindDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x4, qv_y4);
-    plot();
-}
-
-
-void MainWindow::on_PressureDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x5, qv_y5);
-    plot();
-}
-
-
-void MainWindow::on_AQDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x6, qv_y6);
-    plot();
-}
-
-
 
 void MainWindow::on_MillibarsButton_toggled(bool checked)
 {

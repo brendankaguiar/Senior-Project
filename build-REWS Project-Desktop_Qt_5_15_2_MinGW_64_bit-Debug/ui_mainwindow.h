@@ -18,7 +18,6 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
@@ -132,14 +131,6 @@ public:
     QPushButton *AboutButton;
     QFrame *AboutFrame;
     QLabel *AboutDetails;
-    QPushButton *AboutClose;
-    QPlainTextEdit *DebugBox;
-    QPushButton *TempDebug;
-    QPushButton *HumidityDebug;
-    QPushButton *WindDebug;
-    QPushButton *PressureDebug;
-    QPushButton *AQDebug;
-    QLabel *label;
     QFrame *DeleteFrame;
     QLabel *DeleteText;
     QPushButton *DeleteConfirm;
@@ -967,11 +958,12 @@ public:
 "}"));
         AboutFrame = new QFrame(Settings);
         AboutFrame->setObjectName(QString::fromUtf8("AboutFrame"));
-        AboutFrame->setGeometry(QRect(560, 80, 601, 371));
+        AboutFrame->setGeometry(QRect(560, 90, 601, 371));
         AboutFrame->setAutoFillBackground(false);
-        AboutFrame->setStyleSheet(QString::fromUtf8("QFrame{\n"
-"	background: rgb(236,235,242);\n"
-"	border: 1px solid black;\n"
+        AboutFrame->setStyleSheet(QString::fromUtf8("QFrame#AboutFrame{\n"
+"border: 2px solid black;\n"
+"border-radius:20px;\n"
+"background: rgb(215, 215, 215); /*185 */\n"
 "}"));
         AboutFrame->setFrameShape(QFrame::StyledPanel);
         AboutFrame->setFrameShadow(QFrame::Raised);
@@ -982,37 +974,14 @@ public:
 "	border: 0px;\n"
 "}"));
         AboutDetails->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
-        AboutClose = new QPushButton(AboutFrame);
-        AboutClose->setObjectName(QString::fromUtf8("AboutClose"));
-        AboutClose->setGeometry(QRect(270, 330, 80, 24));
-        DebugBox = new QPlainTextEdit(AboutFrame);
-        DebugBox->setObjectName(QString::fromUtf8("DebugBox"));
-        DebugBox->setGeometry(QRect(260, 190, 101, 70));
-        TempDebug = new QPushButton(AboutFrame);
-        TempDebug->setObjectName(QString::fromUtf8("TempDebug"));
-        TempDebug->setGeometry(QRect(50, 280, 80, 24));
-        HumidityDebug = new QPushButton(AboutFrame);
-        HumidityDebug->setObjectName(QString::fromUtf8("HumidityDebug"));
-        HumidityDebug->setGeometry(QRect(160, 280, 80, 24));
-        WindDebug = new QPushButton(AboutFrame);
-        WindDebug->setObjectName(QString::fromUtf8("WindDebug"));
-        WindDebug->setGeometry(QRect(270, 280, 80, 24));
-        PressureDebug = new QPushButton(AboutFrame);
-        PressureDebug->setObjectName(QString::fromUtf8("PressureDebug"));
-        PressureDebug->setGeometry(QRect(380, 280, 80, 24));
-        AQDebug = new QPushButton(AboutFrame);
-        AQDebug->setObjectName(QString::fromUtf8("AQDebug"));
-        AQDebug->setGeometry(QRect(490, 280, 80, 24));
-        label = new QLabel(AboutFrame);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(260, 170, 101, 20));
         DeleteFrame = new QFrame(Settings);
         DeleteFrame->setObjectName(QString::fromUtf8("DeleteFrame"));
-        DeleteFrame->setGeometry(QRect(560, 80, 601, 371));
+        DeleteFrame->setGeometry(QRect(560, 90, 601, 371));
         DeleteFrame->setAutoFillBackground(false);
-        DeleteFrame->setStyleSheet(QString::fromUtf8("QFrame{\n"
-"	background: rgb(236,235,242);\n"
-"	border: 1px solid black;\n"
+        DeleteFrame->setStyleSheet(QString::fromUtf8("QFrame#DeleteFrame{\n"
+"border: 2px solid black;\n"
+"border-radius:20px;\n"
+"background: rgb(215, 215, 215); /*185 */\n"
 "}"));
         DeleteFrame->setFrameShape(QFrame::StyledPanel);
         DeleteFrame->setFrameShadow(QFrame::Raised);
@@ -1152,13 +1121,13 @@ public:
         GPS_Val->setScaledContents(false);
         GPS_Val->setAlignment(Qt::AlignCenter);
         tabWidget->addTab(Settings, QString());
+        frame_9->raise();
         frame_8->raise();
         DeleteFrame->raise();
         AboutFrame->raise();
         DeleteAll->raise();
         DownloadAll->raise();
         AboutButton->raise();
-        frame_9->raise();
 
         gridLayout_2->addWidget(tabWidget, 1, 0, 1, 1);
 
@@ -1244,16 +1213,15 @@ public:
         DeleteAll->setText(QCoreApplication::translate("MainWindow", "DELETE ALL DATA", nullptr));
         DownloadAll->setText(QCoreApplication::translate("MainWindow", "Download all data", nullptr));
         AboutButton->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
-        AboutDetails->setText(QCoreApplication::translate("MainWindow", "Cool about page\n"
-"We made this thing", nullptr));
-        AboutClose->setText(QCoreApplication::translate("MainWindow", "Close About", nullptr));
-        DebugBox->setPlainText(QCoreApplication::translate("MainWindow", "0", nullptr));
-        TempDebug->setText(QCoreApplication::translate("MainWindow", "Update Temp", nullptr));
-        HumidityDebug->setText(QCoreApplication::translate("MainWindow", "Update Humid", nullptr));
-        WindDebug->setText(QCoreApplication::translate("MainWindow", "Update Wind", nullptr));
-        PressureDebug->setText(QCoreApplication::translate("MainWindow", "Update Pressure", nullptr));
-        AQDebug->setText(QCoreApplication::translate("MainWindow", "Update AQ", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Enter Value", nullptr));
+        AboutDetails->setText(QCoreApplication::translate("MainWindow", "This is a CS 426 Senior Project Spring 2022 at the University of Nevada, Reno CSE Department\n"
+"\n"
+"Team 29: Brendan Aguiar, Nicholas Ang, Daniel Beeston, \n"
+"Dalton Tracy, and Kenji Won\n"
+"\n"
+"Instructors: David Feil-Seifer and Devrin Lee\n"
+"\n"
+"External Advisors: Dr. Keith Lancaster, Dr. Patrick Arnott\n"
+"", nullptr));
         DeleteText->setText(QCoreApplication::translate("MainWindow", "Are you sure you wish to delete all data?\n"
 "This process is irreversible ", nullptr));
         DeleteConfirm->setText(QCoreApplication::translate("MainWindow", "Yes, Delete All Data Permanently", nullptr));

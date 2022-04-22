@@ -305,12 +305,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 43: _t->on_FirstDate_5_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
         case 44: _t->on_SecondDate_5_userDateChanged((*reinterpret_cast< const QDate(*)>(_a[1]))); break;
         case 45: _t->getGPSLocation(); break;
-        case 46: _t->on_TempDebug_clicked(); break;
-        case 47: _t->on_HumidityDebug_clicked(); break;
-        case 48: _t->on_WindDebug_clicked(); break;
-        case 49: _t->on_PressureDebug_clicked(); break;
-        case 50: _t->on_AQDebug_clicked(); break;
-        case 51: _t->on_MillibarsButton_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 46: _t->on_MillibarsButton_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
     }

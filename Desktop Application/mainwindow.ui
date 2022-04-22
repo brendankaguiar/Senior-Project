@@ -110,7 +110,7 @@ QTabWidget::tab-bar{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Homepage">
        <property name="styleSheet">
@@ -119,19 +119,6 @@ QTabWidget::tab-bar{
        <attribute name="title">
         <string>Homepage</string>
        </attribute>
-       <widget class="QPushButton" name="HTTPButton">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>500</y>
-          <width>201</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Start (now automatic on startup)</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="HomeTemp">
         <property name="geometry">
          <rect>
@@ -316,19 +303,6 @@ Excellent</string>
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QPushButton" name="UpdateHomepage">
-        <property name="geometry">
-         <rect>
-          <x>290</x>
-          <y>500</y>
-          <width>221</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Update Homepage (temp debugging)</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="HomeWindDir">
         <property name="geometry">
          <rect>
@@ -503,7 +477,6 @@ background: rgb(215, 215, 215); /*185 */
        <zorder>frame_5</zorder>
        <zorder>frame_4</zorder>
        <zorder>frame_3</zorder>
-       <zorder>HTTPButton</zorder>
        <zorder>HomeTemp</zorder>
        <zorder>HomePressure</zorder>
        <zorder>HomeHumidity</zorder>
@@ -514,7 +487,6 @@ background: rgb(215, 215, 215); /*185 */
        <zorder>HomeWindVal</zorder>
        <zorder>HomePressureVal</zorder>
        <zorder>HomeAQVal</zorder>
-       <zorder>UpdateHomepage</zorder>
        <zorder>HomeWindDir</zorder>
        <zorder>HomeHumidity_2</zorder>
        <zorder>HomeTime</zorder>

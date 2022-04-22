@@ -36,7 +36,6 @@ public:
     QGridLayout *gridLayout_2;
     QTabWidget *tabWidget;
     QWidget *Homepage;
-    QPushButton *HTTPButton;
     QLabel *HomeTemp;
     QLabel *HomePressure;
     QLabel *HomeHumidity;
@@ -47,7 +46,6 @@ public:
     QLabel *HomeWindVal;
     QLabel *HomePressureVal;
     QLabel *HomeAQVal;
-    QPushButton *UpdateHomepage;
     QLabel *HomeWindDir;
     QLabel *HomeHumidity_2;
     QFrame *frame_3;
@@ -260,9 +258,6 @@ public:
         Homepage = new QWidget();
         Homepage->setObjectName(QString::fromUtf8("Homepage"));
         Homepage->setStyleSheet(QString::fromUtf8(""));
-        HTTPButton = new QPushButton(Homepage);
-        HTTPButton->setObjectName(QString::fromUtf8("HTTPButton"));
-        HTTPButton->setGeometry(QRect(30, 500, 201, 21));
         HomeTemp = new QLabel(Homepage);
         HomeTemp->setObjectName(QString::fromUtf8("HomeTemp"));
         HomeTemp->setGeometry(QRect(180, 95, 531, 251));
@@ -310,9 +305,6 @@ public:
         HomeAQVal->setGeometry(QRect(910, 425, 251, 111));
         HomeAQVal->setFont(font1);
         HomeAQVal->setAlignment(Qt::AlignCenter);
-        UpdateHomepage = new QPushButton(Homepage);
-        UpdateHomepage->setObjectName(QString::fromUtf8("UpdateHomepage"));
-        UpdateHomepage->setGeometry(QRect(290, 500, 221, 24));
         HomeWindDir = new QLabel(Homepage);
         HomeWindDir->setObjectName(QString::fromUtf8("HomeWindDir"));
         HomeWindDir->setGeometry(QRect(870, 195, 351, 81));
@@ -383,7 +375,6 @@ public:
         frame_5->raise();
         frame_4->raise();
         frame_3->raise();
-        HTTPButton->raise();
         HomeTemp->raise();
         HomePressure->raise();
         HomeHumidity->raise();
@@ -394,7 +385,6 @@ public:
         HomeWindVal->raise();
         HomePressureVal->raise();
         HomeAQVal->raise();
-        UpdateHomepage->raise();
         HomeWindDir->raise();
         HomeHumidity_2->raise();
         HomeTime->raise();
@@ -1179,7 +1169,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1188,7 +1178,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "REWS Desktop Visualizer", nullptr));
-        HTTPButton->setText(QCoreApplication::translate("MainWindow", "Start (now automatic on startup)", nullptr));
         HomeTemp->setText(QCoreApplication::translate("MainWindow", "18 \302\260C", nullptr));
         HomePressure->setText(QCoreApplication::translate("MainWindow", "Pressure", nullptr));
         HomeHumidity->setText(QCoreApplication::translate("MainWindow", "Humidity", nullptr));
@@ -1200,7 +1189,6 @@ public:
         HomePressureVal->setText(QCoreApplication::translate("MainWindow", "1000 mbar", nullptr));
         HomeAQVal->setText(QCoreApplication::translate("MainWindow", "18\n"
 "Excellent", nullptr));
-        UpdateHomepage->setText(QCoreApplication::translate("MainWindow", "Update Homepage (temp debugging)", nullptr));
         HomeWindDir->setText(QCoreApplication::translate("MainWindow", "Direction: ", nullptr));
         HomeHumidity_2->setText(QCoreApplication::translate("MainWindow", "Temperature", nullptr));
         HomeTime->setText(QCoreApplication::translate("MainWindow", "00:00 AM", nullptr));

@@ -156,8 +156,6 @@ MainWindow::MainWindow(QWidget *parent)
 
    ui->AboutFrame->setVisible(FALSE);
    ui->DeleteFrame->setVisible(FALSE);
-   ui->HTTPButton->setVisible(FALSE);
-   ui->UpdateHomepage->setVisible(FALSE);
    timerId = startTimer(2000);
 
 }

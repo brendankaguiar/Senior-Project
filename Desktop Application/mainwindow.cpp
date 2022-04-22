@@ -55,12 +55,19 @@ double maxTemp = 0,
         avgWindSpeed = 0,
         avgPressure = 0,
         avgTemp = 0,
-        updateTime = 0;
+        updateTime = 0,
+        lastTemp = -10000,
+        lastHum = -10000,
+        lastWindSpeed = -10000,
+        lastPressure = -10000,
+        lastAqi = -10000;
 QString windDirection;
 QString GPSlocation;
+QString CITYlocation;
+
 int digit = 1;
 int button = 100;
-bool check, Mcheck, Fcheck = 0;
+bool check = 0, Mcheck = 0, Fcheck = 0;
 QDate startDate = QDate::currentDate();
 QDate endDate = QDate::currentDate();
 
@@ -82,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
    ui->PlotWindSpeedDirection->addGraph();
    ui->PlotPressure->addGraph();
    ui->PlotAirQuality->addGraph();
-
+   ui->statusbar->hide();
    QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
    ui->PlotTemperature->xAxis->setTicker(dateTimeTicker);
    dateTimeTicker->setDateTimeFormat("M/d/yyyy\nh:mm AP");
@@ -149,9 +156,7 @@ MainWindow::MainWindow(QWidget *parent)
 
    ui->AboutFrame->setVisible(FALSE);
    ui->DeleteFrame->setVisible(FALSE);
-   ui->HTTPButton->setVisible(FALSE);
-   ui->UpdateHomepage->setVisible(FALSE);
-   timerId = startTimer(11000);
+   timerId = startTimer(2000);
 
 }
 
@@ -270,14 +275,16 @@ void MainWindow::on_ChangeTemperature_sliderMoved(int position)
 void MainWindow::convertF()
 {
     int i = 0;
+    minTemp = ((minTemp*9)/5)+ 32;
+    maxTemp = ((maxTemp*9)/5)+ 32;
+    avgTemp = ((avgTemp*9)/5)+ 32;
+    lastTemp = ((lastTemp*9/5)+32);
     while(i < qv_y2.length())
     {
         qv_y2.replace(i, (((qv_y2.at(i)*9)/5) + 32));
         i++;
     }
-    minTemp = ((minTemp*9)/5)+ 32;
-    maxTemp = ((maxTemp*9)/5)+ 32;
-    avgTemp = ((avgTemp*9)/5)+ 32;
+
     ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
     ui->PlotTemperature->yAxis->setLabel("Temperature °F");
     plot();
@@ -290,14 +297,16 @@ void MainWindow::convertF()
 void MainWindow::convertC()
 {
     int i = 0;
+    minTemp = ((minTemp-32)*5)/9;
+    maxTemp = ((maxTemp-32)*5)/9;
+    avgTemp = ((avgTemp-32)*5)/9;
+    lastTemp = ((lastTemp-32)*5)/9;
     while(i < qv_y2.length())
     {
         qv_y2.replace(i, (((qv_y2.at(i)-32)*5)/9));
         i++;
     }
-    minTemp = ((minTemp-32)*5)/9;
-    maxTemp = ((maxTemp-32)*5)/9;
-    avgTemp = ((avgTemp-32)*5)/9;
+
     ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
     ui->PlotTemperature->yAxis->setLabel("Temperature °C");
     plot();
@@ -327,15 +336,18 @@ void MainWindow::on_ChangeWind_sliderMoved(int position)
 void MainWindow::convertMph()
 {
     int i = 0;
+    minWindSpeed = minWindSpeed/1.609;
+    maxWindSpeed = maxWindSpeed/1.609;
+    avgWindSpeed = avgWindSpeed/1.609;
+    lastWindSpeed = lastWindSpeed/1.609;
     while(i < qv_y4.length())
     {
         qv_y4.replace(i, (qv_y4.at(i)/1.609));
         i++;
     }
-    minWindSpeed = minWindSpeed/1.609;
-    maxWindSpeed = maxWindSpeed/1.609;
-    avgWindSpeed = minWindSpeed/1.609;
+
     ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5.0), (maxWindSpeed+5.0));
+    ui->PlotWindSpeedDirection->yAxis->setLabel("Wind Speed MPH");
     plot();
 }
 
@@ -346,15 +358,18 @@ void MainWindow::convertMph()
 void MainWindow::convertKph()
 {
     int i = 0;
+    minWindSpeed = minWindSpeed*1.609;
+    maxWindSpeed = maxWindSpeed*1.609;
+    avgWindSpeed = avgWindSpeed*1.609;
+    lastWindSpeed = lastWindSpeed*1.609;
     while(i < qv_y4.length())
     {
         qv_y4.replace(i, (qv_y4.at(i)*1.609));
         i++;
     }
-    minWindSpeed = minWindSpeed*1.609;
-    maxWindSpeed = maxWindSpeed*1.609;
-    avgWindSpeed = minWindSpeed*1.609;
+
     ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5.0), (maxWindSpeed+5.0));
+    ui->PlotWindSpeedDirection->yAxis->setLabel("Wind Speed KPH");
     plot();
 }
 
@@ -382,15 +397,18 @@ void MainWindow::on_ChangePressure_sliderMoved(int position)
 void MainWindow::convertMbars()
 {
     int i = 0;
+    minPressure = minPressure/100;
+    maxPressure = maxPressure/100;
+    avgPressure = avgPressure/100;
+    lastPressure = lastPressure/100;
     while(i < qv_y5.length())
     {
         qv_y5.replace(i, (qv_y5.at(i)/100));
         i++;
     }
-    minPressure = minPressure/100;
-    maxPressure = maxPressure/100;
-    avgPressure = minPressure/100;
+
     ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+    ui->PlotPressure->yAxis->setLabel("Pressure mbars");
     plot();
 }
 
@@ -401,15 +419,18 @@ void MainWindow::convertMbars()
 void MainWindow::convertPas()
 {
     int i = 0;
+    minPressure = minPressure*100;
+    maxPressure = maxPressure*100;
+    avgPressure = avgPressure*100;
+    lastPressure = lastPressure*100;
     while(i < qv_y5.length())
     {
         qv_y5.replace(i, (qv_y5.at(i)*100));
         i++;
     }
-    minPressure = minPressure*100;
-    maxPressure = maxPressure*100;
-    avgPressure = minPressure*100;
+
     ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+    ui->PlotPressure->yAxis->setLabel("Pressure Pa");
     plot();
 }
 
@@ -545,17 +566,18 @@ void MainWindow::on_HTTPButton_clicked()
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
 
-void MainWindow::on_MillibarsButton_toggled(bool checked)
+void MainWindow::on_PascalButton_toggled(bool checked)
 {
     check = checked;
     if(checked)
     {
-        convertMbars();
+        convertPas();
         //qDebug("converting to millibar");
     }
     else
     {
-        convertPas();
+
+        convertMbars();
         //qDebug("converting to pascal");
     }
 }
@@ -565,17 +587,17 @@ void MainWindow::on_MillibarsButton_toggled(bool checked)
 /// Dependencies: QtWidgets
 ///////////////////////////////////////////////////////////////
 
-void MainWindow::on_MPHButton_toggled(bool Mchecked)
+void MainWindow::on_KPHButton_toggled(bool Mchecked)
 {
     Mcheck = Mchecked;
     if(Mchecked)
     {
-        convertMph();
+         convertKph();
          //qDebug("converting to mph");
     }
     else
     {
-        convertKph();
+        convertMph();
         //qDebug("converting to kph");
     }
 }
@@ -604,15 +626,15 @@ void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
 void MainWindow::updateHomepage()
 {
     //set the temp @ homescreen
-    QString temp;
+    QString temp = "0";
 
-    if(qv_y2.isEmpty())
+    if(lastTemp == -10000)
     {
         temp = "0";
     }
     else
     {
-        temp = QString::number(qv_y2.at(qv_y2.length()-1));
+        temp = QString::number(lastTemp);
     }
     if(ui->FarenheitButton->isChecked())
     {
@@ -627,7 +649,7 @@ void MainWindow::updateHomepage()
     QDateTime datetime = QDateTime::currentDateTime();
     //ui->HomeTime->setText(datetime.time().toString()); //24 hour time
     //12 hour time
-    if(datetime.time().toString().leftRef(2).toInt() > 12)
+    if(datetime.time().toString().left(2).toInt() > 12)
     {
         ui->HomeTime->setText(QString::number(datetime.time().toString().left(2).toInt()-12) + datetime.time().toString().mid(2,3) + " PM");
     }
@@ -638,17 +660,17 @@ void MainWindow::updateHomepage()
     ui->HomeDate->setText(QLocale().toString(datetime.date(),QLocale::LongFormat));
 
     //update humidity
-    if(qv_y3.isEmpty())
+    if(lastHum == -10000)
     {
         ui->HomeHumidityVal->setText("0%");
     }
     else
     {
-        ui -> HomeHumidityVal->setText(QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
+        ui -> HomeHumidityVal->setText(QString::number(lastHum) + "%");
     }
 
     //update windspeed
-    if(qv_y4.isEmpty())
+    if(lastWindSpeed == -10000)
     {
         if(ui->MPHButton->isChecked())
         {
@@ -664,16 +686,16 @@ void MainWindow::updateHomepage()
     {
         if(ui->MPHButton->isChecked())
         {
-            ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+            ui -> HomeWindVal -> setText(QString::number(lastWindSpeed) + " MPH");
         }
         else
         {
-            ui -> HomeWindVal -> setText(QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+            ui -> HomeWindVal -> setText(QString::number(lastWindSpeed) + " KM/H");
         }
         ui->HomeWindDir->setText("Direction: " + windDirection);
     }
     //update pressure
-    if(qv_y5.isEmpty())
+    if(lastPressure == -10000)
     {
         if(ui->MillibarsButton->isChecked())
         {
@@ -688,23 +710,23 @@ void MainWindow::updateHomepage()
     {
         if(ui->MillibarsButton->isChecked())
         {
-            ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+            ui -> HomePressureVal -> setText(QString::number(lastPressure) + " mbars");
         }
         else
         {
-            ui -> HomePressureVal -> setText(QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+            ui -> HomePressureVal -> setText(QString::number(lastPressure) + " P");
         }
     }
 
     //update air quality
     int curAQ;
-    if(qv_y6.isEmpty())
+    if(lastAqi == -10000)
     {
         curAQ = 0;
     }
     else
     {
-        curAQ = qv_y6.at(qv_y6.length()-1);
+        curAQ = lastAqi;
     }
     if(curAQ > 301) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nHazardous"); }
     else if (curAQ > 201) { ui -> HomeAQVal -> setText(QString::number(curAQ) + "\nVery Unhealthy"); }
@@ -719,15 +741,17 @@ void MainWindow::updateHomepage()
 void MainWindow::updateHumidity()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    if(qv_y3.isEmpty())
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    if(lastHum == -10000)
     {
         ui->HumidityVal->setText("Current Humidity: 0%");
     }
     else
     {
-        ui -> HumidityVal->setText("Current Humidity: \n" + QString::number(qv_y3.at(qv_y3.length()-1)) + "%");
+        ui -> HumidityVal->setText("Current Humidity: \n" + QString::number(lastHum) + "%");
     }
-    ui -> HumidityUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> HumidityUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
     ui->HumidityStats->setText("24 hour average: " + QString::number(avgHum).left(QString::number(avgHum).indexOf(".")+3) + "%\nPast 24 hour high: " + QString::number(maxHum) + "%\nPast 24 hour low: " + QString::number(minHum) + "%");
 }
 
@@ -735,14 +759,16 @@ void MainWindow::updateHumidity()
 void MainWindow::updateTemperature()
 {
     QDateTime datetime = QDateTime::currentDateTime();
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
     QString temp;
-    if(qv_y2.isEmpty())
+    if(lastTemp == -10000)
     {
         temp = "0";
     }
     else
     {
-        temp = QString::number(qv_y2.at(qv_y2.length()-1));
+        temp = QString::number(lastTemp);
     }
     if(ui->FarenheitButton->isChecked())
     {
@@ -752,7 +778,7 @@ void MainWindow::updateTemperature()
     {
         ui->TemperatureVal->setText("Current Temperature: \n" + temp.left(temp.indexOf(".") + 3) + " °C");
     }
-    ui -> TemperatureUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> TemperatureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
 
     if(ui->FarenheitButton->isChecked())
     {
@@ -770,26 +796,39 @@ void MainWindow::updateTemperature()
 void MainWindow::updateWind()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    if(!qv_y4.isEmpty())
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    if(lastWindSpeed != -10000)
     {
         if(ui->MPHButton->isChecked())
         {
-            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(qv_y4.at(qv_y4.length()-1)) + " MPH");
+            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(lastWindSpeed) + " MPH");
         }
         else
         {
-            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(qv_y4.at(qv_y4.length()-1)) + " KM/H");
+            ui -> WindVal -> setText("Current Wind Speed: \n" + QString::number(lastWindSpeed) + " KM/H");
+        }
+    }
+    else
+    {
+        if(ui->MPHButton->isChecked())
+        {
+            ui -> WindVal -> setText("Current Wind Speed: \n0 MPH");
+        }
+        else
+        {
+            ui -> WindVal -> setText("Current Wind Speed: \n0 KM/H");
         }
     }
     ui -> WindDirection->setText("Current Wind Direction: "  + windDirection);
-    ui -> WindUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> WindUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
     if(ui->MPHButton->isChecked())
         {
-            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+3) + " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+5) + " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
         }
         else
         {
-            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+3) + " KM/H\nPast 24 hour high: " + QString::number(maxWindSpeed) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
+            ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+5) + " KM/H\nPast 24 hour high: " + (QString::number(maxWindSpeed).left(QString::number(maxWindSpeed).indexOf(".")+5)) + " KM/H\nPast 24 hour low: " + QString::number(minWindSpeed) + " KM/H");
         }
 
 }
@@ -799,7 +838,9 @@ void MainWindow::updateWind()
 void MainWindow::updatePressure()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    if(qv_y5.isEmpty())
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    if(lastPressure == -10000)
     {
         if(ui->MillibarsButton->isChecked())
         {
@@ -814,22 +855,22 @@ void MainWindow::updatePressure()
     {
         if(ui->MillibarsButton->isChecked())
         {
-            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(qv_y5.at(qv_y5.length()-1)) + " mbars");
+            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(lastPressure) + " mbars");
         }
         else
         {
-            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(qv_y5.at(qv_y5.length()-1)) + " P");
+            ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(lastPressure) + " P");
         }
     }
-    ui -> PressureUpdated -> setText("Last updated: " + datetime.toString());
+    ui -> PressureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
 
     if(ui->MillibarsButton->isChecked())
     {
-        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+3) + " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
+        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+6) + " mbar\nPast 24 hour high: " + QString::number(maxPressure) + " mbar\nPast 24 hour low: " + QString::number(minPressure) + " mbar");
     }
     else
     {
-        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+3) + " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
+        ui->PressureStats->setText("24 hour average: " + QString::number(avgPressure).left(QString::number(avgPressure).indexOf(".")+8) + " Pa\nPast 24 hour high: " + QString::number(maxPressure) + " Pa\nPast 24 hour low: " + QString::number(minPressure) + " Pa");
     }
 
 }
@@ -838,14 +879,16 @@ void MainWindow::updatePressure()
 void MainWindow::updateAQ()
 {
     QDateTime datetime = QDateTime::currentDateTime();
+    QDateTime lastUpdatedDate;
+    lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
     int curAQ;
-    if(qv_y6.isEmpty())
+    if(lastAqi == -10000)
     {
         curAQ = 0;
     }
     else
     {
-        curAQ = qv_y6.at(qv_y6.length()-1);
+        curAQ = lastAqi;
     }
     if(curAQ > 301)
     {
@@ -877,8 +920,8 @@ void MainWindow::updateAQ()
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Good");
     }
-    ui -> AQUpdated -> setText("Last updated: " + datetime.toString());
-     ui->AQStats->setText("24 hour average: " + QString::number(avgAqi).left(QString::number(avgAqi).indexOf(".")+3) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
+    ui -> AQUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui->AQStats->setText("24 hour average: " + QString::number(avgAqi).left(QString::number(avgAqi).indexOf(".")+3) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
 }
 
 void MainWindow::updateGPS()
@@ -887,114 +930,261 @@ void MainWindow::updateGPS()
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(updateTime);
     if(updateTime != 0)
     {
-        ui -> GPS_Val -> setText("Current Location: \nNear " + GPSlocation + "\n" + "Last Updated:\n" + lastUpdatedDate.toString("MM/dd/yyyy h:mm ap"));
+        ui -> GPS_Val -> setText("Current Location: \nNear " + CITYlocation + "\n" + "Last Updated:\n" + lastUpdatedDate.toString("MM/dd/yyyy h:mm ap") + "\nLatitude/Longitude:\n" + GPSlocation);
     }
 }
+
 
 //sets the background color based off temp
 void MainWindow::setTempBG()
 {
     double tempVal;
-    if(qv_y2.isEmpty())
+    if(lastTemp == -10000)
     {
         tempVal = 0;
     }
     else
     {
-        tempVal = (qv_y2.at(qv_y2.length()-1));
+        tempVal = lastTemp;
     }
     if(!ui->FarenheitButton->isChecked()) { tempVal = (tempVal *9/5) + 32;} //if temp is in celcius convert it to farenheight for temp color
-    if(tempVal > 100) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,86,1);}"); }
-    else if( tempVal > 85) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(253,200,36);}"); }
-    else if( tempVal > 65) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(247,255,144);}"); }
-    else if( tempVal > 45) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(186,255,236);}"); }
-    else if( tempVal > 25) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(144,242,255);}"); }
-    else if( tempVal > -10) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(40,114,213);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}"); }
+    if(tempVal > 100)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(180, 76, 14);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(180, 76, 14);}");
+
+    }
+    else if( tempVal > 85)
+    {//edited color
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(203, 179, 24);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(203, 179, 24);}");
+    }
+    else if( tempVal > 65)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(89, 163, 202);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(89, 163, 202);}");
+    }
+    else if( tempVal > 45)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(107, 197, 208);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(107, 197, 208);}");
+    }
+    else if( tempVal > 25)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(93, 97, 175);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(93, 97, 175);}");
+    }
+    else if( tempVal > -10)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(28, 56, 148);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(28, 56, 148);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(225,225,225);}");
+    }
 }
 
 //sets the background color based off humidity
 void MainWindow::setHumidityBG()
 {
     int humidVal;
-    if(qv_y3.isEmpty())
+    if(lastHum == -10000)
     {
         humidVal = 0;
     }
     else
     {
-        humidVal = (qv_y3.at(qv_y3.length()-1));
+        humidVal = lastHum;
     }
-    if(humidVal < 10) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(152,192,240);}"); }
-    else if (humidVal < 20) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(117,177,240);}"); }
-    else if (humidVal < 30) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(103,167,240);}"); }
-    else if (humidVal < 40) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(95,162,240);}"); }
-    else if (humidVal < 50) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(84,154,240);}"); }
-    else if (humidVal < 60) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(86,152,239);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(20,124,235);}"); }
+    if(humidVal < 10)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(135, 172, 216);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(135, 172, 216);}");
+    }
+    else if (humidVal < 20)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(98, 142, 223);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(98, 142, 223);}");
+
+    }
+    else if (humidVal < 30)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(84, 157, 240);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(84, 157, 240);}");
+    }
+    else if (humidVal < 40)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(55, 130, 217);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(55, 130, 217);}");
+    }
+    else if (humidVal < 50)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(64, 81, 202);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(64, 81, 202);}");
+    }
+    else if (humidVal < 60)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(31, 45, 151);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(31, 45, 151);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(17, 32, 141);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(17, 32, 141);}");
+    }
 }
 
 //sets the background color based off wind
 void MainWindow::setWindBG()
 {
-    double windVal = 0;
-    if(!qv_y4.isEmpty())
+    double windVal;
+    if(lastWindSpeed != -10000)
     {
-        windVal = (qv_y4.at(qv_y4.length()-1));;
+        windVal = lastWindSpeed;
+    }
+    else
+    {
+        windVal = 0;
     }
     if(!(ui->MPHButton->isChecked()))
     {
         //convert km/h to m/h
         windVal = windVal/1.609344;
     }
-    if(windVal < 3) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(103,203,255);}"); }
-    else if (windVal < 7) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(120,207,193);}"); }
-    else if (windVal < 12) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(0,228,1);}"); }
-    else if (windVal < 18) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(102,255,51);}"); }
-    else if (windVal < 24) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(203,254,50);}"); }
-    else if (windVal < 31) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(226,254,153);}"); }
-    else if (windVal < 38) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,153);}"); }
-    else if (windVal < 46) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(251,220,87);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,154,101);}"); }
+    if(windVal < 3)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(174, 194, 191);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(174, 194, 191);}");
+    }
+    else if (windVal < 7)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(145, 205, 195);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(145, 205, 195);}");
+    }
+    else if (windVal < 12)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(109, 151, 179);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(109, 151, 179);}");
+    }
+    else if (windVal < 18)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(102,255,51);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(102,255,51);}");
+    }
+    else if (windVal < 24)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(203,254,50);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(203,254,50);}");
+    }
+    else if (windVal < 31)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(226,254,153);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(226,254,153);}");
+    }
+    else if (windVal < 38)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,153);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,255,153);}");
+    }
+    else if (windVal < 46)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(251,220,87);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(251,220,87);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,154,101);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,154,101);}");
+    }
 }
 
 //sets the background color based off pressure
 void MainWindow::setPressureBG()
 {
-    double pressureVal = 0;
-    if(!qv_y5.isEmpty())
+    double pressureVal;
+    if(lastPressure != -10000)
     {
-        pressureVal = (qv_y5.at(qv_y5.length()-1));
+        pressureVal = lastPressure;
+    }
+    else
+    {
+        pressureVal = 0;
     }
     if(!ui->MillibarsButton->isChecked())
     {
         pressureVal = pressureVal/100;
     }
-    if(pressureVal < 950) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(70,117,235);}"); }
-    else if (pressureVal < 990) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(117,151,235);}"); }
-    else if (pressureVal < 1020) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(188,201,235);}"); }
-    else if (pressureVal < 1050) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,188,194);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,106,125);}"); }
+    if(pressureVal < 950)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(70,117,235);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(70,117,235);}");
+    }
+    else if (pressureVal < 990)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(117,151,235);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(117,151,235);}");
+    }
+    else if (pressureVal < 1020)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(188,201,235);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(188,201,235);}");
+    }
+    else if (pressureVal < 1050)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,188,194);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(235,188,194);}");
+    }
+    else
+    {
+       ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(235,106,125);}");
+       ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(235,106,125);}");
+    }
 }
 
 //sets the background color based off air quality (AQ)
 void MainWindow::setAQBG()
 {
     int curAQ;
-    if(qv_y6.isEmpty())
+    if(lastAqi == -10000)
     {
         curAQ = 0;
     }
     else
     {
-        curAQ = qv_y6.at(qv_y6.length()-1);
+        curAQ = lastAqi;
     }
-    if(curAQ > 301) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(125,75,89);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(147,105,150);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,102,102);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,179,102);}"); }
-    else if (curAQ > 201) { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,179);}"); }
-    else { ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(87,217,87);}"); }
+    if(curAQ > 301)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(125,75,89);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(125,75,89);}");
+    }
+    else if (curAQ > 201)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(147,105,150);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(147,105,150);}");
+    }
+    else if (curAQ > 151)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,102,102);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,102,102);}");
+    }
+    else if (curAQ > 101)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,179,102);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,179,102);}");
+    }
+    else if (curAQ > 51)
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(255,255,179);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(255,255,179);}");
+    }
+    else
+    {
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(116, 208, 116);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(116, 208, 116);}");
+    }
 }
 
 //update the homepage
@@ -1056,7 +1246,8 @@ void MainWindow::refreshCurrentTab()
     {
         getGPSLocation();
         updateGPS();
-        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
+        ui -> tabWidget -> setStyleSheet("QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{background-color: rgb(225,225,225);}");
+        ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(225,225,225);}");
     }
 }
 //change color to default if user leave homepage or change color back if homepage is clicked on again
@@ -1144,25 +1335,7 @@ void MainWindow::getHttp(QString http)
                 addPoint(data["timestamp"].toDouble(), data["aqi"].toDouble(), qv_x6, qv_y6);
 
                 windDirection = data["winddirection"].toString();
-                if(data["temperature"].toDouble() > maxTemp) {
-                    maxTemp = data["temperature"].toDouble();
-                }else if(data["temperature"].toDouble() < minTemp) {
-                    minTemp = data["temperature"].toDouble();
-                }else if(data["humidity"].toDouble() > maxHum) {
-                    maxHum = data["humidity"].toDouble();
-                }else if(data["humidity"].toDouble() < minHum) {
-                    minHum = data["humidity"].toDouble();
-                }else if(data["windspeed"].toDouble() > maxWindSpeed) {
-                    maxWindSpeed = data["windspeed"].toDouble();
-                }else if(data["windspeed"].toDouble() < minWindSpeed) {
-                    minWindSpeed = data["windspeed"].toDouble();
-                }else if(data["pressure"].toDouble() > maxPressure) {
-                    maxPressure = data["pressure"].toDouble();
-                }else if(data["aqi"].toDouble() > maxAqi) {
-                    maxAqi = data["aqi"].toDouble();
-                }else if(data["aqi"].toDouble() < minAqi) {
-                    minAqi = data["aqi"].toDouble();
-                }else if(data["timestamp"].toDouble() > maxTimestamp) {
+                if(data["timestamp"].toDouble() > maxTimestamp) {
                     maxTimestamp = data["timestamp"].toDouble();
                 }
                 /*lastAQI = data["aqi"].toDouble();
@@ -1173,7 +1346,11 @@ void MainWindow::getHttp(QString http)
 
             }
             reply->deleteLater();
-
+            lastTemp = qv_y2.at(qv_y2.length()-1);
+            lastHum = qv_y3.at(qv_y3.length()-1);
+            lastWindSpeed = qv_y4.at(qv_y4.length()-1);
+            lastPressure = qv_y5.at(qv_y5.length()-1);
+            lastAqi = qv_y6.at(qv_y6.length()-1);
             //ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
             ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -1538,26 +1715,46 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
 
             if(sensor == "temperature")
             {
+                if(!qv_y2.isEmpty())
+                {
+                lastTemp = qv_y2.at(qv_y2.length()-1);
+                }
                 ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
                 ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "humidity")
             {
+                if(!qv_y3.isEmpty())
+                {
+                lastHum = qv_y3.at(qv_y3.length()-1);
+                }
                 ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
                 ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "windspeed")
             {
+                    if(!qv_y4.isEmpty())
+                    {
+                lastWindSpeed = qv_y4.at(qv_y4.length()-1);
+                    }
                 ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
                 ui->PlotWindSpeedDirection->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "pressure")
             {
+                        if(!qv_y5.isEmpty())
+                        {
+                lastPressure = qv_y5.at(qv_y5.length()-1);
+                        }
                 ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
                 ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "aqi")
             {
+                            if(!qv_y6.isEmpty())
+                            {
+                lastAqi = qv_y6.at(qv_y6.length()-1);
+                            }
                 ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
                 ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
             }
@@ -1627,6 +1824,7 @@ void MainWindow::multHttp(QString sensor)
                     else if(sensor == "windspeed")
                     {
                         addPoint(data["timestamp"].toDouble(), data[sensor].toDouble(), qv_x4, qv_y4);
+                        windDirection = data["winddirection"].toString();
                     }
                     else if(sensor == "pressure")
                     {
@@ -1647,30 +1845,50 @@ void MainWindow::multHttp(QString sensor)
                 reply->deleteLater();
                 if(sensor == "temperature")
                 {
+                    if(!qv_y2.isEmpty())
+                    {
+                    lastTemp = qv_y2.at(qv_y2.length()-1);
+                    }
                     ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
 
                     ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "humidity")
                 {
+                        if(!qv_y3.isEmpty())
+                        {
+                    lastHum = qv_y3.at(qv_y3.length()-1);
+                        }
                     ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
 
                     ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "windspeed")
                 {
+                        if(!qv_y4.isEmpty())
+                        {
+                    lastWindSpeed = qv_y4.at(qv_y4.length()-1);
+                        }
                     ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
 
                     ui->PlotWindSpeedDirection->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "pressure")
                 {
+                            if(!qv_y5.isEmpty())
+                            {
+                    lastPressure = qv_y5.at(qv_y5.length()-1);
+                            }
                     ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
 
                     ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
                 else if(sensor == "aqi")
                 {
+                                if(!qv_y6.isEmpty())
+                                {
+                    lastAqi = qv_y6.at(qv_y6.length()-1);
+                                }
                     ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
 
                     ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -1704,6 +1922,11 @@ void MainWindow::timerEvent(QTimerEvent *event)
     refreshCurrentTab();
     if(startDate == QDate::currentDate())
     {
+        getMinMaxAvg("humidity", getDate(QDate::currentDate()));
+        getMinMaxAvg("temperature", getDate(QDate::currentDate()));
+        getMinMaxAvg("windspeed", getDate(QDate::currentDate()));
+        getMinMaxAvg("pressure", getDate(QDate::currentDate()));
+        getMinMaxAvg("aqi", getDate(QDate::currentDate()));
         getHttp();
     }
 }
@@ -1848,8 +2071,9 @@ void MainWindow::getGPSLocation()
                 data = record->toObject();
                 if(!data["location"].isNull() && updateTime != data["lastupdated"].toDouble())
                 {
-                GPSlocation = data["location"].toString();
+                CITYlocation = data["city"].toString();
                 updateTime = data["lastupdated"].toDouble();
+                GPSlocation = data["location"].toString();
                 }
             }
 
@@ -1858,42 +2082,9 @@ void MainWindow::getGPSLocation()
     qnam->get(request);
 }
 
-void MainWindow::on_TempDebug_clicked()
+
+void MainWindow::on_MillibarsButton_toggled(bool checked)
 {
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x2, qv_y2);
-    plot();
-}
 
-
-void MainWindow::on_HumidityDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x3, qv_y3);
-    plot();
-}
-
-
-void MainWindow::on_WindDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x4, qv_y4);
-    plot();
-}
-
-
-void MainWindow::on_PressureDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x5, qv_y5);
-    plot();
-}
-
-
-void MainWindow::on_AQDebug_clicked()
-{
-    double value = ui->DebugBox->toPlainText().toDouble();
-    addPoint(QDateTime::currentMSecsSinceEpoch(), value, qv_x6, qv_y6);
-    plot();
 }
 

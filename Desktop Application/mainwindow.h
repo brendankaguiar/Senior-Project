@@ -41,9 +41,9 @@ private slots:
 
     void on_HTTPButton_clicked();
 
-    void on_MillibarsButton_toggled(bool checked);
+    void on_PascalButton_toggled(bool checked);
 
-    void on_MPHButton_toggled(bool checked);
+    void on_KPHButton_toggled(bool checked);
 
     void on_FarenheitButton_toggled(bool checked);
 
@@ -140,6 +140,8 @@ private slots:
     void on_PressureDebug_clicked();
 
     void on_AQDebug_clicked();
+
+    void on_MillibarsButton_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;

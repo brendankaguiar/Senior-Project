@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1279</width>
-    <height>620</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,13 +21,14 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow{
-	background-color:   rgb(185, 185, 185);  /*  Background window color   */ 
+	background-color:   blue;  /*  Background window color   */ 
 }
 
  /* Main window color in center */ 
 QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#Pressure, QWidget#AirQuality, QWidget#Settings{
 	/*background-color: rgb(254,255,153);*/
 	background-color: rgb(225,225,225);
+	color:black;
 }
 
 
@@ -35,6 +36,11 @@ QWidget#Homepage, QWidget#Humidity, QWidget#Temperature, QWidget#Wind, QWidget#P
 QWidget{
 	color: black;
 	background-color:  rgb(182, 182, 182);
+}
+
+ /* Color the outer border  */ 
+QWidget#ThemeWidgetForm{
+	/* background-color: red; */
 }
 
  /* Remove the background on the radio button widgets */ 
@@ -57,12 +63,13 @@ QTabWidget::pane{
 
 QTabBar{
 	color: black;  /*  Tab font color   */ 
+	min-width:5px;
 }
 
 QTabBar::tab{
-	background: rgb(144, 144, 144); /*  Tab background color   */ 
+	background: rgb(180, 180, 180); /*  Tab background color   144*/ 
 	border: 1px solid black;
-	padding: 5px;
+	padding: 10px;
 }
 
 QTabBar::tab:selected{
@@ -94,7 +101,6 @@ QTabWidget::tab-bar{
       </property>
       <property name="font">
        <font>
-        <family>Microsoft YaHei UI</family>
         <pointsize>16</pointsize>
         <italic>false</italic>
         <bold>false</bold>
@@ -106,435 +112,24 @@ QTabWidget::tab-bar{
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="Homepage">
-       <attribute name="title">
-        <string>Homepage</string>
-       </attribute>
-       <widget class="QPushButton" name="HTTPButton">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>500</y>
-          <width>201</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Start (now automatic on startup)</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeTemp">
-        <property name="geometry">
-         <rect>
-          <x>180</x>
-          <y>80</y>
-          <width>531</width>
-          <height>251</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>18 °C</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomePressure">
-        <property name="geometry">
-         <rect>
-          <x>530</x>
-          <y>250</y>
-          <width>301</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>48</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Pressure</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeHumidity">
-        <property name="geometry">
-         <rect>
-          <x>530</x>
-          <y>20</y>
-          <width>301</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>48</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Humidity</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeAQ">
-        <property name="geometry">
-         <rect>
-          <x>890</x>
-          <y>250</y>
-          <width>301</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>48</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Air Quality</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeWind">
-        <property name="geometry">
-         <rect>
-          <x>870</x>
-          <y>20</y>
-          <width>431</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>48</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Wind Speed</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeTime">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>280</y>
-          <width>501</width>
-          <height>111</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>64</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>00:00 AM</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeDate">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>380</y>
-          <width>511</width>
-          <height>71</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>24</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Friday, Feburary 18th, 2022</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeHumidityVal">
-        <property name="geometry">
-         <rect>
-          <x>620</x>
-          <y>100</y>
-          <width>141</width>
-          <height>171</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>34%</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeWindVal">
-        <property name="geometry">
-         <rect>
-          <x>980</x>
-          <y>90</y>
-          <width>231</width>
-          <height>171</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>5 MPH</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomePressureVal">
-        <property name="geometry">
-         <rect>
-          <x>550</x>
-          <y>380</y>
-          <width>261</width>
-          <height>81</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>1000 mbar</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeAQVal">
-        <property name="geometry">
-         <rect>
-          <x>910</x>
-          <y>370</y>
-          <width>251</width>
-          <height>111</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>18
-Excellent</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="UpdateHomepage">
-        <property name="geometry">
-         <rect>
-          <x>290</x>
-          <y>500</y>
-          <width>221</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Update Homepage (temp debugging)</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeWindDir">
-        <property name="geometry">
-         <rect>
-          <x>870</x>
-          <y>180</y>
-          <width>261</width>
-          <height>81</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Direction: </string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="HomeHumidity_2">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>20</y>
-          <width>421</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>48</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Temperature</string>
-        </property>
-       </widget>
-       <widget class="QFrame" name="frame_3">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>30</y>
-          <width>431</width>
-          <height>491</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-       <widget class="QFrame" name="frame_4">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>30</y>
-          <width>321</width>
-          <height>221</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-       <widget class="QFrame" name="frame_5">
-        <property name="geometry">
-         <rect>
-          <x>860</x>
-          <y>30</y>
-          <width>371</width>
-          <height>221</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-       <widget class="QFrame" name="frame_6">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>280</y>
-          <width>321</width>
-          <height>201</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-       <widget class="QFrame" name="frame_7">
-        <property name="geometry">
-         <rect>
-          <x>860</x>
-          <y>280</y>
-          <width>371</width>
-          <height>201</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-       <zorder>frame_7</zorder>
-       <zorder>frame_6</zorder>
-       <zorder>frame_5</zorder>
-       <zorder>frame_4</zorder>
-       <zorder>frame_3</zorder>
-       <zorder>HTTPButton</zorder>
-       <zorder>HomeTemp</zorder>
-       <zorder>HomePressure</zorder>
-       <zorder>HomeHumidity</zorder>
-       <zorder>HomeAQ</zorder>
-       <zorder>HomeWind</zorder>
-       <zorder>HomeTime</zorder>
-       <zorder>HomeDate</zorder>
-       <zorder>HomeHumidityVal</zorder>
-       <zorder>HomeWindVal</zorder>
-       <zorder>HomePressureVal</zorder>
-       <zorder>HomeAQVal</zorder>
-       <zorder>UpdateHomepage</zorder>
-       <zorder>HomeWindDir</zorder>
-       <zorder>HomeHumidity_2</zorder>
-      </widget>
       <widget class="QWidget" name="Humidity">
        <attribute name="title">
         <string>Humidity</string>
        </attribute>
-       <widget class="QLabel" name="HumidityUpdated">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>520</y>
-          <width>211</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Last Updated: 1:00 PM 2/18/22</string>
-        </property>
-       </widget>
        <widget class="QFrame" name="HumidityFrame1">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
+          <y>50</y>
           <width>631</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius:20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -546,11 +141,16 @@ background: rgb(185, 185, 185);
         <widget class="QCustomPlot" name="PlotHumidity" native="true">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>611</width>
-           <height>461</height>
+           <x>20</x>
+           <y>20</y>
+           <width>591</width>
+           <height>441</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QCustomPlot{
+border-radius:20px;
+}</string>
          </property>
         </widget>
        </widget>
@@ -558,15 +158,20 @@ background: rgb(185, 185, 185);
         <property name="geometry">
          <rect>
           <x>690</x>
-          <y>30</y>
+          <y>50</y>
           <width>551</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+         <string notr="true">QFrame#HumidityFrame2{
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
+}
+
+QFrame{
+	border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -601,7 +206,7 @@ background: rgb(185, 185, 185);
           <rect>
            <x>40</x>
            <y>190</y>
-           <width>411</width>
+           <width>471</width>
            <height>121</height>
           </rect>
          </property>
@@ -636,7 +241,7 @@ background: rgb(210, 210, 210);
            <widget class="QLabel" name="label_8">
             <property name="font">
              <font>
-              <pointsize>12</pointsize>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="styleSheet">
@@ -654,7 +259,7 @@ background: rgb(210, 210, 210);
            <widget class="QLabel" name="From_2">
             <property name="font">
              <font>
-              <pointsize>12</pointsize>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="styleSheet">
@@ -689,6 +294,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -698,7 +313,7 @@ background: rgb(210, 210, 210);
            <widget class="QLabel" name="To_2">
             <property name="font">
              <font>
-              <pointsize>12</pointsize>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="styleSheet">
@@ -727,6 +342,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -734,38 +359,418 @@ background: rgb(210, 210, 210);
           </item>
          </layout>
         </widget>
+        <widget class="QLabel" name="HumidityUpdated">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>360</y>
+           <width>461</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Last Updated: 1:00 PM 2/18/22</string>
+         </property>
+        </widget>
        </widget>
+      </widget>
+      <widget class="QWidget" name="Homepage">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <attribute name="title">
+        <string>Homepage</string>
+       </attribute>
+       <widget class="QLabel" name="HomeTemp">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>95</y>
+          <width>531</width>
+          <height>251</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>18 °C</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomePressure">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>305</y>
+          <width>301</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>48</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Pressure</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeHumidity">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>35</y>
+          <width>301</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>48</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Humidity</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeAQ">
+        <property name="geometry">
+         <rect>
+          <x>890</x>
+          <y>305</y>
+          <width>301</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>48</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Air Quality</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeWind">
+        <property name="geometry">
+         <rect>
+          <x>870</x>
+          <y>35</y>
+          <width>431</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>48</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Wind Speed</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeDate">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>395</y>
+          <width>511</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>24</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Friday, Feburary 18th, 2022</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeHumidityVal">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>115</y>
+          <width>141</width>
+          <height>171</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>34%</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeWindVal">
+        <property name="geometry">
+         <rect>
+          <x>980</x>
+          <y>105</y>
+          <width>231</width>
+          <height>171</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>5 MPH</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomePressureVal">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>435</y>
+          <width>261</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>1000 mbar</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeAQVal">
+        <property name="geometry">
+         <rect>
+          <x>910</x>
+          <y>425</y>
+          <width>251</width>
+          <height>111</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>18
+Excellent</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeWindDir">
+        <property name="geometry">
+         <rect>
+          <x>870</x>
+          <y>195</y>
+          <width>351</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Direction: </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeHumidity_2">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>35</y>
+          <width>421</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>48</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Temperature</string>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frame_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>45</y>
+          <width>431</width>
+          <height>491</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frame_4">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>45</y>
+          <width>321</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frame_5">
+        <property name="geometry">
+         <rect>
+          <x>860</x>
+          <y>45</y>
+          <width>371</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frame_6">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>335</y>
+          <width>321</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frame_7">
+        <property name="geometry">
+         <rect>
+          <x>860</x>
+          <y>335</y>
+          <width>371</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="HomeTime">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>295</y>
+          <width>501</width>
+          <height>111</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>64</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>00:00 AM</string>
+        </property>
+       </widget>
+       <zorder>frame_7</zorder>
+       <zorder>frame_6</zorder>
+       <zorder>frame_5</zorder>
+       <zorder>frame_4</zorder>
+       <zorder>frame_3</zorder>
+       <zorder>HomeTemp</zorder>
+       <zorder>HomePressure</zorder>
+       <zorder>HomeHumidity</zorder>
+       <zorder>HomeAQ</zorder>
+       <zorder>HomeWind</zorder>
+       <zorder>HomeDate</zorder>
+       <zorder>HomeHumidityVal</zorder>
+       <zorder>HomeWindVal</zorder>
+       <zorder>HomePressureVal</zorder>
+       <zorder>HomeAQVal</zorder>
+       <zorder>HomeWindDir</zorder>
+       <zorder>HomeHumidity_2</zorder>
+       <zorder>HomeTime</zorder>
       </widget>
       <widget class="QWidget" name="Temperature">
        <attribute name="title">
         <string>Temperature</string>
        </attribute>
-       <widget class="QLabel" name="TemperatureUpdated">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>520</y>
-          <width>211</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Last Updated: 1:00 PM 2/18/22</string>
-        </property>
-       </widget>
        <widget class="QFrame" name="TemperatureFrame1">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
+          <y>50</y>
           <width>631</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius:20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -777,10 +782,10 @@ background: rgb(185, 185, 185);
         <widget class="QCustomPlot" name="PlotTemperature" native="true">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>611</width>
-           <height>461</height>
+           <x>20</x>
+           <y>20</y>
+           <width>591</width>
+           <height>441</height>
           </rect>
          </property>
         </widget>
@@ -789,15 +794,20 @@ background: rgb(185, 185, 185);
         <property name="geometry">
          <rect>
           <x>690</x>
-          <y>30</y>
+          <y>50</y>
           <width>551</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+         <string notr="true">QFrame#TemperatureFrame2{
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
+}
+
+QFrame{
+	border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -832,7 +842,7 @@ background: rgb(185, 185, 185);
           <rect>
            <x>40</x>
            <y>190</y>
-           <width>411</width>
+           <width>491</width>
            <height>121</height>
           </rect>
          </property>
@@ -914,6 +924,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -952,6 +972,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -959,38 +989,43 @@ background: rgb(210, 210, 210);
           </item>
          </layout>
         </widget>
+        <widget class="QLabel" name="TemperatureUpdated">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>360</y>
+           <width>461</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Last Updated: 1:00 PM 2/18/22</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="Wind">
        <attribute name="title">
         <string>Wind Speed/Direction</string>
        </attribute>
-       <widget class="QLabel" name="WindUpdated">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>520</y>
-          <width>211</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Last Updated: 1:00 PM 2/18/22</string>
-        </property>
-       </widget>
        <widget class="QFrame" name="WindFrame2">
         <property name="geometry">
          <rect>
           <x>690</x>
-          <y>30</y>
+          <y>50</y>
           <width>551</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+         <string notr="true">QFrame#WindFrame2{
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
+}
+
+QFrame{
+	border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -1002,10 +1037,10 @@ background: rgb(185, 185, 185);
         <widget class="QLabel" name="WindDirection">
          <property name="geometry">
           <rect>
-           <x>30</x>
-           <y>320</y>
+           <x>-10</x>
+           <y>200</y>
            <width>501</width>
-           <height>41</height>
+           <height>221</height>
           </rect>
          </property>
          <property name="font">
@@ -1051,8 +1086,8 @@ background:transparent;
          <property name="geometry">
           <rect>
            <x>40</x>
-           <y>170</y>
-           <width>441</width>
+           <y>160</y>
+           <width>501</width>
            <height>121</height>
           </rect>
          </property>
@@ -1139,6 +1174,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1177,6 +1222,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1184,20 +1239,34 @@ background: rgb(210, 210, 210);
           </item>
          </layout>
         </widget>
+        <widget class="QLabel" name="WindUpdated">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>360</y>
+           <width>371</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Last Updated: 1:00 PM 2/18/22</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QFrame" name="frame">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
+          <y>50</y>
           <width>631</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+border:2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -1209,10 +1278,10 @@ background: rgb(185, 185, 185);
         <widget class="QCustomPlot" name="PlotWindSpeedDirection" native="true">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>611</width>
-           <height>461</height>
+           <x>20</x>
+           <y>20</y>
+           <width>591</width>
+           <height>441</height>
           </rect>
          </property>
         </widget>
@@ -1222,32 +1291,20 @@ background: rgb(185, 185, 185);
        <attribute name="title">
         <string>Pressure</string>
        </attribute>
-       <widget class="QLabel" name="PressureUpdated">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>520</y>
-          <width>211</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Last Updated: 1:00 PM 2/18/22</string>
-        </property>
-       </widget>
        <widget class="QFrame" name="frame_2">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
+          <y>50</y>
           <width>631</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+border:2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -1259,10 +1316,10 @@ background: rgb(185, 185, 185);
         <widget class="QCustomPlot" name="PlotPressure" native="true">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>611</width>
-           <height>461</height>
+           <x>20</x>
+           <y>20</y>
+           <width>591</width>
+           <height>441</height>
           </rect>
          </property>
         </widget>
@@ -1271,15 +1328,20 @@ background: rgb(185, 185, 185);
         <property name="geometry">
          <rect>
           <x>690</x>
-          <y>30</y>
+          <y>50</y>
           <width>551</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+         <string notr="true">QFrame#PressureFrame2{
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
+}
+
+QFrame{
+	border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -1376,6 +1438,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1414,6 +1486,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1441,38 +1523,39 @@ Past 24 hour high: #mbars
 Past 24 hour low: #mbars</string>
          </property>
         </widget>
+        <widget class="QLabel" name="PressureUpdated">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>360</y>
+           <width>451</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Last Updated: 1:00 PM 2/18/22</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="AirQuality">
        <attribute name="title">
         <string>Air Quality</string>
        </attribute>
-       <widget class="QLabel" name="AQUpdated">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>520</y>
-          <width>211</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Last Updated: 1:00 PM 2/18/22</string>
-        </property>
-       </widget>
        <widget class="QFrame" name="AQFrame1">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
+          <y>50</y>
           <width>631</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+border:2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -1484,10 +1567,10 @@ background: rgb(185, 185, 185);
         <widget class="QCustomPlot" name="PlotAirQuality" native="true">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>611</width>
-           <height>461</height>
+           <x>20</x>
+           <y>20</y>
+           <width>591</width>
+           <height>441</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -1499,15 +1582,20 @@ background: rgb(185, 185, 185);
         <property name="geometry">
          <rect>
           <x>690</x>
-          <y>30</y>
+          <y>50</y>
           <width>551</width>
           <height>481</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-/*border: 1px solid black;*/
-background: rgb(185, 185, 185);
+         <string notr="true">QFrame#AQFrame2{
+border: 2px solid black;
+background: rgb(215, 215, 215); /*185 */
+border-radius: 20px;
+}
+
+QFrame{
+	border-radius: 20px;
 }</string>
         </property>
         <property name="frameShape">
@@ -1565,7 +1653,7 @@ background:transparent;
           <rect>
            <x>40</x>
            <y>190</y>
-           <width>441</width>
+           <width>491</width>
            <height>121</height>
           </rect>
          </property>
@@ -1664,6 +1752,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1702,6 +1800,16 @@ background: rgb(210, 210, 210);
 	background:white;
 }</string>
             </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2022</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
             <property name="calendarPopup">
              <bool>true</bool>
             </property>
@@ -1709,191 +1817,30 @@ background: rgb(210, 210, 210);
           </item>
          </layout>
         </widget>
+        <widget class="QLabel" name="AQUpdated">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>360</y>
+           <width>451</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Last Updated: 1:00 PM 2/18/22</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="Settings">
        <attribute name="title">
         <string>Settings</string>
        </attribute>
-       <widget class="QLineEdit" name="SettingsTitle">
-        <property name="geometry">
-         <rect>
-          <x>510</x>
-          <y>20</y>
-          <width>131</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>SETTINGS</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QFrame" name="SettingsOptions">
-        <property name="geometry">
-         <rect>
-          <x>120</x>
-          <y>100</y>
-          <width>371</width>
-          <height>211</height>
-         </rect>
-        </property>
-        <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="AirTitle">
-           <property name="font">
-            <font>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Air Pressure</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QFrame" name="verticalFrame">
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <widget class="QRadioButton" name="MillibarsButton">
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Millibars</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="PascalButton">
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Pascals</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="WindTitle">
-           <property name="font">
-            <font>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Wind Speed</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QFrame" name="WindOptions">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QRadioButton" name="MPHButton">
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Miles Per Hour (MPH)</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="KPHButton">
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Kilometers Per Hour (KPH)</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="TemperatureTitle">
-           <property name="font">
-            <font>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Temperature</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QFrame" name="TemperatureOptions">
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QRadioButton" name="CelciusButton">
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Celsius</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="FarenheitButton">
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Farenheight </string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
        <widget class="QPushButton" name="DeleteAll">
         <property name="geometry">
          <rect>
           <x>1120</x>
-          <y>490</y>
+          <y>510</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -1906,7 +1853,7 @@ background: rgb(210, 210, 210);
         <property name="geometry">
          <rect>
           <x>980</x>
-          <y>490</y>
+          <y>510</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -1918,8 +1865,8 @@ background: rgb(210, 210, 210);
        <widget class="QPushButton" name="AboutButton">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>510</y>
+          <x>0</x>
+          <y>530</y>
           <width>80</width>
           <height>24</height>
          </rect>
@@ -1943,7 +1890,7 @@ background: rgb(210, 210, 210);
         <property name="geometry">
          <rect>
           <x>560</x>
-          <y>80</y>
+          <y>90</y>
           <width>601</width>
           <height>371</height>
          </rect>
@@ -1952,9 +1899,10 @@ background: rgb(210, 210, 210);
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-	background: rgb(236,235,242);
-	border: 1px solid black;
+         <string notr="true">QFrame#AboutFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
 }</string>
         </property>
         <property name="frameShape">
@@ -1978,115 +1926,18 @@ background: rgb(210, 210, 210);
 }</string>
          </property>
          <property name="text">
-          <string>Cool about page
-We made this thing</string>
+          <string>This is a CS 426 Senior Project Spring 2022 at the University of Nevada, Reno CSE Department
+
+Team 29: Brendan Aguiar, Nicholas Ang, Daniel Beeston, 
+Dalton Tracy, and Kenji Won
+
+Instructors: David Feil-Seifer and Devrin Lee
+
+External Advisors: Dr. Keith Lancaster, Dr. Patrick Arnott
+</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="AboutClose">
-         <property name="geometry">
-          <rect>
-           <x>270</x>
-           <y>330</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Close About</string>
-         </property>
-        </widget>
-        <widget class="QPlainTextEdit" name="DebugBox">
-         <property name="geometry">
-          <rect>
-           <x>260</x>
-           <y>190</y>
-           <width>101</width>
-           <height>70</height>
-          </rect>
-         </property>
-         <property name="plainText">
-          <string>0</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="TempDebug">
-         <property name="geometry">
-          <rect>
-           <x>50</x>
-           <y>280</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Update Temp</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="HumidityDebug">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>280</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Update Humid</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="WindDebug">
-         <property name="geometry">
-          <rect>
-           <x>270</x>
-           <y>280</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Update Wind</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="PressureDebug">
-         <property name="geometry">
-          <rect>
-           <x>380</x>
-           <y>280</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Update Pressure</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="AQDebug">
-         <property name="geometry">
-          <rect>
-           <x>490</x>
-           <y>280</y>
-           <width>80</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Update AQ</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>260</x>
-           <y>170</y>
-           <width>101</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Enter Value</string>
          </property>
         </widget>
        </widget>
@@ -2094,7 +1945,7 @@ We made this thing</string>
         <property name="geometry">
          <rect>
           <x>560</x>
-          <y>80</y>
+          <y>90</y>
           <width>601</width>
           <height>371</height>
          </rect>
@@ -2103,9 +1954,10 @@ We made this thing</string>
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame{
-	background: rgb(236,235,242);
-	border: 1px solid black;
+         <string notr="true">QFrame#DeleteFrame{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
 }</string>
         </property>
         <property name="frameShape">
@@ -2168,40 +2020,255 @@ This process is irreversible </string>
          </property>
         </widget>
        </widget>
-       <widget class="QLabel" name="GPS_Val">
+       <widget class="QFrame" name="frame_8">
         <property name="geometry">
          <rect>
-          <x>510</x>
-          <y>70</y>
-          <width>681</width>
-          <height>211</height>
+          <x>110</x>
+          <y>90</y>
+          <width>371</width>
+          <height>371</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>24</pointsize>
-         </font>
+        <property name="styleSheet">
+         <string notr="true">QFrame#frame_8{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
         </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-        <property name="text">
-         <string>Current Location:
-
-Last updated:</string>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
         </property>
-        <property name="scaledContents">
-         <bool>false</bool>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
+        <widget class="QFrame" name="SettingsOptions">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>120</y>
+           <width>371</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="AirTitle">
+            <property name="font">
+             <font>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Air Pressure</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="verticalFrame">
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QRadioButton" name="MillibarsButton">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Millibars</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="PascalButton">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Pascals</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="WindTitle">
+            <property name="font">
+             <font>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Wind Speed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="WindOptions">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QRadioButton" name="MPHButton">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Miles Per Hour (MPH)</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="KPHButton">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Kilometers Per Hour (KPH)</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QFrame" name="TemperatureOptions">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QRadioButton" name="CelciusButton">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Celsius</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="FarenheitButton">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Farenheight </string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="TemperatureTitle">
+            <property name="font">
+             <font>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Temperature</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>-30</y>
+           <width>181</width>
+           <height>181</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>36</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Settings</string>
+         </property>
+        </widget>
        </widget>
-       <zorder>GPS_Val</zorder>
+       <widget class="QFrame" name="frame_9">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>90</y>
+          <width>481</width>
+          <height>271</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame#frame_9{
+border: 2px solid black;
+border-radius:20px;
+background: rgb(215, 215, 215); /*185 */
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLabel" name="GPS_Val">
+         <property name="geometry">
+          <rect>
+           <x>-110</x>
+           <y>-100</y>
+           <width>681</width>
+           <height>451</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Current Location:
+
+Last updated:
+
+Latitude/Longitude:</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+       <zorder>frame_9</zorder>
+       <zorder>frame_8</zorder>
        <zorder>DeleteFrame</zorder>
        <zorder>AboutFrame</zorder>
-       <zorder>SettingsTitle</zorder>
-       <zorder>SettingsOptions</zorder>
        <zorder>DeleteAll</zorder>
        <zorder>DownloadAll</zorder>
        <zorder>AboutButton</zorder>

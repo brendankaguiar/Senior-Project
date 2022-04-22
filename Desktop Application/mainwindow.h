@@ -141,6 +141,8 @@ private slots:
 
     void on_AQDebug_clicked();
 
+    void on_MillibarsButton_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
 

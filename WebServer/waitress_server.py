@@ -1,6 +1,6 @@
 #*************DESCRIPTION*************
 #Written by Daniel Beeston
-#Flask deployment server
+#Flask local deployment server, uses server.py
 #Run using "python waitress_server.py <IP>:<Port>"
 #Running without arguments will run on localhost port 5000
 

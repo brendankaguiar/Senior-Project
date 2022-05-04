@@ -3,7 +3,7 @@
 #Flask server routes and database functions
 #Run using "python server.py" to host development server on 127.0.0.1
 
-#External packages used: Flask, sqlite3, os, json, datetime
+#External packages used: Flask, sqlite3, os, json, datetime, Geopy
 
 from flask import Flask, request
 import psycopg2
@@ -445,6 +445,7 @@ class database:
 
         return json.dumps(record_list)  #Return json object array with records
 
+    #update location data in database with new data
     def updatedevice(self,deviceid,json_data):
         db_con = psycopg2.connect(
             dbname=self.dbname,
@@ -465,6 +466,7 @@ class database:
                 return "update_failed"
         return "update_success"
 
+    #retrieve location data from database and use Geopy to retrieve city/state
     def getlocation(self,deviceid):
         db_con = psycopg2.connect(
             dbname=self.dbname,
@@ -484,28 +486,33 @@ class database:
                 result = cursor.fetchall()
             record_list = []
 
+            #split up location string from database into latitude and longitude floats
             location = result[0][0].split(",")
             lat = [location[0][0:location[0].find(".") - 2],location[0][location[0].find(".") - 2:len(location[0])]]
             location[0] = round(float(lat[0]) + float(lat[1])/60,5)
             long = [location[2][0:location[2].find(".") - 2],location[2][location[2].find(".") - 2:len(location[2])]]
             location[2] = round(float(long[0]) + float(long[1])/60,5)
 
+            #multiply lat and long floats by -1 if west or south
             if location[1] == 'S':
                 location[0] *= -1
             if location[3] == 'W':
                 location[2] *= -1
 
+            #concat lat and long into string for Geopy
             dec_location = str(location[0])+', '+str(location[2])
 
+            #set up geopy and retrieve location info
             geolocator = geopy.Nominatim(user_agent="rews")
             location = geolocator.reverse(geopy.Point(dec_location))
 
+            #use city if city is in the address, otherwise just use the county for city
             if "city" in location.raw['address']:
                 city = location.raw['address']['city'] + ", " + location.raw['address']['state']
             else:
                 city = location.raw['address']['county'] + ", " + location.raw['address']['state']
 
-
+            #convert everything to json object
             record_list.append({'location':dec_location, 'lastupdated':result[0][1], 'city':city})
 
             return json.dumps(record_list)  #Return json object array with records
@@ -614,19 +621,21 @@ def delete_device(device_id):
         return "delete_success"
     return "delete_fail"
 
-
+#register a device with the system
 @app.route('/devicedata/register/<device_id>')
 def register(device_id):
     print(f"\nReceived request from {request.remote_addr}")
     print(f"Attempting to register device {device_id}")
     return db.registerdevice(device_id)
 
+#unregister a device from the system, deleting all data in the process
 @app.route('/devicedata/unregister/<device_id>')
 def unregister(device_id):
     print(f"\nReceived request from {request.remote_addr}")
     print(f"Attempting to unregister device {device_id}")
     return db.deletedevice(device_id)
 
+#Insert location data into database
 @app.route('/devicedata/metadata/<device_id>', methods=['POST'])
 def metadata(device_id):
     data = request.get_json()
@@ -641,7 +650,7 @@ def locationdata(device_id):
     print(f"Returning location metadata for {device_id}")
     return db.getlocation(device_id)
 
-
+#debug route, used to generate a number of days worth of dummy data in database
 @app.route('/debug/generate_data/<days>')
 def debug_generatedata(days):
     print(f"\nReceived request from {request.remote_addr}")

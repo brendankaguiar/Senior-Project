@@ -1,6 +1,6 @@
 #*************DESCRIPTION*************
 #Written by Daniel Beeston
-#When ran, it will post a single datapoint to localhost server with current date and time
+#Test script for server. When ran, it will post a single datapoint to localhost server with current date and time
 #Script is now somewhat redundent after creating data_inserter_test.py
 #To change host, see HOST variable
 

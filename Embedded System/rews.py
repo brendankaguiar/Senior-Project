@@ -22,6 +22,7 @@ GPIO.setwarnings(False)
 GPIO.setup(18,GPIO.OUT)
 GPIO.setup(23,GPIO.OUT)
 
+#Flash red and green LEDs at startup
 for i in range(4):
     sleep(0.5)
     GPIO.output(18,GPIO.HIGH)
@@ -30,35 +31,39 @@ for i in range(4):
     GPIO.output(18,GPIO.LOW)
     GPIO.output(23,GPIO.LOW)
     
-#sleep(15)
-
-port = serial.Serial("/dev/ttyACM0",9600, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_TWO, timeout=30, write_timeout=30)#wait until data available
+#set up serial port
+port = serial.Serial("/dev/ttyACM0",9600, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_TWO, timeout=30, write_timeout=30)
 cycles = 0
 
 
 while True:
+    #generate current timestamp
     date = str(datetime.today().date())
     date = date.replace('-','_')
     now = datetime.now()
     current_timestamp = now.timestamp()
-    
+
+    #turn of LEDs
     GPIO.output(23,GPIO.LOW)
     GPIO.output(18,GPIO.LOW)
-    
+
+    #wait until data is available
     try:
         Data = port.read()  #read serial port
         sleep(.12)#increasing time retains more of value        
         data_left = port.inWaiting()    #check for remaining bytes
         Data += port.read(data_left)
         Start = Data.decode("utf-8")
-    except:
+    except: #flash red LED if read failed, continue to next loop iteration
         print("read failed")
         GPIO.output(18,GPIO.HIGH)
         sleep(0.5)
         continue
-    
+
+    #split data from arduino into list
     slist = Start.split()
-    
+
+    #check if data is valid (7 fields)
     if len(slist) == 7:
         slist[0] = float(slist[0])
         slist[1] = float(slist[1])
@@ -70,7 +75,8 @@ while True:
         #GPIO.output(18,GPIO.HIGH)
         #sleep(0.5)
         continue
-        
+
+    #determine whether GPS data is valid
     valid = False
     if slist[6].find('V') == -1:
         valid = True
@@ -81,13 +87,8 @@ while True:
     for x in slist:
         print(x)
     print("")
-    
-    #Data = port.readline().decode("utf-8").strip()#decode data received to String
-    #print("he")
-    #W_Data = Data.split(",")#parse into list removing commas in the process
-    #print(W_Data) #check data was parsed correctly
-    #append W_Data to json
-    
+
+    #skip first three cycles to sync up to arduino
     if cycles > 2:
         #try to post weather data
         try:

@@ -1,3 +1,5 @@
+#*************DESCRIPTION*************
+#Old main script used on raspberry pi. Raspberry pi now runs "rews.py" found in /Embedded System
 #Reqests and Time functions written by Daniel B.
 #serial and time functions written by Brendan A.
 

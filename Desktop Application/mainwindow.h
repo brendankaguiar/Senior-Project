@@ -131,17 +131,7 @@ private slots:
 
     void getGPSLocation();
 
-    void on_TempDebug_clicked();
-
-    void on_HumidityDebug_clicked();
-
-    void on_WindDebug_clicked();
-
-    void on_PressureDebug_clicked();
-
-    void on_AQDebug_clicked();
-
-    void on_MillibarsButton_toggled(bool checked);
+    void on_DownloadDate_userDateChanged(const QDate &date);
 
 private:
     Ui::MainWindow *ui;

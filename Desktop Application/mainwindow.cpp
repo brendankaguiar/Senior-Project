@@ -18,6 +18,8 @@
  *
  * **********************************************/
 
+
+//Libraries and Header Files
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtWidgets>
@@ -38,6 +40,7 @@
 #include <QDateTime>
 #include <QDate>
 
+//Global Variables
 double maxTemp = 0,
         minTemp = 0,
         maxHum = 0,
@@ -65,16 +68,19 @@ QString windDirection;
 QString GPSlocation;
 QString CITYlocation;
 
+int deviceID = 0;
 int digit = 1;
 int button = 100;
 bool check = 0, Mcheck = 0, Fcheck = 0;
 QDate startDate = QDate::currentDate();
 QDate endDate = QDate::currentDate();
+QDate downloadDate = QDate::currentDate();
 
 QPen pen;
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets, QCustomPlot
+/// Description: Initial setup of window, graphs and timer
 ///////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -142,21 +148,21 @@ MainWindow::MainWindow(QWidget *parent)
    //ui->HomepagePlot->graph(0)->setPen(QPen(Qt::blue));
    //ui->HomepagePlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotTemperature->graph(0)->setPen(QPen(Qt::blue));
-   ui->PlotTemperature->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   //ui->PlotTemperature->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotHumidity->graph(0)->setPen(QPen(Qt::blue));
-   ui->PlotHumidity->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   //ui->PlotHumidity->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotWindSpeedDirection->graph(0)->setPen(QPen(Qt::blue));
-   ui->PlotWindSpeedDirection->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   //ui->PlotWindSpeedDirection->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotPressure->graph(0)->setPen(QPen(Qt::blue));
-   ui->PlotPressure->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   //ui->PlotPressure->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
    ui->PlotAirQuality->graph(0)->setPen(QPen(Qt::blue));
-   ui->PlotAirQuality->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-   getHttp("https://flask-rews.herokuapp.com/devicedata/latest/0");
+   //ui->PlotAirQuality->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+   getHttp("https://flask-rews.herokuapp.com/devicedata/latest/" + QString::number(deviceID));
    qnam->setAutoDeleteReplies(true);
 
    ui->AboutFrame->setVisible(FALSE);
    ui->DeleteFrame->setVisible(FALSE);
-   timerId = startTimer(2000);
+   timerId = startTimer(5000);
 
 }
 
@@ -169,6 +175,7 @@ MainWindow::~MainWindow()
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QVector
+/// Description: Adds points to graphs
 ///////////////////////////////////////////////////////////////
 void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<double> &yV)
 {
@@ -181,6 +188,7 @@ void MainWindow::addPoint(double x, double y, QVector<double> &xV, QVector<doubl
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QVector
+/// Description: Clears Graphs
 ///////////////////////////////////////////////////////////////
 void MainWindow::clearData()
 {
@@ -202,6 +210,7 @@ void MainWindow::clearData()
 ////////////////////////////////////////////////////////////////
 /// Written By: Nicholas Ang
 /// Dependencies: QtWidgets, QCustomPlot, QVector
+/// Description: Plots all graphs with data obtained from HTTP requests
 ///////////////////////////////////////////////////////////////
 void MainWindow::plot()
 {
@@ -285,7 +294,7 @@ void MainWindow::convertF()
         i++;
     }
 
-    ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
+    ui->PlotTemperature->yAxis->setRange((minTemp-15.0), (maxTemp+15.0));
     ui->PlotTemperature->yAxis->setLabel("Temperature °F");
     plot();
 }
@@ -307,7 +316,7 @@ void MainWindow::convertC()
         i++;
     }
 
-    ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
+    ui->PlotTemperature->yAxis->setRange((minTemp-15.0), (maxTemp+15.0));
     ui->PlotTemperature->yAxis->setLabel("Temperature °C");
     plot();
 }
@@ -407,7 +416,7 @@ void MainWindow::convertMbars()
         i++;
     }
 
-    ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+    ui->PlotPressure->yAxis->setRange((minPressure-1.0), (maxPressure+1.0));
     ui->PlotPressure->yAxis->setLabel("Pressure mbars");
     plot();
 }
@@ -445,7 +454,7 @@ void MainWindow::on_HTTPButton_clicked()
     //clearData();
     qnam->clearAccessCache();
     qnam->clearConnectionCache();
-    QString url = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_03_02";
+    QString url = "https://flask-rews.herokuapp.com/devicedata/all/" + QString::number(deviceID) + "/2022_03_02";
     url.remove(QChar('"'));
     QUrl processedURL = url;
     qDebug() << "Sending request to: " << url;
@@ -548,10 +557,10 @@ void MainWindow::on_HTTPButton_clicked()
             ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
 
-            ui->PlotTemperature->yAxis->setRange((minTemp-5.0), (maxTemp+5.0));
-            ui->PlotHumidity->yAxis->setRange((minHum-5.0), (maxHum+5.0));
+            ui->PlotTemperature->yAxis->setRange((minTemp-15.0), (maxTemp+15.0));
+            ui->PlotHumidity->yAxis->setRange(0, 100);
             ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5.0), (maxWindSpeed+5.0));
-            ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+            ui->PlotPressure->yAxis->setRange((minPressure-1.0), (maxPressure+1.0));
             ui->PlotAirQuality->yAxis->setRange((minAqi-5.0), (maxAqi+5.0));
             plot();
 
@@ -564,6 +573,7 @@ void MainWindow::on_HTTPButton_clicked()
 ////////////////////////////////////////////////////////////////
 /// Written By: Kenji Won
 /// Dependencies: QtWidgets
+/// Description: Converts Pressure Units between mBars and Pascals
 ///////////////////////////////////////////////////////////////
 
 void MainWindow::on_PascalButton_toggled(bool checked)
@@ -585,6 +595,7 @@ void MainWindow::on_PascalButton_toggled(bool checked)
 ////////////////////////////////////////////////////////////////
 /// Written By: Kenji Won
 /// Dependencies: QtWidgets
+/// Description: Converts Wind Speed Units between KPH and MPH
 ///////////////////////////////////////////////////////////////
 
 void MainWindow::on_KPHButton_toggled(bool Mchecked)
@@ -605,6 +616,7 @@ void MainWindow::on_KPHButton_toggled(bool Mchecked)
 ////////////////////////////////////////////////////////////////
 /// Written By: Kenji Won
 /// Dependencies: QtWidgets
+/// Description: Converts Temperature Units between F and C
 ///////////////////////////////////////////////////////////////
 
 void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
@@ -622,6 +634,11 @@ void MainWindow::on_FarenheitButton_toggled(bool Fchecked)
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Updates text for all sensor data on homepage
+///////////////////////////////////////////////////////////////
 //update homepage with data from graphs
 void MainWindow::updateHomepage()
 {
@@ -703,7 +720,7 @@ void MainWindow::updateHomepage()
         }
         else
         {
-            ui -> HomePressureVal -> setText("0 P");
+            ui -> HomePressureVal -> setText("0 Pa");
         }
     }
     else
@@ -737,30 +754,46 @@ void MainWindow::updateHomepage()
 
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Updates text for latest Hum data
+///////////////////////////////////////////////////////////////
 //update humidity page with data from graphs
 void MainWindow::updateHumidity()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    QDateTime lastUpdatedDate;
+    QDateTime lastUpdatedDate = QDateTime::currentDateTime();
+    if(maxTimestamp != 0)
+    {
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    }
     if(lastHum == -10000)
     {
-        ui->HumidityVal->setText("Current Humidity: 0%");
+        ui->HumidityVal->setText("Current Humidity:\n0%");
     }
     else
     {
         ui -> HumidityVal->setText("Current Humidity: \n" + QString::number(lastHum) + "%");
     }
-    ui -> HumidityUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui -> HumidityUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:mm:ss AP yyyy"));
     ui->HumidityStats->setText("24 hour average: " + QString::number(avgHum).left(QString::number(avgHum).indexOf(".")+3) + "%\nPast 24 hour high: " + QString::number(maxHum) + "%\nPast 24 hour low: " + QString::number(minHum) + "%");
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Updates text for latest temp data
+///////////////////////////////////////////////////////////////
 //update temp page with data from graphs
 void MainWindow::updateTemperature()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    QDateTime lastUpdatedDate;
+    QDateTime lastUpdatedDate = QDateTime::currentDateTime();
+    if(maxTimestamp != 0)
+    {
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    }
     QString temp;
     if(lastTemp == -10000)
     {
@@ -778,7 +811,7 @@ void MainWindow::updateTemperature()
     {
         ui->TemperatureVal->setText("Current Temperature: \n" + temp.left(temp.indexOf(".") + 3) + " °C");
     }
-    ui -> TemperatureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui -> TemperatureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:mm:ss AP yyyy"));
 
     if(ui->FarenheitButton->isChecked())
     {
@@ -791,13 +824,20 @@ void MainWindow::updateTemperature()
 }
 
 
-
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Updates text for latest wind data
+///////////////////////////////////////////////////////////////
 //update wind page with data from graphs
 void MainWindow::updateWind()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    QDateTime lastUpdatedDate;
+    QDateTime lastUpdatedDate = QDateTime::currentDateTime();
+    if(maxTimestamp != 0)
+    {
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    }
     if(lastWindSpeed != -10000)
     {
         if(ui->MPHButton->isChecked())
@@ -821,7 +861,7 @@ void MainWindow::updateWind()
         }
     }
     ui -> WindDirection->setText("Current Wind Direction: "  + windDirection);
-    ui -> WindUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui -> WindUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:mm:ss AP yyyy"));
     if(ui->MPHButton->isChecked())
         {
             ui->WindStats->setText("24 hour average: " + QString::number(avgWindSpeed).left(QString::number(avgWindSpeed).indexOf(".")+5) + " MPH\nPast 24 hour high: " + QString::number(maxWindSpeed) + " MPH\nPast 24 hour low: " + QString::number(minWindSpeed) + " MPH");
@@ -833,22 +873,29 @@ void MainWindow::updateWind()
 
 }
 
-
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Updates text for latest Pressure data
+///////////////////////////////////////////////////////////////
 //update pressure page with data from graphs
 void MainWindow::updatePressure()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    QDateTime lastUpdatedDate;
+    QDateTime lastUpdatedDate = QDateTime::currentDateTime();
+    if(maxTimestamp != 0)
+    {
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    }
     if(lastPressure == -10000)
     {
         if(ui->MillibarsButton->isChecked())
         {
-            ui -> PressureVal -> setText("0 mbars");
+            ui -> PressureVal -> setText("Current Pressure: \n0 mbars");
         }
         else
         {
-            ui -> PressureVal -> setText("0 P");
+            ui -> PressureVal -> setText("Current Pressure: \n0 Pa");
         }
     }
     else
@@ -862,7 +909,7 @@ void MainWindow::updatePressure()
             ui -> PressureVal -> setText("Current Pressure: \n" + QString::number(lastPressure) + " P");
         }
     }
-    ui -> PressureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui -> PressureUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:mm:ss AP yyyy"));
 
     if(ui->MillibarsButton->isChecked())
     {
@@ -875,12 +922,20 @@ void MainWindow::updatePressure()
 
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Updates text for latest AQI data
+///////////////////////////////////////////////////////////////
 //update aq page with data from graphs
 void MainWindow::updateAQ()
 {
     QDateTime datetime = QDateTime::currentDateTime();
-    QDateTime lastUpdatedDate;
+    QDateTime lastUpdatedDate = QDateTime::currentDateTime();
+    if(maxTimestamp != 0)
+    {
     lastUpdatedDate = QDateTime::fromSecsSinceEpoch(maxTimestamp);
+    }
     int curAQ;
     if(lastAqi == -10000)
     {
@@ -895,35 +950,40 @@ void MainWindow::updateAQ()
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
         ui -> AQState -> setText("Hazardous");
     }
-    else if (curAQ > 201)
+    else if (curAQ > 251)
     {
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
-        ui -> AQState -> setText("Very Unhealthy");
+        ui -> AQState -> setText("Very Unhealthy\n");
     }
     else if (curAQ > 201)
     {
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
-        ui -> AQState -> setText("Unhealthy");
+        ui -> AQState -> setText("Unhealthy\n");
     }
-    else if (curAQ > 201)
+    else if (curAQ > 151)
     {
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
-        ui -> AQState -> setText("Unhealthy for Senstive Groups");
+        ui -> AQState -> setText("Poor\n");
     }
-    else if (curAQ > 201)
+    else if (curAQ > 101)
     {
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
-        ui -> AQState -> setText("Moderate");
+        ui -> AQState -> setText("Moderate\n");
     }
     else
     {
         ui -> AQVal -> setText("Current AQI: \n" + QString::number(curAQ));
-        ui -> AQState -> setText("Good");
+        ui -> AQState -> setText("Good\n");
     }
-    ui -> AQUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:m:s AP yyyy"));
+    ui -> AQUpdated -> setText("Last updated: " + lastUpdatedDate.toString("ddd MMM d h:mm:ss AP yyyy"));
     ui->AQStats->setText("24 hour average: " + QString::number(avgAqi).left(QString::number(avgAqi).indexOf(".")+3) + "\nPast 24 hour high: " + QString::number(maxAqi) + "\nPast 24 hour low: " + QString::number(minAqi));
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QtWidgets
+/// Description: Updates text for latest gps data
+///////////////////////////////////////////////////////////////
 void MainWindow::updateGPS()
 {
     QDateTime lastUpdatedDate;
@@ -934,7 +994,11 @@ void MainWindow::updateGPS()
     }
 }
 
-
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Sets background color of Temp tab based on current temp value
+///////////////////////////////////////////////////////////////
 //sets the background color based off temp
 void MainWindow::setTempBG()
 {
@@ -986,6 +1050,11 @@ void MainWindow::setTempBG()
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Sets background color of Hum tab based on current Hum value
+///////////////////////////////////////////////////////////////
 //sets the background color based off humidity
 void MainWindow::setHumidityBG()
 {
@@ -1036,6 +1105,11 @@ void MainWindow::setHumidityBG()
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Sets background color of Wind tab based on current Wind values
+///////////////////////////////////////////////////////////////
 //sets the background color based off wind
 void MainWindow::setWindBG()
 {
@@ -1100,6 +1174,11 @@ void MainWindow::setWindBG()
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Sets background color of Pressure tab based on current pressure value
+///////////////////////////////////////////////////////////////
 //sets the background color based off pressure
 void MainWindow::setPressureBG()
 {
@@ -1143,6 +1222,11 @@ void MainWindow::setPressureBG()
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Sets background color of AQI tab based on current AQI value
+///////////////////////////////////////////////////////////////
 //sets the background color based off air quality (AQ)
 void MainWindow::setAQBG()
 {
@@ -1187,12 +1271,22 @@ void MainWindow::setAQBG()
     }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+///////////////////////////////////////////////////////////////
 //update the homepage
 void MainWindow::on_pushButton_clicked()
 {
     updateHomepage();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Refreshes tab with realtime data and adjusts graphs
+///////////////////////////////////////////////////////////////
+//Refreshes the tab with realtime data
 void MainWindow::refreshCurrentTab()
 {
     int index = ui->tabWidget->currentIndex();
@@ -1206,7 +1300,7 @@ void MainWindow::refreshCurrentTab()
     {
         updateHumidity();
         setHumidityBG();
-        ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
+        ui->PlotHumidity->yAxis->setRange(0, 100);
         ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
         plot();
     }
@@ -1214,7 +1308,7 @@ void MainWindow::refreshCurrentTab()
     {
         updateTemperature();
         setTempBG();
-        ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
+        ui->PlotTemperature->yAxis->setRange((minTemp-15), (maxTemp+15));
         ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
         plot();
     }
@@ -1222,24 +1316,31 @@ void MainWindow::refreshCurrentTab()
     {
         updateWind();
         setWindBG();
-        ui->PlotTemperature->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
-        ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
+        ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
+        ui->PlotWindSpeedDirection->xAxis->setRange(minTimestamp, maxTimestamp);
         plot();
     }
     else if(index == 4)
     {
         updatePressure();
         setPressureBG();
-        ui->PlotTemperature->yAxis->setRange((minPressure-100), (maxPressure+100));
-        ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
+        if(check == 1)
+        {
+            ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+        }
+        else
+        {
+        ui->PlotPressure->yAxis->setRange((minPressure-1), (maxPressure+1));
+        }
+        ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
         plot();
     }
     else if(index == 5)
     {
         updateAQ();
         setAQBG();
-        ui->PlotTemperature->yAxis->setRange((minAqi-5), (maxAqi+5));
-        ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
+        ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
+        ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
         plot();
     }
     else if(index == 6)
@@ -1250,6 +1351,12 @@ void MainWindow::refreshCurrentTab()
         ui -> ThemeWidgetForm -> setStyleSheet("QWidget#ThemeWidgetForm{background-color: rgb(225,225,225);}");
     }
 }
+
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QtWidgets
+/// Description: Gets data for corresponding sensor and tab to display to user
+///////////////////////////////////////////////////////////////
 //change color to default if user leave homepage or change color back if homepage is clicked on again
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
@@ -1260,22 +1367,27 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     else if(index == 1)
     {
         getMinMaxAvg("humidity", getDate(QDate::currentDate()));
+        getHttpSensor("humidity", getDate(QDate::currentDate()));
     }
     else if(index == 2)
     {
         getMinMaxAvg("temperature", getDate(QDate::currentDate()));
+        getHttpSensor("temperature", getDate(QDate::currentDate()));
     }
     else if(index == 3)
     {
         getMinMaxAvg("windspeed", getDate(QDate::currentDate()));
+        getHttpSensor("windspeed", getDate(QDate::currentDate()));
     }
     else if(index == 4)
     {
         getMinMaxAvg("pressure", getDate(QDate::currentDate()));
+        getHttpSensor("pressure", getDate(QDate::currentDate()));
     }
     else if(index == 5)
     {
         getMinMaxAvg("aqi", getDate(QDate::currentDate()));
+        getHttpSensor("aqi", getDate(QDate::currentDate()));
     }
     else
     {
@@ -1286,6 +1398,13 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     ui->DeleteFrame->setVisible(FALSE);
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won and Dalton Tracy
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QByteArray, QJsonDocument, QJsonArray, QJssonObject, QDateTime
+/// Description: Initial startup HTTP request. Gets all data for current date
+/// to show data on homepage and all tabs
+///////////////////////////////////////////////////////////////
 void MainWindow::getHttp(QString http)
 {
     QString date = getDate(QDate::currentDate());
@@ -1346,11 +1465,14 @@ void MainWindow::getHttp(QString http)
 
             }
             reply->deleteLater();
+            if(!qv_y2.isEmpty())
+            {
             lastTemp = qv_y2.at(qv_y2.length()-1);
             lastHum = qv_y3.at(qv_y3.length()-1);
             lastWindSpeed = qv_y4.at(qv_y4.length()-1);
             lastPressure = qv_y5.at(qv_y5.length()-1);
             lastAqi = qv_y6.at(qv_y6.length()-1);
+            }
             //ui->HomepagePlot->xAxis->setRange(minTimestamp, maxTimestamp); //in celsius
             ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
@@ -1359,10 +1481,10 @@ void MainWindow::getHttp(QString http)
             ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
 
             //ui->HomepagePlot->yAxis->setRange(minTemp-5, maxTemp+5); //in celsius
-            ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
-            ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
+            ui->PlotTemperature->yAxis->setRange((minTemp-15), (maxTemp+15));
+            ui->PlotHumidity->yAxis->setRange(0, 100);
             ui->PlotWindSpeedDirection->yAxis->setRange((minWindSpeed-5), (maxWindSpeed+5));
-            ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
+            ui->PlotPressure->yAxis->setRange((minPressure-1), (maxPressure+1));
             ui->PlotAirQuality->yAxis->setRange((minAqi-5), (maxAqi+5));
 
             qDebug() << minTemp;
@@ -1383,6 +1505,7 @@ void MainWindow::getHttp(QString http)
             if(check == 1)
             {
                 convertPas();
+                ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
             }
             if(Mcheck == 1)
             {
@@ -1399,13 +1522,18 @@ void MainWindow::getHttp(QString http)
     );
     updateHomepage();
     qnam->get(request);
-    }
+}
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply
+/// Description: Sends HTTP request for all sensor data for a user set date
+///////////////////////////////////////////////////////////////
 void MainWindow::downloadFile()
 {
     qnam = new QNetworkAccessManager();
-    //QString downloadUrl = "https://flask-rews.herokuapp.com/devicedata/all/0/2022_02_16";
-    QString downloadUrl = requestUrl("all/", getDate(QDate::currentDate()));
+    //QString downloadUrl = "https://flask-rews.herokuapp.com/devicedata/all/" + QString::number(deviceID) + "/2022_02_16";
+    QString downloadUrl = requestUrl("all/", getDate(downloadDate));
     qnam->clearAccessCache();
     qnam->clearConnectionCache();
     QString url = downloadUrl;
@@ -1419,12 +1547,18 @@ void MainWindow::downloadFile()
 
 }
 
+//Download button
 void MainWindow::on_DownloadAll_clicked()
 {
-
     downloadFile();
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QFile
+/// Description: Writes data from reply to file
+///////////////////////////////////////////////////////////////
 void MainWindow::downloadFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
@@ -1450,10 +1584,15 @@ void MainWindow::downloadFinished()
         }
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString
+/// Description: Formats string for url
+///////////////////////////////////////////////////////////////
 QString MainWindow::requestUrl(QString type, QString date)
 {
     QString defaultString = "https://flask-rews.herokuapp.com/devicedata/";
-    QString deviceNum = "0/";
+    QString deviceNum = (QString::number(deviceID) + "/");
     QString url;
     QString temp;
     url = defaultString.append(type);
@@ -1462,6 +1601,11 @@ QString MainWindow::requestUrl(QString type, QString date)
     return url;
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply
+/// Description: When called, sends request to HTTP Get to delete all data
+///////////////////////////////////////////////////////////////
 void MainWindow::deleteAllData()
 {
     qnam = new QNetworkAccessManager();
@@ -1477,6 +1621,11 @@ void MainWindow::deleteAllData()
     QObject::connect(reply, SIGNAL(finished()), this, SLOT(deleteFinished()));
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply
+/// Description: When called, reads HTTP requests reply and clears all data
+///////////////////////////////////////////////////////////////
 void MainWindow::deleteFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
@@ -1497,6 +1646,11 @@ void MainWindow::deleteFinished()
 
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Kenji Won
+/// Dependencies: QDateTime
+/// Description: UI element to show delete information window
+///////////////////////////////////////////////////////////////
 void MainWindow::on_DeleteAll_clicked()
 {
     ui->AboutFrame->setVisible(FALSE);
@@ -1505,6 +1659,11 @@ void MainWindow::on_DeleteAll_clicked()
     ui->DeleteText->setText("Are you sure you wish to delete all data?\nThis process is irreversible");
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QDateTime
+/// Description: Gets current date and formats it in string for url
+///////////////////////////////////////////////////////////////
 QString MainWindow::getCurrentDate()
 {
     int day,month,year;
@@ -1538,6 +1697,12 @@ QString MainWindow::getCurrentDate()
     return dateS;
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QDateTime
+/// Description: Gets date selected from the user and formats
+///  it in string for url
+///////////////////////////////////////////////////////////////
 QString MainWindow::getDate(QDate date)
 {
     int day,month,year;
@@ -1570,7 +1735,14 @@ QString MainWindow::getDate(QDate date)
     return dateS;
 }
 
-
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QByteArray, QJsonDocument, QJsonArray, QJssonObject
+/// Description: Gets the min, max, avg over 24 hours from the webserver
+/// using HTTP Get requests. Min, max, avg is used to set graph ranges and
+/// display to user
+///////////////////////////////////////////////////////////////
 void MainWindow::getMinMaxAvg(QString sensor, QString date)
 {
     QString pr = "stats/";
@@ -1653,7 +1825,13 @@ void MainWindow::getMinMaxAvg(QString sensor, QString date)
     qnam->get(request);
 }
 
-
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QByteArray, QJsonDocument, QJsonArray, QJssonObject
+/// Description: Gets the data from a specific sensor on a specific date,
+/// default date is current date. Uses HTTP Get Requests
+///////////////////////////////////////////////////////////////
 void MainWindow::getHttpSensor(QString sensor, QString date)
 {
     getMinMaxAvg(sensor, date);
@@ -1719,7 +1897,7 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
                 {
                 lastTemp = qv_y2.at(qv_y2.length()-1);
                 }
-                ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
+                ui->PlotTemperature->yAxis->setRange((minTemp-15), (maxTemp+15));
                 ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "humidity")
@@ -1728,7 +1906,7 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
                 {
                 lastHum = qv_y3.at(qv_y3.length()-1);
                 }
-                ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
+                ui->PlotHumidity->yAxis->setRange(0, 100);
                 ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "windspeed")
@@ -1746,7 +1924,7 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
                         {
                 lastPressure = qv_y5.at(qv_y5.length()-1);
                         }
-                ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
+                ui->PlotPressure->yAxis->setRange((minPressure-1), (maxPressure+1));
                 ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
             }
             else if(sensor == "aqi")
@@ -1762,6 +1940,7 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
             if(check == 1)
             {
                 convertPas();
+                ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
             }
             if(Mcheck == 1)
             {
@@ -1780,6 +1959,13 @@ void MainWindow::getHttpSensor(QString sensor, QString date)
 
 }
 
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QByteArray, QJsonDocument, QJsonArray, QJssonObject
+/// Description: Iterates over the dates selected by user and gets data
+/// for the sensor over these dates to plot on graph. Uses HTTP Get request
+///////////////////////////////////////////////////////////////
 void MainWindow::multHttp(QString sensor)
 {
     clearData();
@@ -1849,7 +2035,7 @@ void MainWindow::multHttp(QString sensor)
                     {
                     lastTemp = qv_y2.at(qv_y2.length()-1);
                     }
-                    ui->PlotTemperature->yAxis->setRange((minTemp-5), (maxTemp+5));
+                    ui->PlotTemperature->yAxis->setRange((minTemp-15), (maxTemp+15));
 
                     ui->PlotTemperature->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
@@ -1859,7 +2045,7 @@ void MainWindow::multHttp(QString sensor)
                         {
                     lastHum = qv_y3.at(qv_y3.length()-1);
                         }
-                    ui->PlotHumidity->yAxis->setRange((minHum-5), (maxHum+5));
+                    ui->PlotHumidity->yAxis->setRange(0, 100);
 
                     ui->PlotHumidity->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
@@ -1879,7 +2065,7 @@ void MainWindow::multHttp(QString sensor)
                             {
                     lastPressure = qv_y5.at(qv_y5.length()-1);
                             }
-                    ui->PlotPressure->yAxis->setRange((minPressure-100), (maxPressure+100));
+                    ui->PlotPressure->yAxis->setRange((minPressure-1), (maxPressure+1));
 
                     ui->PlotPressure->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
@@ -1894,20 +2080,6 @@ void MainWindow::multHttp(QString sensor)
                     ui->PlotAirQuality->xAxis->setRange(minTimestamp, maxTimestamp);
                 }
 
-                if(check == 1)
-                {
-                    convertPas();
-                }
-                if(Mcheck == 1)
-                {
-                    convertKph();
-                }
-                if(Fcheck == 1)
-                {
-                    convertF();
-                }
-
-
                 plot();
             }
         );
@@ -1915,8 +2087,22 @@ void MainWindow::multHttp(QString sensor)
         tempdate = tempdate.addDays(1);
         tday = getDate(tempdate);
     }
+    if(check == 1)
+    {
+        convertPas();
+        ui->PlotPressure->yAxis->setRange((minPressure-100.0), (maxPressure+100.0));
+    }
+    if(Mcheck == 1)
+    {
+        convertKph();
+    }
+    if(Fcheck == 1)
+    {
+        convertF();
+    }
 }
 
+//Updating current page with realtime data
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     refreshCurrentTab();
@@ -1945,19 +2131,20 @@ void MainWindow::on_AboutClose_clicked()
     ui->AboutFrame->setVisible(FALSE);
 }
 
-
+//Delete Data Button
 void MainWindow::on_DeleteConfirm_clicked()
 {
     deleteAllData();
     ui->DeleteText->setText("All data has been deleted");
 }
 
-
+//Cancel Delete Data button
 void MainWindow::on_DeleteDeny_clicked()
 {
     ui->DeleteFrame->setVisible(FALSE);
 }
 
+//Start Date Humidity
 void MainWindow::on_FirstDate_2_userDateChanged(const QDate &date)
 {
     //Humidity Tab date boxes
@@ -1968,7 +2155,7 @@ void MainWindow::on_FirstDate_2_userDateChanged(const QDate &date)
     getHttpSensor("humidity" ,getDate(date));
 }
 
-
+//End Date Humidity
 void MainWindow::on_SecondDate_2_userDateChanged(const QDate &date)
 {
     //Humidity Tab date boxes
@@ -1976,6 +2163,7 @@ void MainWindow::on_SecondDate_2_userDateChanged(const QDate &date)
     multHttp("humidity");
 }
 
+//Start Date Temperature
 void MainWindow::on_FirstDate_userDateChanged(const QDate &date)
 {
     startDate = date;
@@ -1983,17 +2171,16 @@ void MainWindow::on_FirstDate_userDateChanged(const QDate &date)
     minTimestamp = 0;
     maxTimestamp = 0;
     getHttpSensor("temperature", getDate(date));
-    //plot();
 }
 
-
+//End Date Temperature
 void MainWindow::on_SecondDate_userDateChanged(const QDate &date)
 {
     endDate = date;
     multHttp("temperature");
 }
 
-
+//Start Date WindSpeed
 void MainWindow::on_FirstDate_3_userDateChanged(const QDate &date)
 {
     startDate = date;
@@ -2003,14 +2190,14 @@ void MainWindow::on_FirstDate_3_userDateChanged(const QDate &date)
     getHttpSensor("windspeed", getDate(date));
 }
 
-
+//End Date WindSpeed
 void MainWindow::on_SecondDate_3_userDateChanged(const QDate &date)
 {
     endDate = date;
     multHttp("windspeed");
 }
 
-
+//End Date Pressure
 void MainWindow::on_FirstDate_4_userDateChanged(const QDate &date)
 {
     startDate = date;
@@ -2020,14 +2207,14 @@ void MainWindow::on_FirstDate_4_userDateChanged(const QDate &date)
     getHttpSensor("pressure", getDate(date));
 }
 
-
+//End Date Pressure
 void MainWindow::on_SecondDate_4_userDateChanged(const QDate &date)
 {
     endDate = date;
     multHttp("pressure");
 }
 
-
+//Start Date AQI
 void MainWindow::on_FirstDate_5_userDateChanged(const QDate &date)
 {
     startDate = date;
@@ -2037,16 +2224,24 @@ void MainWindow::on_FirstDate_5_userDateChanged(const QDate &date)
     getHttpSensor("aqi", getDate(date));
 }
 
-
+//End date AQI
 void MainWindow::on_SecondDate_5_userDateChanged(const QDate &date)
 {
     endDate = date;
     multHttp("aqi");
 }
 
+
+////////////////////////////////////////////////////////////////
+/// Written By: Nicholas Ang
+/// Dependencies: QString, QUrl, QNetworkAccessManager, QNetworkReply,
+/// QByteArray, QJsonDocument, QJsonArray, QJssonObject
+/// Description: Uses GET HTTP request to get data on city, last updated
+///  time, and latitude/longitude
+///////////////////////////////////////////////////////////////
 void MainWindow::getGPSLocation()
 {
-    QString url = "https://flask-rews.herokuapp.com/devicedata/metadata/location/0";
+    QString url = "https://flask-rews.herokuapp.com/devicedata/metadata/location/"  + QString::number(deviceID);
     qnam = new QNetworkAccessManager();
     url.remove(QChar('"'));
     QUrl processedURL = url;
@@ -2083,8 +2278,9 @@ void MainWindow::getGPSLocation()
 }
 
 
-void MainWindow::on_MillibarsButton_toggled(bool checked)
+//Sets download date to whatever user selected
+void MainWindow::on_DownloadDate_userDateChanged(const QDate &date)
 {
-
+    downloadDate = date;
 }
 
